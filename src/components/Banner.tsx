@@ -1,5 +1,6 @@
 import type { FC } from "react";
 
+import { Icon } from "./Icon.js";
 import MarkdownText from "./MarkdownText.js";
 
 /**
@@ -108,7 +109,7 @@ export const Banner: FC<BannerProps> = ({
           </div>
           {deadline && (
             <div className="flex items-center gap-3 text-sm font-semibold text-blue-200 dark:text-blue-300">
-              <i className="fa-solid fa-clock" />
+              <Icon icon="fa-solid fa-clock" />
               Deadline: {deadline}
             </div>
           )}

@@ -8,6 +8,7 @@ import { Gallery } from "./components/Gallery.jsx";
 import { Banner } from "./components/Banner.jsx";
 import Navbar from "./components/Navbar";
 import MarkdownText from "./components/MarkdownText";
+import { Icon } from "./components/Icon.js";
 import type { Config, ContentBlock } from "./types.js";
 
 import { configs } from "../config/index.js";
@@ -72,7 +73,7 @@ const App: FC = () => {
             <div className="space-y-8">
               <div>
                 <h4 className="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3 flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 w-fit px-3 py-1.5 rounded-lg">
-                  <i className="fa-solid fa-building-columns" />{" "}
+                  <Icon icon="fa-solid fa-building-columns" />{" "}
                   {i18n.affiliation}
                 </h4>
                 <p className="text-slate-800 dark:text-slate-100 font-black text-2xl md:text-3xl leading-tight">
@@ -81,14 +82,15 @@ const App: FC = () => {
               </div>
               <div>
                 <h4 className="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 w-fit px-3 py-1.5 rounded-lg">
-                  <i className="fa-solid fa-paper-plane" /> {i18n.contact}
+                  <Icon icon="fa-solid fa-paper-plane" /> {i18n.contact}
                 </h4>
                 <ul className="grid grid-cols-1 gap-5">
                   {block.data.contact.map((c: any, i: number) => (
                     <li key={i} className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-white/5 flex items-center justify-center text-slate-400 dark:text-slate-500 transition-all duration-500">
-                        <i
-                          className={`fa-solid ${c.label.toLowerCase().includes("riken") ? "fa-at" : c.label.toLowerCase().includes("utokyo") || c.label.toLowerCase().includes("东京大学") ? "fa-university" : "fa-envelope"} text-base`}
+                        <Icon
+                          icon={`fa-solid ${c.label.toLowerCase().includes("riken") ? "fa-at" : c.label.toLowerCase().includes("utokyo") || c.label.toLowerCase().includes("东京大学") ? "fa-university" : "fa-envelope"}`}
+                          className="text-base"
                         />
                       </div>
                       <div className="flex flex-col">

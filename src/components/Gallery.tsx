@@ -1,8 +1,26 @@
 import { useState } from "react";
 import type { FC } from "react";
 import type { GalleryItem } from "../types.js";
+import { Icon } from "./Icon.js";
 
-export const Gallery: FC<{ items: GalleryItem[] }> = ({ items }) => {
+export interface GalleryProps {
+  /**
+   * List of gallery items (photos)
+   * 画廊项 (照片) 列表
+   */
+  items: GalleryItem[];
+}
+
+/**
+ * Gallery component
+ *
+ * Displays a masonry-style grid of images with a lightbox for viewing details.
+ *
+ * 画廊组件
+ *
+ * 显示瀑布流风格的图片网格，并带有用于查看详情的灯箱。
+ */
+export const Gallery: FC<GalleryProps> = ({ items }) => {
   const [selected, setSelected] = useState<GalleryItem | null>(null);
 
   return (
@@ -23,7 +41,7 @@ export const Gallery: FC<{ items: GalleryItem[] }> = ({ items }) => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 dark:from-slate-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
               <h4 className="text-white font-bold text-lg">{item.title}</h4>
               <p className="text-white/70 dark:text-white/60 text-sm flex items-center gap-2">
-                <i className="fa-solid fa-location-dot text-xs" />
+                <Icon icon="fa-solid fa-location-dot" className="text-xs" />
                 {item.location} {item.date && `• ${item.date}`}
               </p>
             </div>
@@ -45,7 +63,7 @@ export const Gallery: FC<{ items: GalleryItem[] }> = ({ items }) => {
               className="absolute -top-12 right-0 text-white/50 hover:text-white transition-colors"
               onClick={() => setSelected(null)}
             >
-              <i className="fa-solid fa-xmark text-3xl" />
+              <Icon icon="fa-solid fa-xmark" className="text-3xl" />
             </button>
             <div className="bg-white/5 p-2 rounded-2xl overflow-hidden shadow-2xl">
               <img
@@ -60,7 +78,7 @@ export const Gallery: FC<{ items: GalleryItem[] }> = ({ items }) => {
                   {selected.title}
                 </h3>
                 <p className="text-blue-400 dark:text-blue-500 font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                  <i className="fa-solid fa-location-dot" />
+                  <Icon icon="fa-solid fa-location-dot" />
                   {selected.location} {selected.date && `• ${selected.date}`}
                 </p>
               </div>

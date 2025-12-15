@@ -1,8 +1,26 @@
 import type { FC } from "react";
 import type { TimelineItem } from "../types.js";
+import { Icon } from "./Icon.js";
 import MarkdownText from "./MarkdownText.js";
 
-export const Timeline: FC<{ items: TimelineItem[] }> = ({ items }) => {
+export interface TimelineProps {
+  /**
+   * List of timeline items to display
+   * 要显示的时间轴项列表
+   */
+  items: TimelineItem[];
+}
+
+/**
+ * Timeline component
+ *
+ * Displays a list of events or news items in a vertical list format.
+ *
+ * 时间轴组件
+ *
+ * 以垂直列表格式显示事件或新闻项列表。
+ */
+export const Timeline: FC<TimelineProps> = ({ items }) => {
   return (
     <div className="grid grid-cols-1 gap-4">
       {items.map((item, idx) => (
@@ -32,7 +50,10 @@ export const Timeline: FC<{ items: TimelineItem[] }> = ({ items }) => {
               >
                 {item.linkText ||
                   (item.link.includes("riken") ? "Press" : "Detail")}
-                <i className="fa-solid fa-arrow-up-right-from-square text-[10px]" />
+                <Icon
+                  icon="fa-solid fa-arrow-up-right-from-square"
+                  className="text-[10px]"
+                />
               </a>
             </div>
           )}

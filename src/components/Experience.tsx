@@ -1,8 +1,26 @@
 import type { FC } from "react";
 import type { ExperienceItem } from "../types.js";
+import { Icon } from "./Icon.js";
 import MarkdownText from "./MarkdownText.js";
 
-export const Experience: FC<{ items: ExperienceItem[] }> = ({ items }) => {
+export interface ExperienceProps {
+  /**
+   * List of experience items to display
+   * 要显示的经历项列表
+   */
+  items: ExperienceItem[];
+}
+
+/**
+ * Experience component
+ *
+ * Displays a vertical timeline of work and study experiences.
+ *
+ * 经历组件
+ *
+ * 显示工作和学习经历的垂直时间轴。
+ */
+export const Experience: FC<ExperienceProps> = ({ items }) => {
   return (
     <div className="space-y-10 pl-0 md:pl-4">
       {items.map((item, idx) => (
@@ -16,8 +34,9 @@ export const Experience: FC<{ items: ExperienceItem[] }> = ({ items }) => {
           <div
             className={`absolute left-0 top-1 w-7 h-7 md:w-8 md:h-8 rounded-xl md:rounded-2xl border-4 border-white dark:border-slate-950 shadow-sm flex items-center justify-center z-10 transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 ${item.type === "study" ? "bg-indigo-600" : "bg-emerald-600"}`}
           >
-            <i
-              className={`fa-solid ${item.type === "study" ? "fa-book-open" : "fa-briefcase"} text-[9px] md:text-[10px] text-white`}
+            <Icon
+              icon={`fa-solid ${item.type === "study" ? "fa-book-open" : "fa-briefcase"}`}
+              className="text-[9px] md:text-[10px] text-white"
             />
           </div>
 
@@ -28,7 +47,7 @@ export const Experience: FC<{ items: ExperienceItem[] }> = ({ items }) => {
                 {item.time}
               </span>
               <div className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 shadow-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all">
-                <i className="fa-solid fa-location-dot" />
+                <Icon icon="fa-solid fa-location-dot" />
                 {item.place}
               </div>
             </div>
@@ -39,8 +58,9 @@ export const Experience: FC<{ items: ExperienceItem[] }> = ({ items }) => {
                 <div
                   className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner ${item.type === "study" ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"}`}
                 >
-                  <i
-                    className={`fa-solid ${item.icon || (item.type === "study" ? "fa-graduation-cap" : "fa-briefcase")} text-lg md:text-2xl`}
+                  <Icon
+                    icon={`fa-solid ${item.icon || (item.type === "study" ? "fa-graduation-cap" : "fa-briefcase")}`}
+                    className="text-lg md:text-2xl"
                   />
                 </div>
                 <div className="space-y-1.5 flex-1 min-w-0">

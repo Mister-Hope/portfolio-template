@@ -1,11 +1,29 @@
 import type { FC } from "react";
 import type { Config } from "../types.js";
+import { Icon } from "./Icon.js";
 import { Typewriter } from "./Typewriter.jsx";
 
+/**
+ * Props for the PortfolioHeader component
+ * PortfolioHeader 组件的属性
+ */
 interface Props {
+  /**
+   * Configuration object containing user details
+   * 包含用户详细信息的配置对象
+   */
   config: Config;
 }
 
+/**
+ * PortfolioHeader component
+ *
+ * The main hero section of the portfolio, displaying the avatar, name, titles, and social links.
+ *
+ * 作品集头部组件
+ *
+ * 作品集的主要 Hero 区域，显示头像、姓名、头衔和社交链接。
+ */
 export const PortfolioHeader: FC<Props> = ({ config }) => {
   return (
     <header className="relative w-full h-screen flex items-center justify-center overflow-hidden">
@@ -52,7 +70,7 @@ export const PortfolioHeader: FC<Props> = ({ config }) => {
                 className="group flex items-center gap-3 bg-white/10 hover:bg-white/25 px-6 py-3 rounded-full border border-white/20 backdrop-blur-xl transition-all duration-500 transform hover:-translate-y-2 shadow-lg"
                 title={media.name}
               >
-                <i className={`${media.icon} text-xl`} />
+                <Icon icon={media.icon} className="text-xl" />
                 <span className="hidden sm:inline text-base font-black tracking-wide">
                   {media.name}
                 </span>
@@ -64,7 +82,7 @@ export const PortfolioHeader: FC<Props> = ({ config }) => {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-80 cursor-pointer">
-        <i className="fa-solid fa-chevron-down text-3xl text-white" />
+        <Icon icon="fa-solid fa-chevron-down" className="text-3xl text-white" />
       </div>
     </header>
   );
