@@ -157,7 +157,7 @@ const App: FC = () => {
                 rel="noopener noreferrer"
                 className="group relative glass p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 transition-all duration-700 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1.5 overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/5 rounded-full -mr-16 -mt-16 group-hover:bg-blue-600/10 transition-colors duration-700"></div>
+                <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/5 rounded-full -mr-16 -mt-16 group-hover:bg-blue-600/10 transition-colors duration-700" />
                 <div className="relative z-10">
                   <h4 className="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-4">
                     {i18n.thesis}
@@ -204,7 +204,7 @@ const App: FC = () => {
                       <i className="fa-solid fa-circle-check text-blue-400 dark:text-blue-500 text-lg" />
                     )}
                     {(listStyle === "circle" || listStyle === "square") && (
-                      <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-blue-500" />
                     )}
                   </div>
                 )}

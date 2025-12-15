@@ -20,7 +20,7 @@ export const PortfolioHeader: FC<Props> = ({ config }) => {
       <div className="container mx-auto px-6 max-w-7xl relative z-10 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24 text-white">
         {/* Avatar Section */}
         <div className="w-56 h-56 md:w-80 md:h-80 lg:w-96 lg:h-96 relative group flex-shrink-0">
-          <div className="absolute inset-0 bg-blue-500/40 rounded-full blur-3xl group-hover:bg-blue-500/60 transition-all duration-500"></div>
+          <div className="absolute inset-0 bg-blue-500/40 rounded-full blur-3xl group-hover:bg-blue-500/60 transition-all duration-500" />
           <img
             src={config.avatar}
             alt={config.name}

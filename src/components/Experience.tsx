@@ -9,7 +9,7 @@ export const Experience: FC<{ items: ExperienceItem[] }> = ({ items }) => {
         <div key={idx} className="relative pl-10 md:pl-12 group">
           {/* Individual Timeline Line segment */}
           {idx !== items.length - 1 && (
-            <div className="absolute left-3.5 top-8 bottom-[-2.5rem] w-px bg-slate-200 dark:bg-slate-800 z-0"></div>
+            <div className="absolute left-3.5 top-8 bottom-[-2.5rem] w-px bg-slate-200 dark:bg-slate-800 z-0" />
           )}
 
           {/* Timeline Node */}

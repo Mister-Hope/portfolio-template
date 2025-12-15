@@ -25,7 +25,7 @@ export const SectionWrapper: FC<Props> = ({ title, icon, children, id }) => {
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter text-slate-900 dark:text-slate-100 leading-none">
               {title}
             </h2>
-            <div className="h-1.5 w-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"></div>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full" />
           </div>
         </div>
 
