@@ -1,0 +1,72 @@
+
+{
+  "name": "SHANG CHENG",
+  "welcome": "👋 Hi there, I am",
+  "titles": [
+    "Theoretical Physics Researcher",
+    "World Explorer",
+    "Quantum Complexity Enthusiast"
+  ],
+  "avatar": "https://picsum.photos/seed/shang/600/800",
+  "bgImage": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1920",
+  "medias": [
+    { "icon": "fa-solid fa-at", "name": "RIKEN Email", "link": "mailto:cheng.shang@riken.jp" },
+    { "icon": "fa-brands fa-google", "name": "Gmail", "link": "mailto:shangc1204@gmail.com" },
+    { "icon": "fa-brands fa-orcid", "name": "ORCID", "link": "https://orcid.org/0000-0001-8393-2329" },
+    { "icon": "fa-solid fa-graduation-cap", "name": "Scholar", "link": "https://scholar.google.com/citations?user=-k8PWr8AAAAJ" },
+    { "icon": "fa-solid fa-flask-vial", "name": "iNSPIRE", "link": "https://inspirehep.net/authors/2662928" },
+    { "icon": "fa-brands fa-x-twitter", "name": "X", "link": "https://x.com/Shangc1204" }
+  ],
+  "navbar": {
+    "links": [
+      { "label": "Profile", "anchor": "#profile" },
+      { "label": "Experience", "anchor": "#education" },
+      { "label": "News", "anchor": "#news" },
+      { "label": "Publications", "anchor": "#publications" },
+      { "label": "Gallery", "anchor": "#gallery" }
+    ]
+  },
+  "footer": "Built with ❤️ using React, TypeScript & Tailwind CSS. © 2024 Shang Cheng.",
+  "contents": [
+    {
+      "type": "profile",
+      "id": "profile",
+      "title": "Profile",
+      "icon": "fa-user-tie",
+      "data": {
+        "affiliation": "Analytical Quantum Complexity RIKEN Hakubi Research Team",
+        "contact": [
+          { "label": "RIKEN Email", "value": "cheng.shang@riken.jp" },
+          { "label": "Gmail", "value": "shangc1204@gmail.com" },
+          { "label": "UTokyo Email", "value": "c-shang@iis.u-tokyo.ac.jp" }
+        ],
+        "interests": ["B-boying (Breaking)", "Gomoku", "Music", "Running"]
+      }
+    },
+    {
+      "type": "experience",
+      "id": "education",
+      "title": "Education & Career",
+      "icon": "fa-graduation-cap",
+      "data": [
+        { "type": "work", "place": "Analytical Quantum Complexity RIKEN Hakubi Research Team", "time": "Oct. 2024 - Present", "title": "Postdoctoral Researcher" },
+        { "type": "study", "place": "The University of Tokyo, Japan", "time": "Oct. 2021 - Sep. 2024", "title": "Ph.D.", "content": "with Prof. Naomichi Hatano" }
+      ]
+    },
+    {
+      "type": "gallery",
+      "id": "gallery",
+      "title": "Gallery",
+      "icon": "fa-images",
+      "data": [
+        { 
+          "url": "https://picsum.photos/seed/p1/1200/800", 
+          "title": "Ph.D. Defense", 
+          "location": "UTokyo, Japan", 
+          "date": "Sep 2024",
+          "description": "The day of my doctoral defense."
+        }
+      ]
+    }
+  ]
+}
