@@ -63,11 +63,14 @@ export function ssgPlugin(root: string): Plugin {
         const title = appConfig.locales[url]?.title ?? "Portfolio";
         const description =
           appConfig.locales[url].description ?? "Portfolio Template";
+        const lang = appConfig.locales[url].lang;
 
-        html = html.replace(
-          /<title>(.*?)<\/title>/,
-          `<title>${title}</title>\n    <meta name="description" content="${description}" />`,
-        );
+        html = html
+          .replace(
+            /<title>(.*?)<\/title>/,
+            `<title>${title}</title>\n    <meta name="description" content="${description}" />`,
+          )
+          .replace(/<html lang="(.*?)">/, `<html lang="${lang}">`);
 
         const filePath =
           url === "/"

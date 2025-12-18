@@ -47,6 +47,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   // update title and meta description based on locale config
   useEffect(() => {
     document.title = localeConfig.title ?? "Portfolio";
+    document.documentElement.lang = localeConfig.lang;
 
     let metaDescription = document.querySelector('meta[name="description"]');
 
