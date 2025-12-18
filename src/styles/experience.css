@@ -1,0 +1,41 @@
+@layer components {
+  .experience-list {
+    @apply space-y-8 pl-0 md:pl-4;
+  }
+
+  .experience-item {
+    @apply relative pl-10 md:pl-12;
+  }
+
+  .experience-line {
+    @apply absolute left-[7.5px] md:left-[9.5px] top-5 bottom-[-2.5rem] w-px bg-slate-200 dark:bg-slate-800 z-0;
+  }
+
+  .experience-node {
+    @apply absolute left-0 top-1 md:top-1.5 w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-white dark:border-slate-950 shadow-sm flex items-center justify-center z-10 transition-all duration-300;
+  }
+
+  .experience-meta {
+    @apply flex flex-wrap items-center justify-between gap-2 px-1;
+  }
+
+  .experience-location {
+    @apply inline-flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 px-2.5 py-1 md:px-3 md:py-1.5 rounded-lg text-xs md:text-sm font-bold text-slate-400 dark:text-slate-500 shadow-sm transition-all max-w-full md:max-w-2xl min-w-0;
+  }
+
+  .experience-card {
+    @apply p-4 md:p-6;
+  }
+
+  .experience-icon-box {
+    @apply w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner;
+  }
+
+  .experience-title {
+    @apply text-lg md:text-xl font-black text-slate-900 dark:text-slate-100 leading-tight transition-colors break-words;
+  }
+
+  .experience-description {
+    @apply pt-1 md:pt-2 text-slate-400 dark:text-slate-500 text-xs md:text-base font-medium leading-relaxed italic;
+  }
+}

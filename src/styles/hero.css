@@ -1,0 +1,65 @@
+@layer components {
+  .hero-header {
+    @apply relative w-full h-screen flex items-center justify-center overflow-hidden;
+  }
+
+  .hero-bg-wrapper {
+    @apply absolute inset-0 z-0 transition-transform duration-1000 group-hover:scale-105;
+  }
+
+  .hero-overlay {
+    @apply absolute inset-0 bg-black/50 backdrop-blur-[1px];
+  }
+
+  .hero-content {
+    @apply container mx-auto px-6 max-w-7xl relative z-10 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16 text-white;
+  }
+
+  .hero-avatar-wrapper {
+    @apply w-56 h-56 md:w-80 md:h-80 lg:w-96 lg:h-96 relative flex-shrink-0;
+  }
+
+  .hero-avatar-glow {
+    @apply absolute inset-0 bg-primary-500/40 rounded-full blur-3xl group-hover:bg-primary-500/60 transition-all duration-500;
+  }
+
+  .hero-avatar-img {
+    @apply w-full h-full object-cover rounded-full border-8 border-white/20 shadow-2xl relative z-10 transition-all duration-700 hover:scale-[1.02];
+  }
+
+  .hero-info {
+    @apply flex-1 text-center lg:text-left space-y-6 max-w-3xl;
+  }
+
+  .hero-text-wrapper {
+    @apply space-y-4;
+  }
+
+  .hero-welcome {
+    @apply text-xl md:text-2xl lg:text-2xl font-black text-primary-300 uppercase drop-shadow-lg;
+  }
+
+  .hero-name {
+    @apply text-5xl md:text-7xl lg:text-7xl font-black leading-none drop-shadow-2xl;
+  }
+
+  .hero-titles {
+    @apply text-xl md:text-3xl lg:text-3xl font-black text-primary-100/95 h-12 md:h-16;
+  }
+
+  .hero-social-links {
+    @apply flex flex-wrap justify-center lg:justify-start gap-5 pt-8;
+  }
+
+  .hero-btn {
+    @apply flex items-center gap-3 bg-white/10 hover:bg-white/25 px-6 py-3 rounded-full border border-white/20 backdrop-blur-xl transition-all duration-500 transform hover:-translate-y-1 shadow-lg;
+  }
+
+  .hero-social-btn-text {
+    @apply hidden sm:inline text-base font-black tracking-wide;
+  }
+
+  .hero-scroll-indicator {
+    @apply absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-80 cursor-pointer;
+  }
+}

@@ -1,0 +1,43 @@
+@layer components {
+  .card-base {
+    @apply border border-slate-100 dark:border-white/10 shadow-sm rounded-[2rem];
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .dark .card-base {
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-0.5;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .dark .glass {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .heading-section {
+    @apply text-3xl md:text-4xl lg:text-4xl font-black text-slate-900 dark:text-slate-100 leading-none;
+  }
+
+  .label-sm {
+    @apply text-xs font-black text-primary-600 dark:text-primary-400 uppercase tracking-widest;
+  }
+
+  .text-content {
+    @apply text-slate-700 dark:text-slate-300 font-bold text-base md:text-lg leading-relaxed;
+  }
+
+  .time {
+    @apply text-xs md:text-base font-bold text-primary-600 dark:text-primary-400 px-2 py-0.5 md:px-3 md:py-1;
+  }
+}

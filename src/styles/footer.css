@@ -1,0 +1,17 @@
+@layer components {
+  .footer-container {
+    @apply mt-8 border-t border-slate-100 dark:border-white/5 pt-10 pb-12 text-center;
+  }
+
+  .footer-content {
+    @apply container mx-auto px-6 max-w-7xl;
+  }
+
+  .footer-copyright {
+    @apply text-slate-500 dark:text-slate-400 text-base md:text-lg font-semibold mb-2;
+  }
+
+  .footer-description {
+    @apply text-slate-400 dark:text-slate-500 text-xs md:text-sm tracking-wider font-medium opacity-80;
+  }
+}

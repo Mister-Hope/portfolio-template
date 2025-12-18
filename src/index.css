@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* 
+    Define your brand colors here. 
+    The system will automatically generate the palette based on these colors.
+  */
+  --primary-base: #3b82f6; /* Blue 500 */
+  --secondary-base: #6366f1; /* Indigo 500 */
+  /**
+   * Define your default font family here.
+   */
+  --font:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+@theme {
+  /* Primary Palette generated from --primary-base */
+  --color-primary-50: oklch(from var(--primary-base) 0.97 0.01 h);
+  --color-primary-100: oklch(from var(--primary-base) 0.94 0.03 h);
+  --color-primary-200: oklch(from var(--primary-base) 0.88 0.05 h);
+  --color-primary-300: oklch(from var(--primary-base) 0.8 0.09 h);
+  --color-primary-400: oklch(from var(--primary-base) 0.7 0.14 h);
+  --color-primary-500: var(--primary-base);
+  --color-primary-600: oklch(from var(--primary-base) 0.55 0.22 h);
+  --color-primary-700: oklch(from var(--primary-base) 0.45 0.2 h);
+  --color-primary-800: oklch(from var(--primary-base) 0.35 0.15 h);
+  --color-primary-900: oklch(from var(--primary-base) 0.25 0.1 h);
+  --color-primary-950: oklch(from var(--primary-base) 0.15 0.05 h);
+
+  /* Secondary Palette generated from --secondary-base */
+  --color-secondary-50: oklch(from var(--secondary-base) 0.97 0.01 h);
+  --color-secondary-100: oklch(from var(--secondary-base) 0.94 0.03 h);
+  --color-secondary-200: oklch(from var(--secondary-base) 0.88 0.05 h);
+  --color-secondary-300: oklch(from var(--secondary-base) 0.8 0.09 h);
+  --color-secondary-400: oklch(from var(--secondary-base) 0.7 0.14 h);
+  --color-secondary-500: var(--secondary-base);
+  --color-secondary-600: oklch(from var(--secondary-base) 0.55 0.22 h);
+  --color-secondary-700: oklch(from var(--secondary-base) 0.45 0.2 h);
+  --color-secondary-800: oklch(from var(--secondary-base) 0.35 0.15 h);
+  --color-secondary-900: oklch(from var(--secondary-base) 0.25 0.1 h);
+  --color-secondary-950: oklch(from var(--secondary-base) 0.15 0.05 h);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+}
+
+@import "./styles/index.css";

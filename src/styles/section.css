@@ -1,0 +1,29 @@
+@layer components {
+  .section-container {
+    @apply py-8 md:py-12 first:pt-8 scroll-mt-24 md:scroll-mt-32 border-t border-slate-100 dark:border-white/5 first:border-t-0;
+  }
+
+  .section-content-wrapper {
+    @apply flex flex-col gap-6 md:gap-10;
+  }
+
+  .section-header {
+    @apply flex flex-col gap-2 pl-2 md:pl-4;
+  }
+
+  .section-title-row {
+    @apply flex items-center gap-3;
+  }
+
+  .section-icon {
+    @apply text-2xl md:text-3xl text-primary-600 dark:text-primary-400 flex-shrink-0;
+  }
+
+  .section-divider {
+    @apply h-1 w-24 md:w-40 bg-gradient-to-r from-primary-600 to-transparent rounded-full opacity-80;
+  }
+
+  .section-children {
+    @apply w-full;
+  }
+}

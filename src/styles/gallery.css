@@ -1,0 +1,61 @@
+@layer components {
+  .gallery-grid {
+    @apply columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4;
+  }
+
+  .gallery-item {
+    @apply break-inside-avoid relative cursor-zoom-in rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500;
+  }
+
+  .gallery-image {
+    @apply w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700;
+  }
+
+  .gallery-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/80 dark:from-slate-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4;
+  }
+
+  .gallery-title {
+    @apply text-white font-bold text-base;
+  }
+
+  .gallery-meta {
+    @apply text-white/70 dark:text-white/60 text-sm flex items-center gap-2;
+  }
+
+  .lightbox-overlay {
+    @apply fixed inset-0 z-[100] bg-black/95 dark:bg-slate-950/98 backdrop-blur-xl flex items-center justify-center p-6 sm:p-12 cursor-zoom-out;
+  }
+
+  .lightbox-container {
+    @apply max-w-5xl w-full relative;
+  }
+
+  .lightbox-close {
+    @apply absolute -top-12 right-0 text-white/50 hover:text-white transition-colors;
+  }
+
+  .lightbox-image-wrapper {
+    @apply bg-white/5 p-2 rounded-2xl overflow-hidden shadow-2xl;
+  }
+
+  .lightbox-image {
+    @apply w-full h-auto max-h-[70vh] object-contain rounded-xl;
+  }
+
+  .lightbox-content {
+    @apply mt-8 text-white space-y-4 max-w-3xl mx-auto text-center;
+  }
+
+  .lightbox-title {
+    @apply text-3xl font-black tracking-tight;
+  }
+
+  .lightbox-meta {
+    @apply text-primary-400 dark:text-primary-500 font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2;
+  }
+
+  .lightbox-description {
+    @apply text-slate-300 dark:text-slate-400 text-lg leading-relaxed font-medium italic bg-white/5 p-6 rounded-3xl border border-white/10;
+  }
+}

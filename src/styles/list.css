@@ -1,0 +1,45 @@
+@layer components {
+  .list-ul {
+    @apply space-y-4 list-none text-lg;
+  }
+
+  .list-ol {
+    @apply space-y-4 list-decimal list-inside marker:text-primary-400 dark:marker:text-primary-500 marker:font-black text-lg;
+  }
+
+  .list-li-unordered {
+    @apply flex items-start gap-4;
+  }
+
+  .list-li-ordered {
+    @apply pl-2;
+  }
+
+  .list-marker-container {
+    @apply mt-1 w-6 h-6 flex-shrink-0 flex items-center justify-center transition-all;
+  }
+
+  .list-marker-check {
+    @apply text-primary-400 dark:text-primary-500 text-lg;
+  }
+
+  .list-marker-circle {
+    @apply w-3.5 h-3.5 rounded-full bg-primary-500 dark:bg-primary-400 shadow-sm;
+  }
+
+  .list-marker-square {
+    @apply w-3.5 h-3.5 rounded-[1px] bg-primary-500 dark:bg-primary-400 shadow-sm;
+  }
+
+  .list-marker-diamond {
+    @apply w-3 h-3 rotate-45 bg-primary-500 dark:bg-primary-400 shadow-sm;
+  }
+
+  .list-content {
+    @apply inline flex-1 font-semibold;
+  }
+
+  .list-link {
+    @apply hover:text-primary-600 dark:hover:text-primary-400 border-b border-transparent hover:border-primary-200 transition-all;
+  }
+}

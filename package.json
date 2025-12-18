@@ -1,0 +1,46 @@
+{
+  "name": "portfolio-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "author": {
+    "name": "Mister-Hope"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mister-Hope/portfolio-template.git"
+  },
+  "scripts": {
+    "build": "vite build",
+    "clean": "rimraf dist",
+    "dev": "vite",
+    "lint": "eslint . --fix && prettier --check --write .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@iconify/react": "^6.0.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "packageManager": "pnpm@10.25.0",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/js-yaml": "^4.0.9",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^25.0.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "eslint": "^9.39.2",
+    "eslint-config-mister-hope": "^0.9.6",
+    "jiti": "^2.6.1",
+    "js-yaml": "^4.1.1",
+    "markdown-it": "^14.1.0",
+    "prettier": "^3.7.4",
+    "rimraf": "^6.1.2",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.0"
+  }
+}

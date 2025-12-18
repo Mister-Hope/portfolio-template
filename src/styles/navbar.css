@@ -1,0 +1,77 @@
+@layer component {
+  .navbar-base {
+    @apply fixed top-0 left-0 right-0 z-[100] border-b transition-all duration-500;
+  }
+
+  .navbar-scrolled {
+    @apply py-3 md:py-4 border-slate-100 dark:border-white/10 shadow-xl shadow-slate-200/10 dark:shadow-none;
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .dark .navbar-scrolled {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .navbar-transparent {
+    @apply py-4 md:py-6 bg-transparent border-transparent shadow-none;
+  }
+
+  .navbar-container {
+    @apply container mx-auto px-6 max-w-7xl flex items-center justify-between;
+  }
+
+  .navbar-brand {
+    @apply text-xl md:text-2xl font-black tracking-tighter transition-all duration-300;
+  }
+
+  .navbar-brand-scrolled {
+    @apply text-slate-900 dark:text-white;
+  }
+
+  .navbar-brand-transparent {
+    @apply text-white drop-shadow-md;
+  }
+
+  .navbar-links {
+    @apply hidden md:flex items-center gap-8;
+  }
+
+  .navbar-link {
+    @apply text-xs md:text-sm font-black uppercase tracking-widest transition-all hover:text-primary-500;
+  }
+
+  .navbar-link-scrolled {
+    @apply text-slate-500 dark:text-slate-400;
+  }
+
+  .navbar-link-transparent {
+    @apply text-white/80;
+  }
+
+  .navbar-actions {
+    @apply flex items-center gap-3 md:border-l border-slate-200 dark:border-white/10 md:pl-5;
+  }
+
+  .nav-btn-base {
+    @apply cursor-pointer rounded-full border transition-all h-10 md:h-11 flex items-center;
+  }
+
+  .nav-btn-scrolled {
+    @apply border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary-600 hover:text-white;
+  }
+
+  .nav-btn-transparent {
+    @apply border-white/20 bg-white/10 text-white hover:bg-white hover:text-slate-900;
+  }
+
+  .navbar-locale-btn {
+    @apply gap-2 px-4 font-black text-[10px] md:text-xs uppercase tracking-widest;
+  }
+
+  .navbar-theme-btn {
+    @apply justify-center w-10 md:w-11;
+  }
+}

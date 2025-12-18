@@ -1,0 +1,11 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["config.json"],
+      "url": "./lib/config.schema.json"
+    }
+  ],
+  "yaml.schemas": {
+    "./lib/config.schema.json": "config.yml"
+  }
+}

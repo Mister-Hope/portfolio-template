@@ -1,0 +1,19 @@
+@layer components {
+  .rich-content {
+    a {
+      @apply text-primary-600 underline underline-offset-2 transition-all duration-200;
+
+      &:hover {
+        @apply text-primary-500 decoration-2;
+      }
+    }
+  }
+
+  span.rich-content img {
+    @apply inline-block;
+  }
+
+  .dark .rich-content a {
+    @apply text-primary-400;
+  }
+}
