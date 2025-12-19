@@ -147,7 +147,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   };
 
   return (
-    <div className="min-h-screen selection:bg-primary-100 dark:selection:bg-primary-900 selection:text-primary-900 dark:selection:text-primary-100">
+    <div className="min-h-screen selection:bg-primary-100 selection:text-primary-900 dark:selection:bg-primary-900 dark:selection:text-primary-100">
       {localeConfig.navbar && (
         <Navbar
           links={localeConfig.navbar.links}
@@ -163,7 +163,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
 
       <Hero hero={localeConfig.hero} locale={localePath} />
 
-      <main className="container mx-auto px-6 max-w-7xl mt-12 md:mt-16">
+      <main className="container mx-auto mt-12 max-w-7xl px-6 md:mt-16">
         {localeConfig.sections.map((block) => (
           <SectionWrapper
             key={block.id}

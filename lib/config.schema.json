@@ -604,7 +604,6 @@
           "description": "Icon class for the action button\n操作按钮的图标类名"
         }
       },
-      "required": ["text"],
       "additionalProperties": false
     },
     "ListSection": {

@@ -93,11 +93,11 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                 <img
                   src={card.logo}
                   alt={card.title}
-                  className="card-logo float-right ml-4 mb-2"
+                  className="card-logo float-right mb-2 ml-4"
                   loading="lazy"
                 />
               ) : (
-                <picture className="card-logo float-right ml-4 mb-2">
+                <picture className="card-logo float-right mb-2 ml-4">
                   <source
                     media="(prefers-color-scheme: dark)"
                     srcSet={card.logo.dark}
@@ -115,20 +115,22 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                 block
               />
             )}
-            {card.actions?.map((action, actionIndex) => {
+            {card.actions?.map(({ text, icon, link }, actionIndex) => {
+              if (!text && !icon) return null;
+
               const content = (
                 <>
-                  <span>{action.text}</span>
-                  {action.icon && (
-                    <Icon icon={action.icon} className="text-lg inline-block" />
+                  {text && <span>{text}</span>}
+                  {icon && (
+                    <Icon icon={icon} className="inline-block text-lg" />
                   )}
                 </>
               );
 
-              return action.link ? (
+              return link ? (
                 <a
                   key={actionIndex}
-                  href={action.link}
+                  href={link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="card-action mr-4"

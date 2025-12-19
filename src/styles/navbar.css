@@ -1,10 +1,10 @@
 @layer component {
   .navbar-base {
-    @apply fixed top-0 left-0 right-0 z-[100] border-b transition-all duration-500;
+    @apply fixed top-0 right-0 left-0 z-[100] border-b transition-all duration-500;
   }
 
   .navbar-scrolled {
-    @apply py-3 md:py-4 border-slate-100 dark:border-white/10 shadow-xl shadow-slate-200/10 dark:shadow-none;
+    @apply border-slate-100 py-3 shadow-xl shadow-slate-200/10 md:py-4 dark:border-white/10 dark:shadow-none;
     background: rgba(255, 255, 255, 0.7);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
@@ -16,15 +16,15 @@
   }
 
   .navbar-transparent {
-    @apply py-4 md:py-6 bg-transparent border-transparent shadow-none;
+    @apply border-transparent bg-transparent py-4 shadow-none md:py-6;
   }
 
   .navbar-container {
-    @apply container mx-auto px-6 max-w-7xl flex items-center justify-between;
+    @apply container mx-auto flex max-w-7xl items-center justify-between px-6;
   }
 
   .navbar-brand {
-    @apply text-xl md:text-2xl font-black tracking-tighter transition-all duration-300;
+    @apply text-xl font-black tracking-tighter transition-all duration-300 md:text-2xl;
   }
 
   .navbar-brand-scrolled {
@@ -36,11 +36,11 @@
   }
 
   .navbar-links {
-    @apply hidden md:flex items-center gap-8;
+    @apply hidden items-center gap-8 md:flex;
   }
 
   .navbar-link {
-    @apply text-xs md:text-sm font-black uppercase tracking-widest transition-all hover:text-primary-500;
+    @apply text-xs font-black tracking-widest uppercase transition-all hover:text-primary-500 md:text-sm;
   }
 
   .navbar-link-scrolled {
@@ -52,15 +52,15 @@
   }
 
   .navbar-actions {
-    @apply flex items-center gap-3 md:border-l border-slate-200 dark:border-white/10 md:pl-5;
+    @apply flex items-center gap-3 border-slate-200 md:border-l md:pl-5 dark:border-white/10;
   }
 
   .nav-btn-base {
-    @apply cursor-pointer rounded-full border transition-all h-10 md:h-11 flex items-center;
+    @apply flex h-10 cursor-pointer items-center rounded-full border transition-all md:h-11;
   }
 
   .nav-btn-scrolled {
-    @apply border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary-600 hover:text-white;
+    @apply border-slate-200 bg-slate-50 text-slate-600 hover:bg-primary-600 hover:text-white dark:border-white/10 dark:bg-slate-800 dark:text-slate-300;
   }
 
   .nav-btn-transparent {
@@ -68,10 +68,10 @@
   }
 
   .navbar-locale-btn {
-    @apply gap-2 px-4 font-black text-[10px] md:text-xs uppercase tracking-widest;
+    @apply gap-2 px-4 text-[10px] font-black tracking-widest uppercase md:text-xs;
   }
 
   .navbar-theme-btn {
-    @apply justify-center w-10 md:w-11;
+    @apply w-10 justify-center md:w-11;
   }
 }

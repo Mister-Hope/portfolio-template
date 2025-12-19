@@ -1,50 +1,50 @@
 @layer components {
   .gallery-grid {
-    @apply columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4;
+    @apply columns-1 gap-4 space-y-4 sm:columns-2 lg:columns-3;
   }
 
   .gallery-item {
-    @apply break-inside-avoid relative cursor-zoom-in rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500;
+    @apply relative cursor-zoom-in break-inside-avoid overflow-hidden rounded-[1rem] shadow-sm transition-all duration-500 hover:shadow-xl md:rounded-[2rem];
   }
 
   .gallery-image {
-    @apply w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700;
+    @apply h-auto w-full transform object-cover transition-transform duration-700 group-hover:scale-110;
   }
 
   .gallery-overlay {
-    @apply absolute inset-0 bg-gradient-to-t from-black/80 dark:from-slate-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4;
+    @apply absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-slate-950/90;
   }
 
   .gallery-title {
-    @apply text-white font-bold text-base;
+    @apply text-base font-bold text-white;
   }
 
   .gallery-meta {
-    @apply text-white/70 dark:text-white/60 text-sm flex items-center gap-2;
+    @apply flex items-center gap-2 text-sm text-white/70 dark:text-white/60;
   }
 
   .lightbox-overlay {
-    @apply fixed inset-0 z-[100] bg-black/95 dark:bg-slate-950/98 backdrop-blur-xl flex items-center justify-center p-6 sm:p-12 cursor-zoom-out;
+    @apply fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/95 p-6 backdrop-blur-xl sm:p-12 dark:bg-slate-950/98;
   }
 
   .lightbox-container {
-    @apply max-w-5xl w-full relative;
+    @apply relative w-full max-w-5xl;
   }
 
   .lightbox-close {
-    @apply absolute -top-12 right-0 text-white/50 hover:text-white transition-colors;
+    @apply absolute -top-12 right-0 text-white/50 transition-colors hover:text-white;
   }
 
   .lightbox-image-wrapper {
-    @apply bg-white/5 p-2 rounded-2xl overflow-hidden shadow-2xl;
+    @apply overflow-hidden rounded-2xl bg-white/5 p-2 shadow-2xl;
   }
 
   .lightbox-image {
-    @apply w-full h-auto max-h-[70vh] object-contain rounded-xl;
+    @apply h-auto max-h-[70vh] w-full rounded-xl object-contain;
   }
 
   .lightbox-content {
-    @apply mt-8 text-white space-y-4 max-w-3xl mx-auto text-center;
+    @apply mx-auto mt-8 max-w-3xl space-y-4 text-center text-white;
   }
 
   .lightbox-title {
@@ -52,10 +52,10 @@
   }
 
   .lightbox-meta {
-    @apply text-primary-400 dark:text-primary-500 font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2;
+    @apply flex items-center justify-center gap-2 text-xs font-bold tracking-widest text-primary-400 uppercase dark:text-primary-500;
   }
 
   .lightbox-description {
-    @apply text-slate-300 dark:text-slate-400 text-lg leading-relaxed font-medium italic bg-white/5 p-6 rounded-3xl border border-white/10;
+    @apply rounded-3xl border border-white/10 bg-white/5 p-6 text-lg leading-relaxed font-medium text-slate-300 italic dark:text-slate-400;
   }
 }

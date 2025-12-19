@@ -120,7 +120,7 @@ export const Experience: FC<ExperienceProps> = ({ items, types = {} }) => {
                         className="text-lg md:text-2xl"
                       />
                     </div>
-                    <div className="space-y-1.5 flex-1 min-w-0">
+                    <div className="min-w-0 flex-1 space-y-1.5">
                       <h3 className="experience-title">
                         <RichContent content={title ?? ""} />
                       </h3>

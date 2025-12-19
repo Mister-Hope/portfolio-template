@@ -1,10 +1,10 @@
 @layer components {
   .list-ul {
-    @apply space-y-4 list-none text-lg;
+    @apply list-none space-y-4 text-lg;
   }
 
   .list-ol {
-    @apply space-y-4 list-decimal list-inside marker:text-primary-400 dark:marker:text-primary-500 marker:font-black text-lg;
+    @apply list-inside list-decimal space-y-4 text-lg marker:font-black marker:text-primary-400 dark:marker:text-primary-500;
   }
 
   .list-li-unordered {
@@ -16,23 +16,23 @@
   }
 
   .list-marker-container {
-    @apply mt-1 w-6 h-6 flex-shrink-0 flex items-center justify-center transition-all;
+    @apply mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center transition-all;
   }
 
   .list-marker-check {
-    @apply text-primary-400 dark:text-primary-500 text-lg;
+    @apply text-lg text-primary-400 dark:text-primary-500;
   }
 
   .list-marker-circle {
-    @apply w-3.5 h-3.5 rounded-full bg-primary-500 dark:bg-primary-400 shadow-sm;
+    @apply h-3.5 w-3.5 rounded-full bg-primary-500 shadow-sm dark:bg-primary-400;
   }
 
   .list-marker-square {
-    @apply w-3.5 h-3.5 rounded-[1px] bg-primary-500 dark:bg-primary-400 shadow-sm;
+    @apply h-3.5 w-3.5 rounded-[1px] bg-primary-500 shadow-sm dark:bg-primary-400;
   }
 
   .list-marker-diamond {
-    @apply w-3 h-3 rotate-45 bg-primary-500 dark:bg-primary-400 shadow-sm;
+    @apply h-3 w-3 rotate-45 bg-primary-500 shadow-sm dark:bg-primary-400;
   }
 
   .list-content {
@@ -40,6 +40,6 @@
   }
 
   .list-link {
-    @apply hover:text-primary-600 dark:hover:text-primary-400 border-b border-transparent hover:border-primary-200 transition-all;
+    @apply border-b border-transparent transition-all hover:border-primary-200 hover:text-primary-600 dark:hover:text-primary-400;
   }
 }

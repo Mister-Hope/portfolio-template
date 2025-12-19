@@ -150,6 +150,11 @@ locales:
               A Vue-powered static site generator.
             category: Project
             actions:
+              - icon: logos:typescript-icon
+              - icon: logos:vue
+              - icon: logos:webpack
+              - icon: logos:vitejs
+
               - text: Website
                 link: https://vuejs.press
                 icon: external-link

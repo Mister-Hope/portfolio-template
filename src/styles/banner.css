@@ -1,6 +1,6 @@
 @layer components {
   .banner-btn {
-    @apply px-8 py-4 rounded-2xl font-bold text-center transition-all duration-300 transform hover:-translate-y-1 active:scale-95;
+    @apply transform rounded-2xl px-8 py-4 text-center font-bold transition-all duration-300 hover:-translate-y-1 active:scale-95;
   }
 
   .banner-btn-primary {
@@ -8,41 +8,41 @@
   }
 
   .banner-btn-secondary {
-    @apply bg-transparent border-2 border-white/30 hover:border-white hover:bg-white/10;
+    @apply border-2 border-white/30 bg-transparent hover:border-white hover:bg-white/10;
   }
 
   .banner-container {
-    @apply relative overflow-hidden bg-gradient-to-br from-secondary-600 to-primary-800 dark:from-secondary-800 dark:to-primary-950 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl shadow-primary-200 dark:shadow-none;
+    @apply relative overflow-hidden rounded-3xl bg-gradient-to-br from-secondary-600 to-primary-800 p-8 text-white shadow-2xl shadow-primary-200 md:rounded-[2.5rem] md:p-12 dark:from-secondary-800 dark:to-primary-950 dark:shadow-none;
   }
 
   .banner-overlay {
-    @apply absolute inset-0 bg-gradient-to-tl from-secondary-600 to-primary-800 dark:from-secondary-800 dark:to-primary-950 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out;
+    @apply absolute inset-0 bg-gradient-to-tl from-secondary-600 to-primary-800 opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-100 dark:from-secondary-800 dark:to-primary-950;
   }
 
   .banner-tag {
-    @apply inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold uppercase tracking-wider;
+    @apply inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-wider uppercase;
   }
 
   .banner-title {
-    @apply text-3xl md:text-4xl font-bold tracking-tight leading-tight transition-all;
+    @apply text-3xl leading-tight font-bold tracking-tight transition-all md:text-4xl;
 
     a {
       @apply !text-white underline decoration-white/50 transition-all;
 
       &:hover {
-        @apply decoration-white !text-primary-100;
+        @apply !text-primary-100 decoration-white;
       }
     }
   }
 
   .banner-content {
-    @apply text-primary-100 dark:text-primary-200 text-lg max-w-2xl leading-relaxed transition-all;
+    @apply max-w-2xl text-lg leading-relaxed text-primary-100 transition-all dark:text-primary-200;
 
     a {
       @apply !text-white underline decoration-primary-300/50 transition-all;
 
       &:hover {
-        @apply decoration-white !text-primary-100;
+        @apply !text-primary-100 decoration-white;
       }
     }
   }

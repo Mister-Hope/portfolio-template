@@ -81,10 +81,10 @@ export const Banner: FC<BannerProps> = ({
       <div className="banner-overlay" />
 
       {/* Decorative shapes */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary-400/20 rounded-full blur-2xl -ml-20 -mb-20" />
+      <div className="absolute top-0 right-0 -mt-20 -mr-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-48 w-48 rounded-full bg-primary-400/20 blur-2xl" />
 
-      <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8">
+      <div className="relative z-10 flex flex-col items-center gap-8 lg:flex-row">
         <div className="flex-1 space-y-6">
           {tags &&
             (Array.isArray(tags) ? (
@@ -108,7 +108,7 @@ export const Banner: FC<BannerProps> = ({
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+        <div className="flex w-full flex-col gap-4 sm:flex-row lg:w-auto">
           {actions.map(({ link, primary, label }, index) => (
             <a
               key={index}

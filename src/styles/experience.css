@@ -8,11 +8,11 @@
   }
 
   .experience-line {
-    @apply absolute left-[7.5px] md:left-[9.5px] top-5 bottom-[-2.5rem] w-px bg-slate-200 dark:bg-slate-800 z-0;
+    @apply absolute top-5 bottom-[-2.5rem] left-[7.5px] z-0 w-px bg-slate-200 md:left-[9.5px] dark:bg-slate-800;
   }
 
   .experience-node {
-    @apply absolute left-0 top-1 md:top-1.5 w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-white dark:border-slate-950 shadow-sm flex items-center justify-center z-10 transition-all duration-300;
+    @apply absolute top-1 left-0 z-10 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white shadow-sm transition-all duration-300 md:top-1.5 md:h-5 md:w-5 dark:border-slate-950;
   }
 
   .experience-meta {
@@ -20,7 +20,7 @@
   }
 
   .experience-location {
-    @apply inline-flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 px-2.5 py-1 md:px-3 md:py-1.5 rounded-lg text-xs md:text-sm font-bold text-slate-400 dark:text-slate-500 shadow-sm transition-all max-w-full md:max-w-2xl min-w-0;
+    @apply inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-lg border border-slate-100 bg-white px-2.5 py-1 text-xs font-bold text-slate-400 shadow-sm transition-all md:max-w-2xl md:px-3 md:py-1.5 md:text-sm dark:border-white/5 dark:bg-slate-900 dark:text-slate-500;
   }
 
   .experience-card {
@@ -28,14 +28,14 @@
   }
 
   .experience-icon-box {
-    @apply w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner;
+    @apply flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl shadow-inner md:h-14 md:w-14 md:rounded-2xl;
   }
 
   .experience-title {
-    @apply text-lg md:text-xl font-black text-slate-900 dark:text-slate-100 leading-tight transition-colors break-words;
+    @apply text-lg leading-tight font-black break-words text-slate-900 transition-colors md:text-xl dark:text-slate-100;
   }
 
   .experience-description {
-    @apply pt-1 md:pt-2 text-slate-400 dark:text-slate-500 text-xs md:text-base font-medium leading-relaxed italic;
+    @apply pt-1 text-xs leading-relaxed font-medium text-slate-400 italic md:pt-2 md:text-base dark:text-slate-500;
   }
 }

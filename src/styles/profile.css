@@ -1,6 +1,6 @@
 @layer components {
   .profile-container {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-8 p-6 md:p-8;
+    @apply grid grid-cols-1 gap-8 p-6 md:grid-cols-2 md:p-8;
   }
 
   .profile-fields-col {
@@ -8,7 +8,7 @@
   }
 
   .profile-label {
-    @apply mb-2 flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 w-fit px-3 py-1.5 rounded-lg;
+    @apply mb-2 flex w-fit items-center gap-2 rounded-lg bg-primary-50 px-3 py-1.5 dark:bg-primary-900/30;
   }
 
   .profile-tags-wrapper {
@@ -16,11 +16,11 @@
   }
 
   .profile-tag {
-    @apply px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-700 dark:text-slate-300 font-black shadow-sm hover:border-primary-300 dark:hover:border-primary-700 hover:bg-primary-50/50 dark:hover:bg-primary-900/20 transition-all cursor-default text-sm;
+    @apply cursor-default rounded-2xl border border-slate-100 bg-white px-5 py-2.5 text-sm font-black text-slate-700 shadow-sm transition-all hover:border-primary-300 hover:bg-primary-50/50 dark:border-white/5 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-primary-700 dark:hover:bg-primary-900/20;
   }
 
   .profile-text-value {
-    @apply text-slate-800 dark:text-slate-100 font-black text-xl md:text-2xl leading-tight;
+    @apply text-xl leading-tight font-black text-slate-800 md:text-2xl dark:text-slate-100;
   }
 
   .profile-contact-col {
@@ -28,7 +28,7 @@
   }
 
   .profile-contact-header {
-    @apply mb-4 flex items-center gap-2 bg-primary-50 dark:bg-primary-900/30 w-fit px-3 py-1.5 rounded-lg;
+    @apply mb-4 flex w-fit items-center gap-2 rounded-lg bg-primary-50 px-3 py-1.5 dark:bg-primary-900/30;
   }
 
   .profile-contact-list {
@@ -40,7 +40,7 @@
   }
 
   .profile-icon-box {
-    @apply w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-white/5 flex items-center justify-center text-slate-400 dark:text-slate-500 transition-all duration-500;
+    @apply flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-100 bg-white text-slate-400 shadow-sm transition-all duration-500 dark:border-white/5 dark:bg-slate-800 dark:text-slate-500;
   }
 
   .profile-contact-info {
@@ -48,22 +48,22 @@
   }
 
   .profile-contact-label {
-    @apply text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest mb-0.5;
+    @apply mb-0.5 text-[10px] font-black tracking-widest text-slate-400 uppercase dark:text-slate-500;
   }
 
   .profile-contact-link {
-    @apply text-slate-800 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 font-bold text-lg transition-colors border-b border-transparent hover:border-primary-100 dark:hover:border-primary-900 w-fit;
+    @apply w-fit border-b border-transparent text-lg font-bold text-slate-800 transition-colors hover:border-primary-100 hover:text-primary-600 dark:text-slate-200 dark:hover:border-primary-900 dark:hover:text-primary-400;
   }
 
   .profile-slogan-box {
-    @apply p-7 bg-gradient-to-br from-primary-100/50 to-secondary-100/50 dark:from-primary-900/40 dark:to-secondary-900/40 rounded-[2rem] border border-primary-100/50 dark:border-primary-400/10 relative overflow-hidden;
+    @apply relative overflow-hidden rounded-[2rem] border border-primary-100/50 bg-gradient-to-br from-primary-100/50 to-secondary-100/50 p-7 dark:border-primary-400/10 dark:from-primary-900/40 dark:to-secondary-900/40;
   }
 
   .profile-quote-icon {
-    @apply absolute -top-1 -left-1 text-5xl text-primary-500/30 dark:text-primary-300/30 select-none;
+    @apply absolute -top-1 -left-1 text-5xl text-primary-500/30 select-none dark:text-primary-300/30;
   }
 
   .profile-slogan-text {
-    @apply text-base text-primary-800 dark:text-primary-300 font-black leading-relaxed relative z-10 italic;
+    @apply relative z-10 text-base leading-relaxed font-black text-primary-800 italic dark:text-primary-300;
   }
 }

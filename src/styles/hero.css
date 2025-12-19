@@ -1,6 +1,6 @@
 @layer components {
   .hero-header {
-    @apply relative w-full h-screen flex items-center justify-center overflow-hidden;
+    @apply relative flex h-screen w-full items-center justify-center overflow-hidden;
   }
 
   .hero-bg-wrapper {
@@ -12,23 +12,23 @@
   }
 
   .hero-content {
-    @apply container mx-auto px-6 max-w-7xl relative z-10 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16 text-white;
+    @apply relative z-10 container mx-auto flex max-w-7xl flex-col items-center justify-center gap-12 px-6 text-white lg:flex-row lg:gap-16;
   }
 
   .hero-avatar-wrapper {
-    @apply w-56 h-56 md:w-80 md:h-80 lg:w-96 lg:h-96 relative flex-shrink-0;
+    @apply relative h-56 w-56 flex-shrink-0 md:h-80 md:w-80 lg:h-96 lg:w-96;
   }
 
   .hero-avatar-glow {
-    @apply absolute inset-0 bg-primary-500/40 rounded-full blur-3xl group-hover:bg-primary-500/60 transition-all duration-500;
+    @apply absolute inset-0 rounded-full bg-primary-500/40 blur-3xl transition-all duration-500 group-hover:bg-primary-500/60;
   }
 
   .hero-avatar-img {
-    @apply w-full h-full object-cover rounded-full border-8 border-white/20 shadow-2xl relative z-10 transition-all duration-700 hover:scale-[1.02];
+    @apply relative z-10 h-full w-full rounded-full border-8 border-white/20 object-cover shadow-2xl transition-all duration-700 hover:scale-[1.02];
   }
 
   .hero-info {
-    @apply flex-1 text-center lg:text-left space-y-6 max-w-3xl;
+    @apply max-w-3xl flex-1 space-y-6 text-center lg:text-left;
   }
 
   .hero-text-wrapper {
@@ -36,30 +36,30 @@
   }
 
   .hero-welcome {
-    @apply text-xl md:text-2xl lg:text-2xl font-black text-primary-300 uppercase drop-shadow-lg;
+    @apply text-xl font-black text-primary-300 uppercase drop-shadow-lg md:text-2xl lg:text-2xl;
   }
 
   .hero-name {
-    @apply text-5xl md:text-7xl lg:text-7xl font-black leading-none drop-shadow-2xl;
+    @apply text-5xl leading-none font-black drop-shadow-2xl md:text-7xl lg:text-7xl;
   }
 
   .hero-titles {
-    @apply text-xl md:text-3xl lg:text-3xl font-black text-primary-100/95 h-12 md:h-16;
+    @apply h-12 text-xl font-black text-primary-100/95 md:h-16 md:text-3xl lg:text-3xl;
   }
 
   .hero-social-links {
-    @apply flex flex-wrap justify-center lg:justify-start gap-5 pt-8;
+    @apply flex flex-wrap justify-center gap-5 pt-8 lg:justify-start;
   }
 
   .hero-btn {
-    @apply flex items-center gap-3 bg-white/10 hover:bg-white/25 px-6 py-3 rounded-full border border-white/20 backdrop-blur-xl transition-all duration-500 transform hover:-translate-y-1 shadow-lg;
+    @apply flex transform items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-3 shadow-lg backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:bg-white/25;
   }
 
   .hero-social-btn-text {
-    @apply hidden sm:inline text-base font-black tracking-wide;
+    @apply hidden text-base font-black tracking-wide sm:inline;
   }
 
   .hero-scroll-indicator {
-    @apply absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-80 cursor-pointer;
+    @apply absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer opacity-80;
   }
 }

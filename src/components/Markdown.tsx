@@ -26,13 +26,13 @@ export interface MarkdownProps {
 export const Markdown: FC<MarkdownProps> = ({ content, card = false }) => {
   if (card)
     return (
-      <div className="card-base p-8 md:p-10 text-content font-medium">
+      <div className="card-base text-content p-8 font-medium md:p-10">
         <RichContent content={content} />
       </div>
     );
 
   return (
-    <div className="px-2 md:px-4 text-content font-medium">
+    <div className="text-content px-2 font-medium md:px-4">
       <RichContent content={content} />
     </div>
   );

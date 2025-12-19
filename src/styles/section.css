@@ -1,6 +1,6 @@
 @layer components {
   .section-container {
-    @apply py-8 md:py-12 first:pt-8 scroll-mt-24 md:scroll-mt-32 border-t border-slate-100 dark:border-white/5 first:border-t-0;
+    @apply scroll-mt-24 border-t border-slate-100 py-8 first:border-t-0 first:pt-8 md:scroll-mt-32 md:py-12 dark:border-white/5;
   }
 
   .section-content-wrapper {
@@ -16,11 +16,11 @@
   }
 
   .section-icon {
-    @apply text-2xl md:text-3xl text-primary-600 dark:text-primary-400 flex-shrink-0;
+    @apply flex-shrink-0 text-2xl text-primary-600 md:text-3xl dark:text-primary-400;
   }
 
   .section-divider {
-    @apply h-1 w-24 md:w-40 bg-gradient-to-r from-primary-600 to-transparent rounded-full opacity-80;
+    @apply h-1 w-24 rounded-full bg-gradient-to-r from-primary-600 to-transparent opacity-80 md:w-40;
   }
 
   .section-children {
