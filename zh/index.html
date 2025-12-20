@@ -6,12 +6,19 @@
     <title>Mister-Hope | 作品集</title>
     <meta name="description" content="前端开发者 Mister-Hope 的个人作品集。" />
     <meta name="description" content="The personal portfolio of Mister-Hope, a front-end developer." />
+    <script>
+      const theme = localStorage.getItem("theme");
+      const isDark =
+        theme === "dark" ||
+        (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      if (isDark) document.documentElement.classList.add("dark");
+    </script>
     <link rel="preconnect" href="https://api.iconify.design" crossorigin />
-    <script type="module" crossorigin src="/assets/index-DLj3HP0j.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-COabjz-L.css">
+    <script type="module" crossorigin src="/assets/index-CuxOvNg3.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CoyTU2Rf.css">
   </head>
   <body
-    class="bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100"
+    class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100"
   >
     <div id="root"><link rel="preload" as="image" href="/bg.avif" fetchPriority="high"/><link rel="preload" as="image" href="/avatar.avif"/><div class="min-h-screen selection:bg-primary-100 selection:text-primary-900 dark:selection:bg-primary-900 dark:selection:text-primary-100"><nav class="navbar-base navbar-transparent"><div class="navbar-container"><a href="#" class="navbar-brand navbar-brand-transparent">Mister-Hope</a><div class="flex items-center gap-4 md:gap-8"><div class="navbar-links"><a href="#profile" class="navbar-link navbar-link-transparent">个人资料</a><a href="#experience" class="navbar-link navbar-link-transparent">经历</a><a href="#projects" class="navbar-link navbar-link-transparent">项目</a><a href="#publications" class="navbar-link navbar-link-transparent">研究成果</a><a href="#gallery" class="navbar-link navbar-link-transparent">相册</a></div><div class="navbar-actions"><button class="nav-btn-base navbar-locale-btn nav-btn-transparent"><span></span>EN</button><button class="nav-btn-base navbar-theme-btn nav-btn-transparent" title="切换主题"><span></span></button></div></div></div></nav><header class="group hero-header"><div class="hero-bg-wrapper"><img src="/bg.avif" alt="Background" class="absolute inset-0 h-full w-full object-cover object-center" fetchPriority="high"/><div class="hero-overlay"></div></div><div class="hero-content"><div class="group hero-avatar-wrapper"><div class="hero-avatar-glow"></div><img src="/avatar.avif" alt="Mister-Hope" class="hero-avatar-img"/></div><div class="hero-info"><div class="hero-text-wrapper"><h2 class="hero-welcome tracking-[0.2em]">👋 你好，我是</h2><h1 class="hero-name tracking-tighter">Mister-Hope</h1><div class="hero-titles tracking-tight"><span class="typewriter-cursor"></span></div></div><div class="hero-social-links"><a href="https://mister-hope.com" target="_blank" rel="noopener noreferrer" class="group hero-btn" title="博客"><span></span><span class="hero-social-btn-text">博客</span></a><a href="https://github.com/Mister-Hope" target="_blank" rel="noopener noreferrer" class="group hero-btn" title="GitHub"><span></span><span class="hero-social-btn-text">GitHub</span></a><a href="https://www.linkedin.com/in/mister-hope/" target="_blank" rel="noopener noreferrer" class="group hero-btn" title="领英"><span></span><span class="hero-social-btn-text">领英</span></a><a href="https://x.com/Mister_Hope" target="_blank" rel="noopener noreferrer" class="group hero-btn" title="X"><span></span><span class="hero-social-btn-text">X</span></a></div></div></div><div class="hero-scroll-indicator"><span></span></div></header><main class="container mx-auto mt-12 max-w-7xl px-6 md:mt-16"><section id="profile" class="section-container"><div class="section-content-wrapper"><div class="section-header"><div class="section-title-row"><span></span><h2 class="section-heading tracking-tighter">个人资料</h2></div><div class="section-divider"></div></div><div class="section-children"><div class="profile-container card-base"><div class="profile-fields-col"><div><h4 class="profile-label label-sm"><span></span>姓名</h4><div class="rich-content profile-text-value"><p>约翰·霍普</p>
 </div></div><div><h4 class="profile-label label-sm"><span></span>所属机构</h4><div class="rich-content profile-text-value"><p>东北育才学校</p>
