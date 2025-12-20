@@ -1,3 +1,11 @@
+@utility text-main {
+  @apply text-sm md:text-base;
+}
+
+@utility text-sub {
+  @apply text-xs md:text-sm;
+}
+
 @layer components {
   .card-base {
     @apply rounded-[1rem] border border-slate-100 shadow-sm md:rounded-[2rem] dark:border-white/10;

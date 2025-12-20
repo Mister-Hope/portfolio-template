@@ -40,7 +40,7 @@
   }
 
   .navbar-link {
-    @apply text-xs font-black tracking-widest uppercase transition-all hover:text-primary-500 md:text-sm;
+    @apply text-sub font-black tracking-widest uppercase transition-all hover:text-primary-500;
   }
 
   .navbar-link-scrolled {

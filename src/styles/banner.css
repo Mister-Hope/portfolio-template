@@ -48,6 +48,6 @@
   }
 
   .banner-footer {
-    @apply flex items-center gap-3 text-sm font-semibold text-primary-200 dark:text-primary-300;
+    @apply flex items-center gap-3 text-main font-semibold text-primary-200 dark:text-primary-300;
   }
 }

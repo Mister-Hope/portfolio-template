@@ -120,7 +120,7 @@ export const Navbar: FC<NavbarProps> = ({
                   scrolled ? "nav-btn-scrolled" : "nav-btn-transparent"
                 }`}
               >
-                <Icon icon="language" className="text-sm md:text-base" />
+                <Icon icon="language" className="text-main" />
                 {nextLocaleName}
               </button>
             )}
@@ -134,7 +134,7 @@ export const Navbar: FC<NavbarProps> = ({
             >
               <Icon
                 icon={theme === "light" ? "moon" : "sun"}
-                className="text-sm md:text-base"
+                className="text-main"
               />
             </button>
           </div>

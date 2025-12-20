@@ -20,7 +20,7 @@
   }
 
   .experience-location {
-    @apply inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-lg border border-slate-100 bg-white px-2.5 py-1 text-xs font-bold text-slate-400 shadow-sm transition-all md:max-w-2xl md:px-3 md:py-1.5 md:text-sm dark:border-white/5 dark:bg-slate-900 dark:text-slate-500;
+    @apply inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-lg border border-slate-100 bg-white px-2.5 py-1 text-sub font-bold text-slate-400 shadow-sm transition-all md:max-w-2xl md:px-3 md:py-1.5 dark:border-white/5 dark:bg-slate-900 dark:text-slate-500;
   }
 
   .experience-card {

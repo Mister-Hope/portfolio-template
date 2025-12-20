@@ -12,6 +12,6 @@
   }
 
   .footer-description {
-    @apply text-xs font-medium tracking-wider text-slate-400 opacity-80 md:text-sm dark:text-slate-500;
+    @apply text-sub font-medium tracking-wider text-slate-400 opacity-80 dark:text-slate-500;
   }
 }
