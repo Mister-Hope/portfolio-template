@@ -1,3 +1,5 @@
+import type { AdaptiveImageSource } from "./image.js";
+
 /**
  * Portfolio media link configuration
  * 个人作品集媒体链接配置
@@ -44,12 +46,12 @@ export interface HeroConfig {
    * Avatar image URL
    * 头像图片链接
    */
-  avatar: string;
+  avatar: AdaptiveImageSource;
   /**
    * Background image URL
    * 背景图片链接
    */
-  bgImage: string;
+  bgImage: AdaptiveImageSource;
   /**
    * Social media links
    * 社交媒体链接

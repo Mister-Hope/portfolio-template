@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import type { HeroConfig } from "../types/index.js";
 import { isCJKLocale } from "../utils/index.js";
+import { AdaptiveImage } from "./AdaptiveImage.js";
 import { Icon } from "./Icon.js";
 import { Typewriter } from "./Typewriter.js";
 
@@ -33,7 +34,7 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
     <header className="group hero-header">
       {/* Background with Overlay */}
       <div className="hero-bg-wrapper">
-        <img
+        <AdaptiveImage
           src={hero.bgImage}
           alt="Background"
           className="absolute inset-0 h-full w-full object-cover object-center"
@@ -46,7 +47,11 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
         {/* Avatar Section */}
         <div className="group hero-avatar-wrapper">
           <div className="hero-avatar-glow" />
-          <img src={hero.avatar} alt={hero.name} className="hero-avatar-img" />
+          <AdaptiveImage
+            src={hero.avatar}
+            alt={hero.name}
+            className="hero-avatar-img"
+          />
         </div>
 
         {/* Info Section */}

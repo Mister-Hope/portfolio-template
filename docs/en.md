@@ -103,12 +103,12 @@ The optional `config` object contains the following fields:
     - Details: Titles for the typewriter animation under the name.
 
   - `avatar`:
-    - Type: String
-    - Details: URL to the avatar image (relative to `public/` or absolute).
+    - Type: `string | { light: string; dark: string }`
+    - Details: URL to the avatar image (relative to `public/` or absolute) or an object with light/dark mode URLs.
 
   - `bgImage`:
-    - Type: String
-    - Details: Background image URL for the hero header.
+    - Type: `string | { light: string; dark: string }`
+    - Details: Background image URL for the hero header or an object with light/dark mode URLs.
 
   - `medias`:
     - Type: `Array<HeroMedia>` (optional)

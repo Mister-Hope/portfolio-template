@@ -23,6 +23,27 @@
   },
   "required": ["locales"],
   "definitions": {
+    "AdaptiveImage": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "light": {
+              "type": "string"
+            },
+            "dark": {
+              "type": "string"
+            }
+          },
+          "required": ["light", "dark"],
+          "additionalProperties": false
+        }
+      ],
+      "description": "Image URL or object with light/dark URLs\n图片链接或包含亮/暗模式链接的对象"
+    },
     "ExperienceTypes": {
       "type": "object",
       "additionalProperties": {
@@ -130,11 +151,11 @@
           "description": "Array of titles/roles (for typewriter effect)\n头衔/角色数组 (用于打字机效果)"
         },
         "avatar": {
-          "type": "string",
+          "$ref": "#/definitions/AdaptiveImage",
           "description": "Avatar image URL\n头像图片链接"
         },
         "bgImage": {
-          "type": "string",
+          "$ref": "#/definitions/AdaptiveImage",
           "description": "Background image URL\n背景图片链接"
         },
         "medias": {
@@ -549,22 +570,7 @@
           "description": "Card title\n卡片标题"
         },
         "logo": {
-          "oneOf": [
-            { "type": "string" },
-            {
-              "type": "object",
-              "properties": {
-                "light": {
-                  "type": "string"
-                },
-                "dark": {
-                  "type": "string"
-                }
-              },
-              "required": ["light", "dark"],
-              "additionalProperties": false
-            }
-          ],
+          "$ref": "#/definitions/AdaptiveImage",
           "description": "Logo image URL or object with light/dark URLs\nLogo 图片链接或包含亮/暗模式链接的对象"
         },
         "category": {

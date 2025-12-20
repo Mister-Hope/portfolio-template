@@ -1,5 +1,7 @@
 import type { FC } from "react";
+import type { AdaptiveImageSource } from "../types/index.js";
 import { isCJKLocale } from "../utils/index.js";
+import { AdaptiveImage } from "./AdaptiveImage.js";
 import { Icon } from "./Icon.js";
 import { RichContent } from "./RichContent.js";
 
@@ -36,7 +38,7 @@ export interface CardItem {
    * Optional logo URL or object with light/dark mode URLs
    * 可选的标志 URL 或包含亮色/暗色模式 URL 的对象
    */
-  logo?: string | { light: string; dark: string };
+  logo?: AdaptiveImageSource;
 
   /**
    * Category label (e.g., "Thesis")
@@ -88,23 +90,14 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                 {card.category}
               </h4>
             )}
-            {card.logo &&
-              (typeof card.logo === "string" ? (
-                <img
-                  src={card.logo}
-                  alt={card.title}
-                  className="card-logo float-right mb-2 ml-4"
-                  loading="lazy"
-                />
-              ) : (
-                <picture className="card-logo float-right mb-2 ml-4">
-                  <source
-                    media="(prefers-color-scheme: dark)"
-                    srcSet={card.logo.dark}
-                  />
-                  <img src={card.logo.light} alt={card.title} loading="lazy" />
-                </picture>
-              ))}
+            {card.logo && (
+              <AdaptiveImage
+                src={card.logo}
+                alt={card.title}
+                className="card-logo float-right mb-2 ml-4"
+                loading="lazy"
+              />
+            )}
             <h3 className="card-title">
               <RichContent content={card.title} />
             </h3>
