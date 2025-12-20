@@ -16,7 +16,7 @@
   }
 
   .card-decoration {
-    @apply absolute top-0 right-0 -mt-16 -mr-16 h-36 w-36 rounded-full bg-primary-500/5 transition-colors duration-300;
+    @apply absolute top-0 right-0 -mt-12 -mr-12 h-24 w-24 rounded-full bg-primary-500/5 transition-colors duration-300;
   }
 
   .card-title {

@@ -80,9 +80,9 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
   return (
     <div className="card-grid">
       {items.map((card, idx) => (
-        <div key={idx} className="card-item card-base">
+        <div key={idx} className="card-item flex flex-col card-base">
           <div className="card-decoration" />
-          <div className="relative z-10">
+          <div className="relative z-10 block">
             {card.category && (
               <h4 className={`mb-3 label-sm ${isCJK ? "" : "tracking-widest"}`}>
                 {card.category}
@@ -115,35 +115,40 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                 block
               />
             )}
-            {card.actions?.map(({ text, icon, link }, actionIndex) => {
-              if (!text && !icon) return null;
-
-              const content = (
-                <>
-                  {text && <span>{text}</span>}
-                  {icon && (
-                    <Icon icon={icon} className="inline-block text-lg" />
-                  )}
-                </>
-              );
-
-              return link ? (
-                <a
-                  key={actionIndex}
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="card-action mr-4"
-                >
-                  {content}
-                </a>
-              ) : (
-                <span key={actionIndex} className="card-action mr-4">
-                  {content}
-                </span>
-              );
-            })}
           </div>
+          {card.actions && (
+            <div className="relative z-10 mt-auto flex flex-wrap items-center">
+              {card.actions.map(({ text, icon, link }, actionIndex) => {
+                if (!text && !icon) return null;
+
+                const className = `card-action ${text ? "mx-1" : "mx-0.5"}`;
+                const content = (
+                  <>
+                    {text && <span>{text}</span>}
+                    {icon && (
+                      <Icon icon={icon} className="inline-block text-lg" />
+                    )}
+                  </>
+                );
+
+                return link ? (
+                  <a
+                    key={actionIndex}
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={className}
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <span key={actionIndex} className={className}>
+                    {content}
+                  </span>
+                );
+              })}
+            </div>
+          )}
         </div>
       ))}
     </div>
