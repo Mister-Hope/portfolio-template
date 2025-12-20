@@ -130,7 +130,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={className}
+                    className={`${className} card-action-link`}
                   >
                     {content}
                   </a>

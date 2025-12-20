@@ -28,6 +28,10 @@
   }
 
   .card-action {
-    @apply inline-flex items-center gap-1.5 text-xs font-black text-slate-400 decoration-2 underline-offset-4 transition-colors hover:text-primary-600 hover:underline dark:text-slate-500 dark:hover:text-primary-400;
+    @apply inline-flex items-center gap-1.5 text-xs font-black text-slate-400 transition-colors dark:text-slate-500;
+  }
+
+  .card-action-link {
+    @apply decoration-2 underline-offset-4 hover:text-primary-600 hover:underline dark:hover:text-primary-400;
   }
 }
