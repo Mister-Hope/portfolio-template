@@ -39,7 +39,7 @@ cd your-repository
    # cp examples/config.example.js config.js
    ```
 
-2. 打开 `config.yml` 并开始添加你的信息！
+2. 打开复制的配置文件（例如：`config.yml`）并开始添加你的信息！
 
 关于如何配置每个部分的详细指南：
 

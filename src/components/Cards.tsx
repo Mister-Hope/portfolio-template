@@ -10,7 +10,7 @@ export interface CardAction {
    * Action button label (e.g., "View PDF")
    * 操作按钮标签 (例如 "查看 PDF")
    */
-  text: string;
+  text?: string;
   /**
    * Link URL
    * 链接地址

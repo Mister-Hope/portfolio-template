@@ -29,6 +29,7 @@ jobs:
 
       - name: Build Docs
         run: |-
+          cp examples/config.example.yml config.yml
           pnpm build
           > dist/.nojekyll
 

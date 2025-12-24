@@ -1,10 +1,8 @@
-name: Test Docs
+name: Linter Test
 
 on:
   pull_request:
   push:
-    branches-ignore:
-      - main
 
 permissions:
   contents: read
@@ -12,6 +10,9 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # Only run linter on the main repository
+    # We can not force users to satisfy our linter rules on forks with their configurations
+    if: github.repository == 'Mister-Hope/portfolio-template'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -28,7 +29,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Build Docs
+      - name: Run linter
         run: |-
-          cp examples/config.example.yml config.yml
-          pnpm build
+          pnpm lint

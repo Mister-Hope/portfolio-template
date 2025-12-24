@@ -46,7 +46,7 @@ This project is driven by a configuration file. You **do not** need to edit the 
    # cp examples/config.example.js config.js
    ```
 
-2. Open `config.yml` and start adding your information!
+2. Open the copied config file (e.g.: `config.yml`) and start adding your information!
 
 Detailed guides on how to configure every section:
 
