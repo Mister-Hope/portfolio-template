@@ -37,8 +37,7 @@ export interface BannerSection extends SectionBase {
   data: BannerProps;
 }
 
-export interface TimelineSection
-  extends SectionBase, Omit<TimelineProps, "items"> {
+export interface TimelineSection extends SectionBase, Omit<TimelineProps, "items"> {
   type: "timeline";
   data: TimelineItem[];
 }

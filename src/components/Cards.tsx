@@ -86,9 +86,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
           <div className="card-decoration" />
           <div className="relative z-10 block">
             {card.category && (
-              <h4 className={`mb-3 label-sm ${isCJK ? "" : "tracking-widest"}`}>
-                {card.category}
-              </h4>
+              <h4 className={`mb-3 label-sm ${isCJK ? "" : "tracking-widest"}`}>{card.category}</h4>
             )}
             {card.logo && (
               <AdaptiveImage
@@ -102,11 +100,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
               <RichContent content={card.title} />
             </h3>
             {card.description && (
-              <RichContent
-                className="card-description"
-                content={card.description}
-                block
-              />
+              <RichContent className="card-description" content={card.description} block />
             )}
           </div>
           {card.actions && (
@@ -118,9 +112,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                 const content = (
                   <>
                     {text && <span>{text}</span>}
-                    {icon && (
-                      <Icon icon={icon} className="inline-block text-lg" />
-                    )}
+                    {icon && <Icon icon={icon} className="inline-block text-lg" />}
                   </>
                 );
 

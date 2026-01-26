@@ -24,12 +24,13 @@ export interface MarkdownProps {
  * 显示带有玻璃拟态样式的简单文本块。
  */
 export const Markdown: FC<MarkdownProps> = ({ content, card = false }) => {
-  if (card)
+  if (card) {
     return (
       <div className="card-base p-8 text-content font-medium md:p-10">
         <RichContent content={content} />
       </div>
     );
+  }
 
   return (
     <div className="px-2 text-content font-medium md:px-4">

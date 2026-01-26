@@ -26,14 +26,12 @@ export const defaultExperienceTypes: ExperienceTypesConfig = {
   work: {
     bgClass: "bg-emerald-600",
     icon: "briefcase",
-    iconClass:
-      "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400",
+    iconClass: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400",
   },
   study: {
     bgClass: "bg-indigo-600",
     icon: "graduation-cap",
-    iconClass:
-      "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400",
+    iconClass: "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400",
   },
   volunteer: {
     bgClass: "bg-red-600",
@@ -48,7 +46,6 @@ export const defaultExperienceTypes: ExperienceTypesConfig = {
   project: {
     bgClass: "bg-purple-600",
     icon: "laptop-code",
-    iconClass:
-      "bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400",
+    iconClass: "bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400",
   },
 };

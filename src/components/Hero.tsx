@@ -47,22 +47,14 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
         {/* Avatar Section */}
         <div className="group hero-avatar-wrapper">
           <div className="hero-avatar-glow" />
-          <AdaptiveImage
-            src={hero.avatar}
-            alt={hero.name}
-            className="hero-avatar-img"
-          />
+          <AdaptiveImage src={hero.avatar} alt={hero.name} className="hero-avatar-img" />
         </div>
 
         {/* Info Section */}
         <div className="hero-info">
           <div className="hero-text-wrapper">
-            <h2 className={`hero-welcome ${isCJK ? "" : "tracking-[0.2em]"}`}>
-              {hero.welcome}
-            </h2>
-            <h1 className={`hero-name ${isCJK ? "" : "tracking-tighter"}`}>
-              {hero.name}
-            </h1>
+            <h2 className={`hero-welcome ${isCJK ? "" : "tracking-[0.2em]"}`}>{hero.welcome}</h2>
+            <h1 className={`hero-name ${isCJK ? "" : "tracking-tighter"}`}>{hero.name}</h1>
             <div className={`hero-titles ${isCJK ? "" : "tracking-tight"}`}>
               <Typewriter texts={hero.titles} />
             </div>

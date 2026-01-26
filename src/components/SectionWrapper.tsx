@@ -47,13 +47,7 @@ export interface SectionProps extends SectionBase {
  *
  * 为内容章节提供一致的样式、间距和标题的包装器组件。
  */
-export const SectionWrapper: FC<SectionProps> = ({
-  title,
-  icon,
-  children,
-  id,
-  locale,
-}) => {
+export const SectionWrapper: FC<SectionProps> = ({ title, icon, children, id, locale }) => {
   const isCJK = isCJKLocale(locale);
 
   return (
@@ -64,11 +58,7 @@ export const SectionWrapper: FC<SectionProps> = ({
           <div className="section-header">
             <div className="section-title-row">
               {icon && <Icon icon={icon} className="section-icon" />}
-              <h2
-                className={`section-heading ${isCJK ? "" : "tracking-tighter"}`}
-              >
-                {title}
-              </h2>
+              <h2 className={`section-heading ${isCJK ? "" : "tracking-tighter"}`}>{title}</h2>
             </div>
             <div className="section-divider" />
           </div>

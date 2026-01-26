@@ -1,3 +1,4 @@
+// oxlint-disable import/max-dependencies
 import type { FC, ReactElement } from "react";
 import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
@@ -19,29 +20,22 @@ import { config, localePaths, locales } from "./config.js";
 import { isSSR } from "./utils/index.js";
 
 export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
-  const [localePath, setLocalePath] = useState<string>(
-    () => initialLocale ?? getLocaleFromPath(),
-  );
-  const [localeConfig, setLocaleConfig] = useState<LocaleConfig>(
-    locales[localePath],
-  );
+  const [localePath, setLocalePath] = useState<string>(() => initialLocale ?? getLocaleFromPath());
+  const [localeConfig, setLocaleConfig] = useState<LocaleConfig>(locales[localePath]);
 
   const [theme, setTheme] = useState<"light" | "dark">(() =>
     isSSR
       ? "light"
       : ((localStorage.getItem("theme") as "light" | "dark" | undefined) ??
-        (window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light")),
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")),
   );
 
   // update config and link based on locale path
   useEffect(() => {
     setLocaleConfig(locales[localePath]);
 
-    if (!isSSR && window.location.pathname !== localePath) {
+    if (!isSSR && window.location.pathname !== localePath)
       window.history.pushState(null, "", localePath);
-    }
   }, [localePath]);
 
   if (!isSSR) {
@@ -55,13 +49,10 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
       if (!metaDescription) {
         metaDescription = document.createElement("meta");
         metaDescription.setAttribute("name", "description");
-        document.head.appendChild(metaDescription);
+        document.head.append(metaDescription);
       }
 
-      metaDescription.setAttribute(
-        "content",
-        localeConfig.description ?? "Portfolio Template",
-      );
+      metaDescription.setAttribute("content", localeConfig.description ?? "Portfolio Template");
     }, [localeConfig]);
 
     useEffect(() => {
@@ -77,10 +68,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
     }, []);
 
     useEffect(() => {
-      window.document.documentElement.classList.toggle(
-        "dark",
-        theme === "dark",
-      );
+      window.document.documentElement.classList.toggle("dark", theme === "dark");
       localStorage.setItem("theme", theme);
     }, [theme]);
   }
@@ -88,7 +76,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const toggleTheme = (event: React.MouseEvent): void => {
     const isAppearanceTransition =
       // @ts-expect-error: Providing backward compatibility
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      // oxlint-disable-next-line typescript/no-unnecessary-condition
       document.startViewTransition &&
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -98,11 +86,11 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
       return;
     }
 
-    const x = event.clientX;
-    const y = event.clientY;
+    const pointerX = event.clientX;
+    const pointerY = event.clientY;
     const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y),
+      Math.max(pointerX, window.innerWidth - pointerX),
+      Math.max(pointerY, window.innerHeight - pointerY),
     );
 
     const isDark = theme === "light";
@@ -118,8 +106,8 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
 
     void transition.ready.then(() => {
       const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
+        `circle(0px at ${pointerX}px ${pointerY}px)`,
+        `circle(${endRadius}px at ${pointerX}px ${pointerY}px)`,
       ];
 
       document.documentElement.animate(
@@ -129,9 +117,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
         {
           duration: 400,
           easing: "ease-in",
-          pseudoElement: isDark
-            ? "::view-transition-old(root)"
-            : "::view-transition-new(root)",
+          pseudoElement: isDark ? "::view-transition-old(root)" : "::view-transition-new(root)",
         },
       );
     });
@@ -144,24 +130,20 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
     setLocalePath(localePaths[nextIndex]);
   };
 
-  const nextLocale =
-    localePaths[(localePaths.indexOf(localePath) + 1) % localePaths.length];
-  const nextLocaleName =
-    locales[nextLocale].langName ?? locales[nextLocale].lang;
+  const nextLocale = localePaths[(localePaths.indexOf(localePath) + 1) % localePaths.length];
+  const nextLocaleName = locales[nextLocale].langName ?? locales[nextLocale].lang;
 
   const renderSection = (section: Section): ReactElement | null => {
     switch (section.type) {
-      case "profile":
+      case "profile": {
         return <Profile data={section.data} ui={localeConfig.ui} />;
+      }
 
-      case "experience":
+      case "experience": {
         return (
-          <Experience
-            items={section.data}
-            locale={localePath}
-            types={config.experienceTypes}
-          />
+          <Experience items={section.data} locale={localePath} types={config.experienceTypes} />
         );
+      }
 
       case "banner": {
         return (
@@ -175,24 +157,28 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
         );
       }
 
-      case "timeline":
+      case "timeline": {
         return <Timeline items={section.data} ui={section.ui} />;
+      }
 
-      case "cards":
+      case "cards": {
         return <Cards items={section.data} locale={localePath} />;
+      }
 
-      case "list":
+      case "list": {
         return <List dot={section.dot} items={section.data} />;
+      }
 
-      case "gallery":
+      case "gallery": {
         return <Gallery items={section.data} />;
+      }
 
-      case "markdown":
-        return (
-          <Markdown content={section.data.content} card={section.data.card} />
-        );
-      default:
+      case "markdown": {
+        return <Markdown content={section.data.content} card={section.data.card} />;
+      }
+      default: {
         return null;
+      }
     }
   };
 

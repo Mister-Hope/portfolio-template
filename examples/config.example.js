@@ -4,8 +4,7 @@ export default {
       lang: "zh-CN",
       langName: "EN",
       title: "Mister-Hope | Portfolio",
-      description:
-        "The personal portfolio of Mister-Hope, a front-end developer.",
+      description: "The personal portfolio of Mister-Hope, a front-end developer.",
       hero: {
         name: "Mister-Hope",
         welcome: "👋 Hi there, I am",
@@ -110,8 +109,7 @@ export default {
               place: "Northeast Normal University, School of Physics, Chain",
               time: "Sep. 2021 - Dec. 2024",
               title: "Master of Science",
-              content:
-                "study theoretical physics with Prof. [XueXi Yi](https://cqs.nenu.edu.cn/)",
+              content: "study theoretical physics with Prof. [XueXi Yi](https://cqs.nenu.edu.cn/)",
             },
             {
               type: "project",
@@ -126,8 +124,7 @@ export default {
               place: "AnShan, China",
               time: "Jul. 2020 - Aug. 2021",
               title: "Enjoying my gap year",
-              description:
-                "Also doing open source contributions in my spare time.",
+              description: "Also doing open source contributions in my spare time.",
             },
           ],
         },
@@ -137,8 +134,7 @@ export default {
           title: "Call for Papers",
           icon: "bullhorn",
           data: {
-            header:
-              "Special Collection: Exception Points in non-Hermitian Systems",
+            header: "Special Collection: Exception Points in non-Hermitian Systems",
             tags: "Submit now",
             content:
               "**Journal**: Discover Physics (Springer Nature)\n\nFor inquiries, please contact: cheng.shang@riken.jp or shenhz458@nenu.edu.cn",
@@ -193,8 +189,7 @@ export default {
               title:
                 "VuePress Ecosystem ![Stars](https://img.shields.io/github/stars/vuepress/ecosystem?style=plastic&logo=github)",
               logo: "https://vuejs.press/images/hero.png",
-              description:
-                "A collection of official VuePress plugins and themes.",
+              description: "A collection of official VuePress plugins and themes.",
               category: "Project",
               actions: [
                 {
@@ -225,8 +220,7 @@ export default {
             },
             {
               year: 2022,
-              content:
-                "Received Ph.D. degree from the University of Tokyo on September 20.",
+              content: "Received Ph.D. degree from the University of Tokyo on September 20.",
             },
           ],
         },
@@ -459,8 +453,7 @@ export default {
               place: "东北师范大学，物理学院，中国",
               time: "2021年9月 - 2024年12月",
               title: "理学硕士",
-              content:
-                "在[衣学喜教授](https://cqs.nenu.edu.cn/)指导下研究理论物理。",
+              content: "在[衣学喜教授](https://cqs.nenu.edu.cn/)指导下研究理论物理。",
             },
             {
               type: "project",
@@ -623,8 +616,7 @@ export default {
               title: "PHHQP-XXI 研讨会",
               location: "希腊，哈尼亚",
               date: 2024,
-              description:
-                "在 PHHQP-XXI 展示我的开放量子系统研究。地中海的景色令人深受启发。",
+              description: "在 PHHQP-XXI 展示我的开放量子系统研究。地中海的景色令人深受启发。",
             },
             {
               url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop",

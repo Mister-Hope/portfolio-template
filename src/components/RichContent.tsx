@@ -27,17 +27,13 @@ interface RichContentProps {
  *
  * 渲染 HTML 字符串的 RichContent 组件
  */
-export const RichContent: FC<RichContentProps> = ({
-  content,
-  block = false,
-  className = "",
-}) => {
+export const RichContent: FC<RichContentProps> = ({ content, block = false, className = "" }) => {
   const Tag = block ? "div" : "span";
 
   return (
     <Tag
       className={`rich-content ${className}`}
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+      // oxlint-disable-next-line typescript/naming-convention
       dangerouslySetInnerHTML={{ __html: content }}
     />
   );

@@ -1,10 +1,7 @@
 import type { FC } from "react";
 import { Icon } from "./Icon.js";
 import { RichContent } from "./RichContent.js";
-import type {
-  ExperienceTypeConfig,
-  ExperienceTypesConfig,
-} from "../utils/index.js";
+import type { ExperienceTypeConfig, ExperienceTypesConfig } from "../utils/index.js";
 import { defaultExperienceTypes } from "../utils/index.js";
 
 /**
@@ -80,69 +77,53 @@ export const Experience: FC<ExperienceProps> = ({ items, types = {} }) => {
   const mergedTypes = { ...defaultExperienceTypes, ...types };
 
   const getTypeConfig = (type: string): ExperienceTypeConfig =>
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    // oxlint-disable-next-line typescript/no-unnecessary-condition
     mergedTypes[type] || mergedTypes.work;
 
   return (
     <div className="experience-list">
-      {items.map(
-        ({ place, time, description, type, icon, title, content }, index) => {
-          const { bgClass, icon: typeIcon, iconClass } = getTypeConfig(type);
+      {items.map(({ place, time, description, type, icon, title, content }, index) => {
+        const { bgClass, icon: typeIcon, iconClass } = getTypeConfig(type);
 
-          return (
-            <div key={index} className="group experience-item">
-              {/* Individual Timeline Line segment */}
-              {index !== items.length - 1 && (
-                <div className="experience-line" />
-              )}
+        return (
+          <div key={index} className="group experience-item">
+            {/* Individual Timeline Line segment */}
+            {index !== items.length - 1 && <div className="experience-line" />}
 
-              {/* Timeline Node */}
-              <div className={`experience-node ${bgClass}`} />
+            {/* Timeline Node */}
+            <div className={`experience-node ${bgClass}`} />
 
-              <div className="flex flex-col gap-2 md:gap-3">
-                {/* Top Meta: Time & Location */}
-                <div className="experience-meta">
-                  <span className="time">{time}</span>
-                  <div className="experience-location">
-                    <Icon icon="location-dot" className="flex-shrink-0" />
-                    <span className="block min-w-0 text-left leading-tight">
-                      {place}
-                    </span>
-                  </div>
+            <div className="flex flex-col gap-2 md:gap-3">
+              {/* Top Meta: Time & Location */}
+              <div className="experience-meta">
+                <span className="time">{time}</span>
+                <div className="experience-location">
+                  <Icon icon="location-dot" className="flex-shrink-0" />
+                  <span className="block min-w-0 text-left leading-tight">{place}</span>
                 </div>
+              </div>
 
-                {/* Content Box */}
-                <div className="experience-card card-base">
-                  <div className="flex items-start gap-3 md:gap-4">
-                    <div className={`experience-icon-box ${iconClass}`}>
-                      <Icon icon={icon ?? typeIcon} className="text-title" />
-                    </div>
-                    <div className="min-w-0 flex-1 space-y-1.5">
-                      <h3 className="experience-title">
-                        <RichContent content={title ?? ""} />
-                      </h3>
-                      {content && (
-                        <RichContent
-                          className="text-content"
-                          content={content}
-                          block
-                        />
-                      )}
-                      {description && (
-                        <RichContent
-                          content={description}
-                          className="experience-description"
-                          block
-                        />
-                      )}
-                    </div>
+              {/* Content Box */}
+              <div className="experience-card card-base">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className={`experience-icon-box ${iconClass}`}>
+                    <Icon icon={icon ?? typeIcon} className="text-title" />
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <h3 className="experience-title">
+                      <RichContent content={title ?? ""} />
+                    </h3>
+                    {content && <RichContent className="text-content" content={content} block />}
+                    {description && (
+                      <RichContent content={description} className="experience-description" block />
+                    )}
                   </div>
                 </div>
               </div>
             </div>
-          );
-        },
-      )}
+          </div>
+        );
+      })}
     </div>
   );
 };

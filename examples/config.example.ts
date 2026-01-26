@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+// oxlint-disable typescript/naming-convention
 
 import {
   defineConfig,
@@ -100,8 +100,7 @@ const enContents = defineSections([
         place: "Northeast Normal University, School of Physics, Chain",
         time: "Sep. 2021 - Dec. 2024",
         title: "Master of Science",
-        content:
-          "study theoretical physics with Prof. [XueXi Yi](https://cqs.nenu.edu.cn/)",
+        content: "study theoretical physics with Prof. [XueXi Yi](https://cqs.nenu.edu.cn/)",
       },
       {
         type: "project",
@@ -204,8 +203,7 @@ const enContents = defineSections([
       },
       {
         year: 2022,
-        content:
-          "Received Ph.D. degree from the University of Tokyo on September 20.",
+        content: "Received Ph.D. degree from the University of Tokyo on September 20.",
       },
     ],
   },
@@ -590,8 +588,7 @@ const zhContents = defineSections([
         title: "PHHQP-XXI 研讨会",
         location: "希腊，哈尼亚",
         date: 2024,
-        description:
-          "在 PHHQP-XXI 展示我的开放量子系统研究。地中海的景色令人深受启发。",
+        description: "在 PHHQP-XXI 展示我的开放量子系统研究。地中海的景色令人深受启发。",
       },
       {
         url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop",

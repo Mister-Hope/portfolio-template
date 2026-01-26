@@ -92,73 +92,63 @@ export interface ProfileProps {
   };
 }
 
-export const Profile: FC<ProfileProps> = ({ data, ui }) => {
-  return (
-    <div className="profile-container card-base">
-      <div className="profile-fields-col">
-        {data.fields?.map(({ title, value, icon }, index) => (
-          <div key={index}>
-            <h4 className="profile-label label-sm">
-              {icon && <Icon icon={icon} />}
-              {title}
-            </h4>
-            {Array.isArray(value) ? (
-              <div className="profile-tags-wrapper">
-                {value.map((item, index) => (
-                  <span key={index} className="profile-tag">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            ) : (
-              <RichContent
-                content={value}
-                className="profile-text-value"
-                block
-              />
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="profile-contact-col">
-        <div>
-          <h4 className="profile-contact-header label-sm">
-            <Icon icon="paper-plane" /> {ui?.contacts ?? "Contacts"}
+export const Profile: FC<ProfileProps> = ({ data, ui }) => (
+  <div className="profile-container card-base">
+    <div className="profile-fields-col">
+      {data.fields?.map(({ title, value, icon }, index) => (
+        <div key={index}>
+          <h4 className="profile-label label-sm">
+            {icon && <Icon icon={icon} />}
+            {title}
           </h4>
-          <ul className="profile-contact-list">
-            {data.contacts?.map((c, i) => (
-              <li key={i} className="profile-contact-item">
-                <div className="profile-icon-box">
-                  <Icon icon={c.icon ?? "envelope"} className="text-2xl" />
-                </div>
-                <div className="profile-contact-info">
-                  <span className="profile-contact-label">{c.label}</span>
-                  {c.link || /^\S+@\S+\.\S+$/.test(c.value) ? (
-                    <a
-                      href={c.link ?? `mailto:${c.value}`}
-                      className="profile-contact-link"
-                    >
-                      {c.value}
-                    </a>
-                  ) : (
-                    <span className="profile-contact-link">{c.value}</span>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
+          {Array.isArray(value) ? (
+            <div className="profile-tags-wrapper">
+              {value.map((item, index) => (
+                <span key={index} className="profile-tag">
+                  {item}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <RichContent content={value} className="profile-text-value" block />
+          )}
         </div>
-        {data.slogan && (
-          <div className="profile-slogan-box">
-            <Icon icon="quote-left" className="profile-quote-icon" />
-            <RichContent
-              content={data.slogan}
-              className="profile-slogan-text"
-              block
-            />
-          </div>
-        )}
-      </div>
+      ))}
     </div>
-  );
-};
+    <div className="profile-contact-col">
+      <div>
+        <h4 className="profile-contact-header label-sm">
+          <Icon icon="paper-plane" /> {ui?.contacts ?? "Contacts"}
+        </h4>
+        <ul className="profile-contact-list">
+          {data.contacts?.map((contact, index) => (
+            <li key={index} className="profile-contact-item">
+              <div className="profile-icon-box">
+                <Icon icon={contact.icon ?? "envelope"} className="text-2xl" />
+              </div>
+              <div className="profile-contact-info">
+                <span className="profile-contact-label">{contact.label}</span>
+                {contact.link || /^\S+@\S+\.\S+$/.test(contact.value) ? (
+                  <a
+                    href={contact.link ?? `mailto:${contact.value}`}
+                    className="profile-contact-link"
+                  >
+                    {contact.value}
+                  </a>
+                ) : (
+                  <span className="profile-contact-link">{contact.value}</span>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {data.slogan && (
+        <div className="profile-slogan-box">
+          <Icon icon="quote-left" className="profile-quote-icon" />
+          <RichContent content={data.slogan} className="profile-slogan-text" block />
+        </div>
+      )}
+    </div>
+  </div>
+);

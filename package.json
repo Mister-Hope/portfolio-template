@@ -1,8 +1,7 @@
 {
   "name": "portfolio-template",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "private": true,
   "author": {
     "name": "Mister-Hope"
   },
@@ -10,11 +9,12 @@
     "type": "git",
     "url": "https://github.com/Mister-Hope/portfolio-template.git"
   },
+  "type": "module",
   "scripts": {
     "build": "vite build",
     "clean": "rimraf dist",
     "dev": "vite",
-    "lint": "eslint . --fix && prettier --check --write .",
+    "lint": "oxlint . --fix && oxfmt",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -22,26 +22,30 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
-  "packageManager": "pnpm@10.27.0",
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "@types/js-yaml": "^4.0.9",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "^25.0.3",
-    "@types/react": "^19.2.7",
+    "@types/node": "^25.0.10",
+    "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
-    "eslint": "^9.39.2",
-    "eslint-config-mister-hope": "^0.9.6",
     "jiti": "^2.6.1",
     "js-yaml": "^4.1.1",
     "markdown-it": "^14.1.0",
-    "prettier": "^3.7.4",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "nano-staged": "0.9.0",
+    "oxfmt": "0.27.0",
+    "oxlint": "1.42.0",
+    "oxlint-tsgolint": "0.11.2",
     "rimraf": "^6.1.2",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
-    "vite": "^7.3.1"
-  }
+    "vite": "npm:rolldown-vite@^7.3.1"
+  },
+  "nano-staged": {
+    "**/*": "oxfmt --no-error-on-unmatched-pattern",
+    "*.{js,ts}": "oxlint"
+  },
+  "packageManager": "pnpm@10.28.2"
 }

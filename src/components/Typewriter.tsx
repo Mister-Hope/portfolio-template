@@ -37,11 +37,7 @@ interface TypewriterProps {
  *
  * 通过循环显示字符串列表来模拟打字机效果。
  */
-export const Typewriter: FC<TypewriterProps> = ({
-  texts,
-  speed = 100,
-  pause = 2000,
-}) => {
+export const Typewriter: FC<TypewriterProps> = ({ texts, speed = 100, pause = 2000 }) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [reverse, setReverse] = useState(false);
@@ -69,9 +65,5 @@ export const Typewriter: FC<TypewriterProps> = ({
     };
   }, [subIndex, index, reverse, texts, speed, pause]);
 
-  return (
-    <span className="typewriter-cursor">
-      {texts[index].substring(0, subIndex)}
-    </span>
-  );
+  return <span className="typewriter-cursor">{texts[index].slice(0, subIndex)}</span>;
 };

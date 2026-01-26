@@ -7,16 +7,13 @@
     <script>
       const theme = localStorage.getItem("theme");
       const isDark =
-        theme === "dark" ||
-        (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
       if (isDark) document.documentElement.classList.add("dark");
     </script>
     <link rel="preconnect" href="https://api.iconify.design" crossorigin />
     <link rel="stylesheet" href="/index.css" />
   </head>
-  <body
-    class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100"
-  >
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
     <div id="root"><!--app-html--></div>
     <script type="module" src="/entry-client.tsx"></script>
   </body>

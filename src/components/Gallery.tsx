@@ -58,17 +58,8 @@ export const Gallery: FC<GalleryProps> = ({ items }) => {
     <>
       <div className="gallery-grid">
         {items.map((item, idx) => (
-          <div
-            key={idx}
-            className="group gallery-item"
-            onClick={() => setSelected(item)}
-          >
-            <img
-              src={item.url}
-              alt={item.title}
-              className="gallery-image"
-              loading="lazy"
-            />
+          <div key={idx} className="group gallery-item" onClick={() => setSelected(item)}>
+            <img src={item.url} alt={item.title} className="gallery-image" loading="lazy" />
             <div className="gallery-overlay">
               <h4 className="gallery-title">{item.title}</h4>
               {(item.location || item.date) && (
@@ -91,14 +82,8 @@ export const Gallery: FC<GalleryProps> = ({ items }) => {
       {/* Lightbox */}
       {selected && (
         <div className="lightbox-overlay" onClick={() => setSelected(null)}>
-          <div
-            className="group lightbox-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="lightbox-close"
-              onClick={() => setSelected(null)}
-            >
+          <div className="group lightbox-container" onClick={(event) => event.stopPropagation()}>
+            <button className="lightbox-close" onClick={() => setSelected(null)}>
               <Icon icon="xmark" className="text-3xl" />
             </button>
             <div className="lightbox-image-wrapper">

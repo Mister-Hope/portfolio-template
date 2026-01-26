@@ -2,7 +2,7 @@ import { renderToString } from "react-dom/server";
 import { App } from "./App.js";
 import type { Config } from "./types/index.js";
 
-export function render(url: string, config: Config): string {
+export const render = (url: string, config: Config): string => {
   const { locales } = config;
   const localePaths = Object.keys(locales);
 
@@ -18,4 +18,4 @@ export function render(url: string, config: Config): string {
   }
 
   return renderToString(<App initialLocale={locale} />);
-}
+};

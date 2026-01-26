@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": ["dist/**"],
+  "experimentalTailwindcss": {
+    "stylesheet": "./src/index.css",
+    "preserveWhitespace": true
+  },
+  "experimentalSortPackageJson": {
+    "sortScripts": true
+  }
+}

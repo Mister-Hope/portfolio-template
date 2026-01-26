@@ -6,11 +6,7 @@ import react from "@vitejs/plugin-react";
 import type { ViteDevServer } from "vite";
 import { defineConfig } from "vite";
 
-import {
-  configFiles,
-  getConfigDependencies,
-  loadConfig,
-} from "./lib/configLoader.js";
+import { configFiles, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -29,7 +25,7 @@ export default defineConfig(async () => {
     publicDir: path.resolve(__dirname, "public"),
 
     define: {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+      // oxlint-disable-next-line typescript/naming-convention
       __CONFIG__: JSON.stringify(config),
     },
     server: {
@@ -45,11 +41,10 @@ export default defineConfig(async () => {
         transformIndexHtml(html: string): string {
           const localeConfig = config.locales;
           const locales = Object.keys(localeConfig);
-          const defaultLocale = locales[0];
+          const [defaultLocale] = locales;
 
           const title = localeConfig[defaultLocale].title ?? "Portfolio";
-          const description =
-            localeConfig[defaultLocale].description ?? "Portfolio Template";
+          const description = localeConfig[defaultLocale].description ?? "Portfolio Template";
 
           return html.replace(
             /<title>(.*?)<\/title>/,
@@ -64,26 +59,23 @@ export default defineConfig(async () => {
           const configDependencies = getConfigDependencies(__dirname);
 
           server.watcher.add(configPath);
-          server.watcher.add(
-            configFiles.map((f) => path.resolve(__dirname, f)),
-          );
+          server.watcher.add(configFiles.map((filePath) => path.resolve(__dirname, filePath)));
           server.watcher.add(configDependencies);
 
           server.watcher.on("change", (file: string) => {
             if (
               file.startsWith(configPath) ||
-              configFiles.some((f) => file === path.resolve(__dirname, f)) ||
+              configFiles.some((filePath) => file === path.resolve(__dirname, filePath)) ||
               configDependencies.includes(file)
-            ) {
+            )
               void server.restart();
-            }
           });
         },
       },
     ],
     resolve: {
       alias: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
+        // oxlint-disable-next-line typescript/naming-convention
         "@": path.resolve(__dirname, "."),
       },
     },

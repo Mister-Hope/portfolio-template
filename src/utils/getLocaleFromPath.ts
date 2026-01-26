@@ -8,9 +8,7 @@ export const getLocaleFromPath = (): string => {
 
   const path = window.location.pathname;
 
-  for (const localePath of sortedPaths) {
-    if (path.startsWith(localePath)) return localePath;
-  }
+  for (const localePath of sortedPaths) if (path.startsWith(localePath)) return localePath;
 
   return "/";
 };

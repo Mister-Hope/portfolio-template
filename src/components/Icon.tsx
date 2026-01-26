@@ -12,9 +12,7 @@ export interface IconProps extends HTMLAttributes<HTMLElement> {
 
 const resolveIcon = (icon: string): string => {
   // If it already has a prefix (e.g. "mdi:home"), return as is
-  if (icon.includes(":")) {
-    return icon;
-  }
+  if (icon.includes(":")) return icon;
 
   // Strip fa- prefix if present (e.g. "fa-user" -> "user")
   const cleanName = icon.replace(/^fa-/, "");
@@ -33,9 +31,7 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
   if (icon.startsWith("/") || icon.startsWith("http")) {
     const isExternal = icon.startsWith("http");
     // Handle base path for local images
-    const src = isExternal
-      ? icon
-      : `${import.meta.env.BASE_URL.replace(/\/$/, "") || ""}${icon}`;
+    const src = isExternal ? icon : `${import.meta.env.BASE_URL.replace(/\/$/, "") || ""}${icon}`;
 
     return (
       <img
@@ -54,7 +50,7 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
       icon={resolveIcon(icon)}
       className={className}
       style={style}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       {...(props as any)}
     />
   );

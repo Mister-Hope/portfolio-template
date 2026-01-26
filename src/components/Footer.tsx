@@ -23,21 +23,12 @@ export interface FooterProps {
  *
  * 显示带有版权和可选描述的页脚。
  */
-export const Footer: FC<FooterProps> = ({ copyright, description }) => {
-  return copyright || description ? (
+export const Footer: FC<FooterProps> = ({ copyright, description }) =>
+  copyright || description ? (
     <footer className="footer-container">
       <div className="footer-content">
-        {copyright && (
-          <RichContent content={copyright} className="footer-copyright" block />
-        )}
-        {description && (
-          <RichContent
-            content={description}
-            className="footer-description"
-            block
-          />
-        )}
+        {copyright && <RichContent content={copyright} className="footer-copyright" block />}
+        {description && <RichContent content={description} className="footer-description" block />}
       </div>
     </footer>
   ) : null;
-};

@@ -55,9 +55,7 @@ export const List: FC<ListProps> = ({ items, dot = "number" }) => {
         >
           {!isOrderedList && (
             <div className="list-marker-container">
-              {dot === "check" && (
-                <Icon icon="circle-check" className="list-marker-check" />
-              )}
+              {dot === "check" && <Icon icon="circle-check" className="list-marker-check" />}
               {dot === "circle" && <div className="list-marker-circle" />}
               {dot === "square" && <div className="list-marker-square" />}
               {dot === "diamond" && <div className="list-marker-diamond" />}
@@ -65,19 +63,11 @@ export const List: FC<ListProps> = ({ items, dot = "number" }) => {
           )}
           <div className="list-content">
             {typeof item === "object" && item.link ? (
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="list-link"
-              >
+              <a href={item.link} target="_blank" rel="noopener noreferrer" className="list-link">
                 <RichContent content={item.text} />
               </a>
             ) : (
-              <RichContent
-                content={typeof item === "object" ? item.text : item}
-                block
-              />
+              <RichContent content={typeof item === "object" ? item.text : item} block />
             )}
           </div>
         </li>

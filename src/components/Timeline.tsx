@@ -51,44 +51,38 @@ export interface TimelineProps {
  *
  * 按时间顺序显示事件或新闻项的列表
  */
-export const Timeline: FC<TimelineProps> = ({ items, ui }) => {
-  return (
-    <div className="timeline">
-      {items.map((item, idx) => (
-        <div key={idx} className="group timeline-item">
-          {/* Timeline Line */}
-          {idx !== items.length - 1 && <div className="timeline-line" />}
+export const Timeline: FC<TimelineProps> = ({ items, ui }) => (
+  <div className="timeline">
+    {items.map((item, idx) => (
+      <div key={idx} className="group timeline-item">
+        {/* Timeline Line */}
+        {idx !== items.length - 1 && <div className="timeline-line" />}
 
-          {/* Timeline Node - Simple small solid primary dot */}
-          <div className="timeline-dot" />
+        {/* Timeline Node - Simple small solid primary dot */}
+        <div className="timeline-dot" />
 
-          <div className="timeline-content">
-            <div className="timeline-header">
-              <span className="time">{item.year}</span>
-            </div>
-
-            <RichContent
-              content={item.content}
-              className="timeline-box text-content"
-              block
-            />
-
-            {item.link && (
-              <div className="timeline-link-wrapper">
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="timeline-link"
-                >
-                  {item.linkText ?? ui?.details ?? "Details"}
-                  <Icon icon="arrow-up-right-from-square" className="text-xs" />
-                </a>
-              </div>
-            )}
+        <div className="timeline-content">
+          <div className="timeline-header">
+            <span className="time">{item.year}</span>
           </div>
+
+          <RichContent content={item.content} className="timeline-box text-content" block />
+
+          {item.link && (
+            <div className="timeline-link-wrapper">
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="timeline-link"
+              >
+                {item.linkText ?? ui?.details ?? "Details"}
+                <Icon icon="arrow-up-right-from-square" className="text-xs" />
+              </a>
+            </div>
+          )}
         </div>
-      ))}
-    </div>
-  );
-};
+      </div>
+    ))}
+  </div>
+);

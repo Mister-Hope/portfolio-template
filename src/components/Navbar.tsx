@@ -82,11 +82,7 @@ export const Navbar: FC<NavbarProps> = ({
   }, []);
 
   return (
-    <nav
-      className={`navbar-base ${
-        scrolled ? "navbar-scrolled" : "navbar-transparent"
-      }`}
-    >
+    <nav className={`navbar-base ${scrolled ? "navbar-scrolled" : "navbar-transparent"}`}>
       <div className="navbar-container">
         <a
           href="#"
@@ -132,10 +128,7 @@ export const Navbar: FC<NavbarProps> = ({
               }`}
               title={themeLabel}
             >
-              <Icon
-                icon={theme === "light" ? "moon" : "sun"}
-                className="text-main"
-              />
+              <Icon icon={theme === "light" ? "moon" : "sun"} className="text-main" />
             </button>
           </div>
         </div>

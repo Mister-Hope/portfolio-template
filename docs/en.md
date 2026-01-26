@@ -403,9 +403,9 @@ You can modify the following variables in `src/index.css` to change the theme co
    * Define your default font family here.
    */
   --font:
-    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
   /* 
     Define your brand colors here. 
     The system will automatically generate the palette based on these colors.
