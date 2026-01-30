@@ -9,7 +9,7 @@ import { loadConfig } from "./configLoader.js";
 import type { Config } from "../src/types/index.js";
 
 const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Promise<void> => {
-  if (viteConfig.build.ssr) return;
+  if (viteConfig.build.ssr !== false) return;
 
   const { outDir } = viteConfig.build;
   const serverOutDir = join(outDir, "server");
@@ -50,7 +50,6 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
 
     let html = template.replace(`<!--app-html-->`, appHtml);
 
-    // oxlint-disable-next-line typescript/no-unnecessary-condition
     const title = appConfig.locales[url]?.title ?? "Portfolio";
     const description = appConfig.locales[url].description ?? "Portfolio Template";
     const { lang } = appConfig.locales[url];

@@ -53,8 +53,8 @@ export interface TimelineProps {
  */
 export const Timeline: FC<TimelineProps> = ({ items, ui }) => (
   <div className="timeline">
-    {items.map((item, idx) => (
-      <div key={idx} className="group timeline-item">
+    {items.map(({ year, content, link, linkText }, idx) => (
+      <div key={year + content} className="group timeline-item">
         {/* Timeline Line */}
         {idx !== items.length - 1 && <div className="timeline-line" />}
 
@@ -63,20 +63,15 @@ export const Timeline: FC<TimelineProps> = ({ items, ui }) => (
 
         <div className="timeline-content">
           <div className="timeline-header">
-            <span className="time">{item.year}</span>
+            <span className="time">{year}</span>
           </div>
 
-          <RichContent content={item.content} className="timeline-box text-content" block />
+          <RichContent content={content} className="timeline-box text-content" block />
 
-          {item.link && (
+          {link && (
             <div className="timeline-link-wrapper">
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="timeline-link"
-              >
-                {item.linkText ?? ui?.details ?? "Details"}
+              <a href={link} target="_blank" rel="noopener noreferrer" className="timeline-link">
+                {linkText ?? ui?.details ?? "Details"}
                 <Icon icon="arrow-up-right-from-square" className="text-xs" />
               </a>
             </div>

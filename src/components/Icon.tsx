@@ -40,6 +40,7 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
         className={`icon-img ${className ?? ""}`}
         loading="lazy"
         style={style}
+        // oxlint-disable-next-line react/jsx-props-no-spreading
         {...props}
       />
     );
@@ -50,7 +51,7 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
       icon={resolveIcon(icon)}
       className={className}
       style={style}
-      // oxlint-disable-next-line typescript/no-explicit-any
+      // oxlint-disable-next-line react/jsx-props-no-spreading, typescript/no-explicit-any
       {...(props as any)}
     />
   );

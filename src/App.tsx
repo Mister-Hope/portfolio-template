@@ -1,6 +1,6 @@
 // oxlint-disable import/max-dependencies
 import type { FC, ReactElement } from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { flushSync } from "react-dom";
 import { Hero } from "./components/Hero.js";
 import { SectionWrapper } from "./components/SectionWrapper.js";
@@ -38,97 +38,97 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
       window.history.pushState(null, "", localePath);
   }, [localePath]);
 
-  if (!isSSR) {
-    // update title and meta description based on locale config
-    useEffect(() => {
-      document.title = localeConfig.title ?? "Portfolio";
-      document.documentElement.lang = localeConfig.lang;
+  // update title and meta description based on locale config
+  useEffect(() => {
+    document.title = localeConfig.title ?? "Portfolio";
+    document.documentElement.lang = localeConfig.lang;
 
-      let metaDescription = document.querySelector('meta[name="description"]');
+    let metaDescription = document.querySelector('meta[name="description"]');
 
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.setAttribute("name", "description");
-        document.head.append(metaDescription);
-      }
-
-      metaDescription.setAttribute("content", localeConfig.description ?? "Portfolio Template");
-    }, [localeConfig]);
-
-    useEffect(() => {
-      const onPopState = (): void => {
-        setLocalePath(getLocaleFromPath());
-      };
-
-      window.addEventListener("popstate", onPopState);
-
-      return (): void => {
-        window.removeEventListener("popstate", onPopState);
-      };
-    }, []);
-
-    useEffect(() => {
-      window.document.documentElement.classList.toggle("dark", theme === "dark");
-      localStorage.setItem("theme", theme);
-    }, [theme]);
-  }
-
-  const toggleTheme = (event: React.MouseEvent): void => {
-    const isAppearanceTransition =
-      // @ts-expect-error: Providing backward compatibility
-      // oxlint-disable-next-line typescript/no-unnecessary-condition
-      document.startViewTransition &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (!isAppearanceTransition) {
-      setTheme((prev) => (prev === "light" ? "dark" : "light"));
-
-      return;
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.append(metaDescription);
     }
 
-    const pointerX = event.clientX;
-    const pointerY = event.clientY;
-    const endRadius = Math.hypot(
-      Math.max(pointerX, window.innerWidth - pointerX),
-      Math.max(pointerY, window.innerHeight - pointerY),
-    );
+    metaDescription.setAttribute("content", localeConfig.description ?? "Portfolio Template");
+  }, [localeConfig]);
 
-    const isDark = theme === "light";
+  useEffect(() => {
+    const onPopState = (): void => {
+      setLocalePath(getLocaleFromPath());
+    };
 
-    const transition = document.startViewTransition(() => {
-      flushSync(() => {
-        setTheme(isDark ? "dark" : "light");
+    window.addEventListener("popstate", onPopState);
+
+    return (): void => {
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(
+    (event: React.MouseEvent): void => {
+      const isAppearanceTransition =
+        // @ts-expect-error: Providing backward compatibility
+        document.startViewTransition &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!isAppearanceTransition) {
+        setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
+        return;
+      }
+
+      const pointerX = event.clientX;
+      const pointerY = event.clientY;
+      const endRadius = Math.hypot(
+        Math.max(pointerX, window.innerWidth - pointerX),
+        Math.max(pointerY, window.innerHeight - pointerY),
+      );
+
+      const isDark = theme === "light";
+
+      const transition = document.startViewTransition(() => {
+        flushSync(() => {
+          setTheme(isDark ? "dark" : "light");
+        });
+
+        // Manually toggle class to ensure it's updated for the transition snapshot
+        window.document.documentElement.classList.toggle("dark", isDark);
       });
 
-      // Manually toggle class to ensure it's updated for the transition snapshot
-      window.document.documentElement.classList.toggle("dark", isDark);
-    });
+      void transition.ready.then(() => {
+        const clipPath = [
+          `circle(0px at ${pointerX}px ${pointerY}px)`,
+          `circle(${endRadius}px at ${pointerX}px ${pointerY}px)`,
+        ];
 
-    void transition.ready.then(() => {
-      const clipPath = [
-        `circle(0px at ${pointerX}px ${pointerY}px)`,
-        `circle(${endRadius}px at ${pointerX}px ${pointerY}px)`,
-      ];
+        document.documentElement.animate(
+          {
+            clipPath: isDark ? [...clipPath].reverse() : clipPath,
+          },
+          {
+            duration: 400,
+            easing: "ease-in",
+            pseudoElement: isDark ? "::view-transition-old(root)" : "::view-transition-new(root)",
+          },
+        );
+      });
+    },
+    [theme],
+  );
 
-      document.documentElement.animate(
-        {
-          clipPath: isDark ? [...clipPath].reverse() : clipPath,
-        },
-        {
-          duration: 400,
-          easing: "ease-in",
-          pseudoElement: isDark ? "::view-transition-old(root)" : "::view-transition-new(root)",
-        },
-      );
-    });
-  };
-
-  const handleLocaleChange = (): void => {
+  const handleLocaleChange = useCallback((): void => {
     const currentIndex = localePaths.indexOf(localePath);
     const nextIndex = (currentIndex + 1) % localePaths.length;
 
     setLocalePath(localePaths[nextIndex]);
-  };
+  }, [localePath]);
 
   const nextLocale = localePaths[(localePaths.indexOf(localePath) + 1) % localePaths.length];
   const nextLocaleName = locales[nextLocale].langName ?? locales[nextLocale].lang;

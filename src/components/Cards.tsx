@@ -81,31 +81,31 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
 
   return (
     <div className="card-grid">
-      {items.map((card, idx) => (
-        <div key={idx} className="card-item flex flex-col card-base">
+      {items.map(({ actions, category, description, logo, title }) => (
+        <div key={title + (description ?? "")} className="card-item flex flex-col card-base">
           <div className="card-decoration" />
           <div className="relative z-10 block">
-            {card.category && (
-              <h4 className={`mb-3 label-sm ${isCJK ? "" : "tracking-widest"}`}>{card.category}</h4>
+            {category && (
+              <h4 className={`mb-3 label-sm ${isCJK ? "" : "tracking-widest"}`}>{category}</h4>
             )}
-            {card.logo && (
+            {logo && (
               <AdaptiveImage
-                src={card.logo}
-                alt={card.title}
+                src={logo}
+                alt={title}
                 className="card-logo float-right mb-2 ml-4"
                 loading="lazy"
               />
             )}
             <h3 className="card-title">
-              <RichContent content={card.title} />
+              <RichContent content={title} />
             </h3>
-            {card.description && (
-              <RichContent className="card-description" content={card.description} block />
+            {description && (
+              <RichContent className="card-description" content={description} block />
             )}
           </div>
-          {card.actions && (
+          {actions && (
             <div className="relative z-10 mt-auto flex flex-wrap items-center">
-              {card.actions.map(({ text, icon, link }, actionIndex) => {
+              {actions.map(({ text, icon, link }) => {
                 if (!text && !icon) return null;
 
                 const className = `card-action ${text ? "mx-1" : "mx-0.5"}`;
@@ -118,7 +118,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
 
                 return link ? (
                   <a
-                    key={actionIndex}
+                    key={text + (icon ?? "")}
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -127,7 +127,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                     {content}
                   </a>
                 ) : (
-                  <span key={actionIndex} className={className}>
+                  <span key={text + (icon ?? "")} className={className}>
                     {content}
                   </span>
                 );

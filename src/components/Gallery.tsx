@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { FC } from "react";
 import { Icon } from "./Icon.js";
 
@@ -42,6 +42,130 @@ export interface GalleryProps {
   items: GalleryItem[];
 }
 
+const GalleryCard: FC<{
+  item: GalleryItem;
+  index: number;
+  onSelect: (index: number) => void;
+}> = ({ item, index, onSelect }) => {
+  const handleSelect = useCallback(() => {
+    onSelect(index);
+  }, [index, onSelect]);
+
+  const hasMeta = Boolean(item.location) || Boolean(item.date);
+
+  return (
+    <div className="group gallery-item" onClick={handleSelect}>
+      <img src={item.url} alt={item.title} className="gallery-image" loading="lazy" />
+      <div className="gallery-overlay">
+        <h4 className="gallery-title">{item.title}</h4>
+        {hasMeta && (
+          <p className="gallery-meta">
+            {Boolean(item.location) && (
+              <>
+                <Icon icon="location-dot" className="text-xs" />
+                {item.location}
+              </>
+            )}
+            {Boolean(item.location) && Boolean(item.date) && " • "}
+            {item.date}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Lightbox: FC<{
+  item: GalleryItem;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}> = ({ item, onClose, onPrev, onNext }) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "ArrowLeft") onPrev();
+      if (event.key === "ArrowRight") onNext();
+      if (event.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return (): void => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onPrev, onNext, onClose]);
+
+  const stopPropagation = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+  }, []);
+
+  const handlePrev = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      onPrev();
+    },
+    [onPrev],
+  );
+
+  const handleNext = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      onNext();
+    },
+    [onNext],
+  );
+
+  const handleClose = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      onClose();
+    },
+    [onClose],
+  );
+
+  const hasMeta = Boolean(item.location) || Boolean(item.date);
+
+  return (
+    <div className="lightbox-overlay" onClick={onClose}>
+      <button className="lightbox-nav lightbox-nav-left" type="button" onClick={handlePrev}>
+        <Icon icon="chevron-left" className="text-4xl" />
+      </button>
+
+      <button className="lightbox-nav lightbox-nav-right" type="button" onClick={handleNext}>
+        <Icon icon="chevron-right" className="text-4xl" />
+      </button>
+
+      <div className="group lightbox-container">
+        <button className="lightbox-close" type="button" onClick={handleClose}>
+          <Icon icon="xmark" className="text-3xl" />
+        </button>
+        <div className="lightbox-image-wrapper">
+          <img src={item.url} alt={item.title} className="lightbox-image" loading="lazy" />
+        </div>
+        <div className="lightbox-content" onClick={stopPropagation}>
+          <div className="space-y-1">
+            <h3 className="lightbox-title">{item.title}</h3>
+
+            {hasMeta && (
+              <p className="lightbox-meta">
+                {Boolean(item.location) && (
+                  <>
+                    <Icon icon="location-dot" />
+                    {item.location}
+                  </>
+                )}
+                {Boolean(item.location) && Boolean(item.date) && " • "}
+                {item.date?.toString()}
+              </p>
+            )}
+          </div>
+          {Boolean(item.description) && <p className="lightbox-description">{item.description}</p>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 /**
  * Gallery component
  *
@@ -52,70 +176,36 @@ export interface GalleryProps {
  * 显示瀑布流风格的图片网格，并带有用于查看详情的灯箱。
  */
 export const Gallery: FC<GalleryProps> = ({ items }) => {
-  const [selected, setSelected] = useState<GalleryItem | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const handleClose = useCallback(() => {
+    setSelectedIndex(null);
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    setSelectedIndex((prev) => (prev === null ? null : (prev - 1 + items.length) % items.length));
+  }, [items.length]);
+
+  const handleNext = useCallback(() => {
+    setSelectedIndex((prev) => (prev === null ? null : (prev + 1) % items.length));
+  }, [items.length]);
 
   return (
     <>
       <div className="gallery-grid">
-        {items.map((item, idx) => (
-          <div key={idx} className="group gallery-item" onClick={() => setSelected(item)}>
-            <img src={item.url} alt={item.title} className="gallery-image" loading="lazy" />
-            <div className="gallery-overlay">
-              <h4 className="gallery-title">{item.title}</h4>
-              {(item.location || item.date) && (
-                <p className="gallery-meta">
-                  {item.location && (
-                    <>
-                      <Icon icon="location-dot" className="text-xs" />
-                      {item.location}
-                    </>
-                  )}
-                  {item.location && item.date && "•"}
-                  {item.date}
-                </p>
-              )}
-            </div>
-          </div>
+        {items.map((item, index) => (
+          <GalleryCard key={item.url} item={item} index={index} onSelect={setSelectedIndex} />
         ))}
       </div>
 
       {/* Lightbox */}
-      {selected && (
-        <div className="lightbox-overlay" onClick={() => setSelected(null)}>
-          <div className="group lightbox-container" onClick={(event) => event.stopPropagation()}>
-            <button className="lightbox-close" onClick={() => setSelected(null)}>
-              <Icon icon="xmark" className="text-3xl" />
-            </button>
-            <div className="lightbox-image-wrapper">
-              <img
-                src={selected.url}
-                alt={selected.title}
-                className="lightbox-image"
-                loading="lazy"
-              />
-            </div>
-            <div className="lightbox-content">
-              <div className="space-y-1">
-                <h3 className="lightbox-title">{selected.title}</h3>
-                {(selected.location || selected.date) && (
-                  <p className="lightbox-meta">
-                    {selected.location && (
-                      <>
-                        <Icon icon="location-dot" />
-                        {selected.location}
-                      </>
-                    )}
-                    {selected.location && selected.date && "•"}
-                    {selected.date?.toString()}
-                  </p>
-                )}
-              </div>
-              {selected.description && (
-                <p className="lightbox-description">{selected.description}</p>
-              )}
-            </div>
-          </div>
-        </div>
+      {selectedIndex !== null && (
+        <Lightbox
+          item={items[selectedIndex]}
+          onClose={handleClose}
+          onPrev={handlePrev}
+          onNext={handleNext}
+        />
       )}
     </>
   );

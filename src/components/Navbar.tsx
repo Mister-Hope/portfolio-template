@@ -72,7 +72,9 @@ export const Navbar: FC<NavbarProps> = ({
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = (): void => setScrolled(window.scrollY > 50);
+    const handleScroll = (): void => {
+      setScrolled(window.scrollY > 50);
+    };
 
     window.addEventListener("scroll", handleScroll);
 
@@ -95,15 +97,15 @@ export const Navbar: FC<NavbarProps> = ({
 
         <div className="flex items-center gap-4 md:gap-8">
           <div className="navbar-links">
-            {links.map((link, idx) => (
+            {links.map(({ label, anchor }) => (
               <a
-                key={idx}
-                href={link.anchor}
+                key={label}
+                href={anchor}
                 className={`navbar-link ${
                   scrolled ? "navbar-link-scrolled" : "navbar-link-transparent"
                 }`}
               >
-                {link.label}
+                {label}
               </a>
             ))}
           </div>
@@ -111,6 +113,7 @@ export const Navbar: FC<NavbarProps> = ({
           <div className="navbar-actions">
             {showLocaleSwitch && (
               <button
+                type="button"
                 onClick={onLocaleChange}
                 className={`nav-btn-base navbar-locale-btn ${
                   scrolled ? "nav-btn-scrolled" : "nav-btn-transparent"
@@ -122,7 +125,8 @@ export const Navbar: FC<NavbarProps> = ({
             )}
 
             <button
-              onClick={(event): void => onThemeChange(event)}
+              type="button"
+              onClick={onThemeChange}
               className={`nav-btn-base navbar-theme-btn ${
                 scrolled ? "nav-btn-scrolled" : "nav-btn-transparent"
               }`}

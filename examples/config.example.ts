@@ -1,5 +1,3 @@
-// oxlint-disable typescript/naming-convention
-
 import {
   defineConfig,
   defineFooterConfig,

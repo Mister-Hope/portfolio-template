@@ -34,8 +34,9 @@ export const loadConfig = async (root: string): Promise<Config> => {
           try {
             const dependencies = getConfigDependencies(root);
 
+            // oxlint-disable-next-line typescript/no-dynamic-delete
             for (const dep of dependencies) delete require.cache[dep];
-
+            // oxlint-disable-next-line typescript/no-dynamic-delete
             delete require.cache[filePath];
           } catch {
             // Ignore errors clearing cache

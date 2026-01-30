@@ -80,6 +80,14 @@ const processSection = (section: Section): Section => {
       result.data.content = renderMarkdown(result.data.content);
       break;
     }
+
+    case "gallery": {
+      break;
+    }
+
+    default: {
+      throw new Error(`Unknown section type: ${(result as Section).type}`);
+    }
   }
 
   return result;
@@ -88,15 +96,19 @@ const processSection = (section: Section): Section => {
 export const resolveLocaleConfig = (config: LocaleConfig): LocaleConfig => ({
   ...config,
   sections: config.sections.map(processSection),
-  footer: config.footer
+  ...(config.footer
     ? {
-        ...config.footer,
-        ...(config.footer.copyright ? { copyright: renderMarkdown(config.footer.copyright) } : {}),
-        ...(config.footer.description
-          ? { description: renderMarkdown(config.footer.description) }
-          : {}),
+        footer: {
+          ...config.footer,
+          ...(config.footer.copyright
+            ? { copyright: renderMarkdown(config.footer.copyright) }
+            : {}),
+          ...(config.footer.description
+            ? { description: renderMarkdown(config.footer.description) }
+            : {}),
+        },
       }
-    : undefined,
+    : {}),
 });
 
 export const resolveConfig = (config: Config): Config => ({

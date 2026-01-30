@@ -25,7 +25,6 @@ export default defineConfig(async () => {
     publicDir: path.resolve(__dirname, "public"),
 
     define: {
-      // oxlint-disable-next-line typescript/naming-convention
       __CONFIG__: JSON.stringify(config),
     },
     server: {
@@ -75,7 +74,6 @@ export default defineConfig(async () => {
     ],
     resolve: {
       alias: {
-        // oxlint-disable-next-line typescript/naming-convention
         "@": path.resolve(__dirname, "."),
       },
     },

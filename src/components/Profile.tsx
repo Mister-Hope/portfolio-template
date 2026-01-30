@@ -95,16 +95,16 @@ export interface ProfileProps {
 export const Profile: FC<ProfileProps> = ({ data, ui }) => (
   <div className="profile-container card-base">
     <div className="profile-fields-col">
-      {data.fields?.map(({ title, value, icon }, index) => (
-        <div key={index}>
+      {data.fields?.map(({ title, value, icon }) => (
+        <div key={title}>
           <h4 className="profile-label label-sm">
             {icon && <Icon icon={icon} />}
             {title}
           </h4>
           {Array.isArray(value) ? (
             <div className="profile-tags-wrapper">
-              {value.map((item, index) => (
-                <span key={index} className="profile-tag">
+              {value.map((item) => (
+                <span key={item} className="profile-tag">
                   {item}
                 </span>
               ))}
@@ -121,8 +121,8 @@ export const Profile: FC<ProfileProps> = ({ data, ui }) => (
           <Icon icon="paper-plane" /> {ui?.contacts ?? "Contacts"}
         </h4>
         <ul className="profile-contact-list">
-          {data.contacts?.map((contact, index) => (
-            <li key={index} className="profile-contact-item">
+          {data.contacts?.map((contact) => (
+            <li key={contact.value} className="profile-contact-item">
               <div className="profile-icon-box">
                 <Icon icon={contact.icon ?? "envelope"} className="text-2xl" />
               </div>

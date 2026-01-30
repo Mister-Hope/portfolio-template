@@ -48,9 +48,9 @@ export const List: FC<ListProps> = ({ items, dot = "number" }) => {
 
   return (
     <ListTag className={isOrderedList ? "list-ol" : "list-ul"}>
-      {items.map((item, i) => (
+      {items.map((item) => (
         <li
-          key={i}
+          key={typeof item === "object" ? item.text : item}
           className={`text-content ${isOrderedList ? "list-li-ordered" : "list-li-unordered"}`}
         >
           {!isOrderedList && (

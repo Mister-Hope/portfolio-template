@@ -81,7 +81,11 @@ export const Banner: FC<BannerProps> = ({ header, content, footer, tags, actions
       <div className="flex-1 space-y-6">
         {tags &&
           (Array.isArray(tags) ? (
-            tags.map((tag) => <div className="banner-tag">{tag}</div>)
+            tags.map((tag) => (
+              <div key={tag} className="banner-tag">
+                {tag}
+              </div>
+            ))
           ) : (
             <div className="banner-tag">{tags}</div>
           ))}
@@ -98,9 +102,9 @@ export const Banner: FC<BannerProps> = ({ header, content, footer, tags, actions
       </div>
 
       <div className="flex w-full flex-col gap-4 sm:flex-row lg:w-auto">
-        {actions.map(({ link, primary, label }, index) => (
+        {actions.map(({ link, primary, label }) => (
           <a
-            key={index}
+            key={link}
             href={link}
             target="_blank"
             rel="noopener noreferrer"

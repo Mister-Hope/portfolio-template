@@ -27,6 +27,24 @@ interface Props {
  *
  * 作品集的主要 Hero 区域，显示头像、姓名、头衔和社交链接。
  */
+const handleScroll = (): void => {
+  const firstSection = document.querySelector("main > section");
+
+  if (firstSection) {
+    firstSection.scrollIntoView({ behavior: "smooth" });
+  } else {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  }
+};
+
+/**
+ * The main hero section of the portfolio, displaying the avatar, name, titles, and social links.
+ *
+ * 作品集的主要 Hero 区域，显示头像、姓名、头衔和社交链接。
+ */
 export const Hero: FC<Props> = ({ hero, locale }) => {
   const isCJK = isCJKLocale(locale);
 
@@ -62,9 +80,9 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
 
           {hero.medias && (
             <div className="hero-social-links">
-              {hero.medias.map((media, idx) => (
+              {hero.medias.map((media) => (
                 <a
-                  key={idx}
+                  key={media.link}
                   href={media.link}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -81,21 +99,7 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
       </div>
 
       {/* Scroll Indicator */}
-      <div
-        className="hero-scroll-indicator"
-        onClick={() => {
-          const firstSection = document.querySelector("main > section");
-
-          if (firstSection) {
-            firstSection.scrollIntoView({ behavior: "smooth" });
-          } else {
-            window.scrollTo({
-              top: window.innerHeight,
-              behavior: "smooth",
-            });
-          }
-        }}
-      >
+      <div className="hero-scroll-indicator" onClick={handleScroll}>
         <Icon icon="chevron-down" className="text-3xl text-white" />
       </div>
     </header>

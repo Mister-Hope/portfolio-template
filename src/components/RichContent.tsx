@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { FC } from "react";
 
 /**
@@ -29,12 +30,10 @@ interface RichContentProps {
  */
 export const RichContent: FC<RichContentProps> = ({ content, block = false, className = "" }) => {
   const Tag = block ? "div" : "span";
+  const html = useMemo(() => ({ __html: content }), [content]);
 
   return (
-    <Tag
-      className={`rich-content ${className}`}
-      // oxlint-disable-next-line typescript/naming-convention
-      dangerouslySetInnerHTML={{ __html: content }}
-    />
+    // oxlint-disable-next-line react/no-danger
+    <Tag className={`rich-content ${className}`} dangerouslySetInnerHTML={html} />
   );
 };

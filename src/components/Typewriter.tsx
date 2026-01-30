@@ -44,7 +44,9 @@ export const Typewriter: FC<TypewriterProps> = ({ texts, speed = 100, pause = 20
 
   useEffect(() => {
     if (subIndex === texts[index].length + 1 && !reverse) {
-      setTimeout(() => setReverse(true), pause);
+      setTimeout(() => {
+        setReverse(true);
+      }, pause);
 
       return;
     }
