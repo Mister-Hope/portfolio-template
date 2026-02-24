@@ -6,7 +6,7 @@ import react from "@vitejs/plugin-react";
 import type { ViteDevServer } from "vite";
 import { defineConfig } from "vite";
 
-import { configFiles, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
+import { CONFIG_FILES, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -58,13 +58,13 @@ export default defineConfig(async () => {
           const configDependencies = getConfigDependencies(__dirname);
 
           server.watcher.add(configPath);
-          server.watcher.add(configFiles.map((filePath) => path.resolve(__dirname, filePath)));
+          server.watcher.add(CONFIG_FILES.map((filePath) => path.resolve(__dirname, filePath)));
           server.watcher.add(configDependencies);
 
           server.watcher.on("change", (file: string) => {
             if (
               file.startsWith(configPath) ||
-              configFiles.some((filePath) => file === path.resolve(__dirname, filePath)) ||
+              CONFIG_FILES.some((filePath) => file === path.resolve(__dirname, filePath)) ||
               configDependencies.includes(file)
             )
               void server.restart();

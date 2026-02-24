@@ -1,4 +1,3 @@
-// oxlint-disable no-console
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
@@ -43,7 +42,7 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
   };
 
   const templatePath = resolve(outDir, "index.html");
-  const template = readFileSync(templatePath, "utf8");
+  const template = readFileSync(templatePath, "utf-8");
 
   for (const url of routesToPrerender) {
     const appHtml = render(url, appConfig);

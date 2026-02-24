@@ -1,7 +1,7 @@
 import type { BannerProps } from "../components/Banner.js";
 import type { CardItem } from "../components/Cards.js";
-import type { ExperienceItem } from "../components/Experience.js";
-import type { GalleryItem } from "../components/Gallery.js";
+import type { ExperienceItem } from "../components/ExperienceItem.js";
+import type { GalleryItem } from "../components/GalleryCard.js";
 import type { ListItem, ListProps } from "../components/List.js";
 import type { MarkdownProps } from "../components/Markdown.js";
 import type { ProfileData } from "../components/Profile.js";

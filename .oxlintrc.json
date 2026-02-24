@@ -29,6 +29,18 @@
       "rules": {
         "max-lines": "off"
       }
+    },
+    {
+      "files": ["lib/**/*.ts"],
+      "plugins": ["node"],
+      "rules": {
+        // allow console usage in scripts and config files
+        "no-console": "off",
+        // allow importing node built-in modules in config files and scripts
+        "import/no-nodejs-modules": "off",
+        // config files shall be allowed to access process.env
+        "node/no-process-env": "off"
+      }
     }
   ]
 }

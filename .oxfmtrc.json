@@ -5,7 +5,7 @@
     "stylesheet": "./src/index.css",
     "preserveWhitespace": true
   },
-  "experimentalSortPackageJson": {
+  "sortPackageJson": {
     "sortScripts": true
   }
 }
