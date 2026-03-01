@@ -44,7 +44,10 @@
     "no-plusplus": "off",
     // ternary operator shall be allowed for simple expressions
     "no-ternary": "off",
+    // _ is commonly used as a placeholder variable name
     "no-shadow": ["warn", { "allow": ["_"] }],
+    // allow using variables before their declaration, as long as they are not used in their initializers
+    "no-use-before-define": ["warn", { "allowNamedExports": true }],
     // we use void operator to mark those promise that shall not be awaited
     "no-void": "off",
     // normally we do not enforce numeric separator usage
@@ -116,6 +119,8 @@
     "typescript/no-inferrable-types": "off",
     // disable unsafe type assertion checks
     "typescript/no-unsafe-type-assertion": "off",
+    // we may use a union contain void to declare function return type
+    "typescript/no-invalid-void-type": "off",
     // enforce naming conventions
     // NOTE: not implemented yet by the moment: https://github.com/oxc-project/tsgolint/tree/main?tab=readme-ov-file#implemented-rules
     "typescript/naming-convention": [
@@ -156,6 +161,7 @@
         { "selector": "enumMember", "format": ["PascalCase"] }
       ]
     ],
+    "typescript/parameter-properties": ["warn", { "prefer": "parameter-property" }],
     // allow non-null assertions in some cases
     "typescript/strict-boolean-expressions": [
       "warn",
@@ -199,9 +205,7 @@
 
     // stylistic rules with default being tweaked
     "catch-error-name": ["warn", { "name": "err" }],
-    // FIXME: https://github.com/oxc-project/oxc/issues/18566
-    // "curly": ["warn", "multi-or-nest", "consistent"],
-    "curly": "off",
+    "curly": ["warn", "multi-or-nest", "consistent"],
     "id-length": [
       "warn",
       {
