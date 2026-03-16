@@ -3,7 +3,7 @@ import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 
-import { createJiti } from "jiti";
+import { unrun } from "unrun";
 import { load } from "js-yaml";
 
 import { resolveConfig } from "./resolveConfig.js";
@@ -120,16 +120,12 @@ export const loadConfig = async (root: string): Promise<Config> => {
             // Ignore errors clearing cache
           }
 
-          const jiti = createJiti(import.meta.url, {
-            // oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-assignment
-            fsCache: false as any,
-            // oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-assignment
-            moduleCache: false as any,
-          });
           // oxlint-disable-next-line no-await-in-loop
-          const mod = await jiti.import(filePath);
+          const { module } = await unrun<Config>({
+            path: filePath,
+          });
 
-          config = (mod as { default: Config }).default;
+          config = module;
           break;
         }
       } catch (err) {
