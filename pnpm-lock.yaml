@@ -53,7 +53,7 @@ importers:
         version: 0.9.0
       npm-check-updates:
         specifier: ^19.6.3
-        version: 19.6.3
+        version: 19.6.5
       oxc-config-hope:
         specifier: 0.0.8
         version: 0.0.8(oxfmt@0.40.0)(oxlint-tsgolint@0.17.0)(oxlint@1.55.0(oxlint-tsgolint@0.17.0))
@@ -879,8 +879,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  npm-check-updates@19.6.3:
-    resolution: {integrity: sha512-VAt9Bp26eLaymZ0nZyh5n/by+YZIuegXlvWR0yv1zBqd984f8VnEnBbn+1lS3nN5LyEjn62BJ+yYgzNSpb6Gzg==}
+  npm-check-updates@19.6.5:
+    resolution: {integrity: sha512-XlBUMC30relXfEerrnX239W9iB30U6Woz0Hj42Sv6iSF4EGOvj2mS2r45sZ3RglH0VPBxXOWooMxObZ/SMZhrw==}
     engines: {node: '>=20.0.0', npm: '>=8.12.1'}
     hasBin: true
 
@@ -1561,7 +1561,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  npm-check-updates@19.6.3: {}
+  npm-check-updates@19.6.5: {}
 
   oxc-config-hope@0.0.8(oxfmt@0.40.0)(oxlint-tsgolint@0.17.0)(oxlint@1.55.0(oxlint-tsgolint@0.17.0)):
     optionalDependencies:
