@@ -33,7 +33,7 @@ export default defineConfig(async () => {
     },
     plugins: [
       react(),
-      tailwindcss({}),
+      tailwindcss(),
       ssgPlugin(__dirname),
       {
         name: "inject-title-and-meta",
