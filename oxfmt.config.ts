@@ -1,3 +1,9 @@
 import { config } from "oxc-config-hope/oxfmt";
+import { defineConfig } from "oxfmt";
 
-export default config;
+export default defineConfig({
+  extends: config,
+  sortTailwindcss: {
+    stylesheet: "./src/index.css",
+  },
+});
