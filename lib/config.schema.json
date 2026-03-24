@@ -8,6 +8,33 @@
       "properties": {
         "experienceTypes": {
           "$ref": "#/definitions/ExperienceTypes"
+        },
+        "mdIt": {
+          "description": "markdown-it plugins configuration.\nEach entry is pluginName or [pluginName, options?].\nmarkdown-it 插件配置，每个条目为插件包名或 [插件包名, 选项?]。",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Plugin package name / 插件包名"
+              },
+              {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "description": "Plugin package name / 插件包名"
+                  },
+                  {
+                    "description": "Options passed to md.use() / 传递给 md.use() 的选项"
+                  }
+                ],
+                "description": "Plugin entry: [pluginName, options?]\n插件条目：[插件包名, 选项?]"
+              }
+            ]
+          }
         }
       },
       "additionalProperties": false
@@ -239,14 +266,30 @@
     },
     "Section": {
       "oneOf": [
-        { "$ref": "#/definitions/ProfileSection" },
-        { "$ref": "#/definitions/ExperienceSection" },
-        { "$ref": "#/definitions/BannerSection" },
-        { "$ref": "#/definitions/TimelineSection" },
-        { "$ref": "#/definitions/CardsSection" },
-        { "$ref": "#/definitions/ListSection" },
-        { "$ref": "#/definitions/GallerySection" },
-        { "$ref": "#/definitions/MarkdownSection" }
+        {
+          "$ref": "#/definitions/ProfileSection"
+        },
+        {
+          "$ref": "#/definitions/ExperienceSection"
+        },
+        {
+          "$ref": "#/definitions/BannerSection"
+        },
+        {
+          "$ref": "#/definitions/TimelineSection"
+        },
+        {
+          "$ref": "#/definitions/CardsSection"
+        },
+        {
+          "$ref": "#/definitions/ListSection"
+        },
+        {
+          "$ref": "#/definitions/GallerySection"
+        },
+        {
+          "$ref": "#/definitions/MarkdownSection"
+        }
       ],
       "description": "Configuration for a content block\n内容块配置"
     },
@@ -269,7 +312,9 @@
     },
     "ProfileSection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {
@@ -322,7 +367,9 @@
         },
         "value": {
           "oneOf": [
-            { "type": "string" },
+            {
+              "type": "string"
+            },
             {
               "type": "array",
               "items": {
@@ -363,7 +410,9 @@
     },
     "ExperienceSection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {
@@ -419,7 +468,9 @@
     },
     "BannerSection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {
@@ -457,7 +508,9 @@
                 "type": "string"
               }
             },
-            { "type": "string" }
+            {
+              "type": "string"
+            }
           ],
           "description": "Tags\n标签"
         },
@@ -495,7 +548,9 @@
     },
     "TimelineSection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {
@@ -518,7 +573,9 @@
       "properties": {
         "year": {
           "oneOf": [
-            { "type": "string" },
+            {
+              "type": "string"
+            },
             {
               "type": "number"
             }
@@ -544,7 +601,9 @@
     },
     "CardsSection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {
@@ -614,7 +673,9 @@
     },
     "ListSection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {
@@ -624,7 +685,14 @@
             "data": {
               "type": "array",
               "items": {
-                "oneOf": [{ "$ref": "#/definitions/ListItem" }, { "type": "string" }]
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/ListItem"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
               }
             },
             "dot": {
@@ -655,7 +723,9 @@
     },
     "GallerySection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {
@@ -703,7 +773,9 @@
     },
     "MarkdownSection": {
       "allOf": [
-        { "$ref": "#/definitions/SectionBase" },
+        {
+          "$ref": "#/definitions/SectionBase"
+        },
         {
           "type": "object",
           "properties": {

@@ -33,6 +33,45 @@ The optional `config` object contains the following fields:
     - `icon`: String. Icon name for the timeline node (e.g., "mdi:briefcase").
     - `iconClass`: String. Icon class for the timeline node (e.g., "text-white").
 
+- `mdIt`:
+  - Type: `(string | [string, options?])[]` (all config formats) or `(md: MarkdownIt) => void` (JS/TS only) (optional).
+  - Details:
+    Apply additional [markdown-it](https://markdown-it.github.io/) plugins to extend Markdown rendering.
+    Each entry in the array is `pluginPackageName` or `[pluginPackageName, pluginOptions?]`.
+
+    When loading a plugin the export is resolved automatically in this order:
+    1. The module itself is a function → use it.
+    2. `module.default` exists → use it.
+    3. Derive a name from the package name and use that named export
+       (`markdown-it-foo` / `@scope/plugin-foo` → `foo`; `foo-bar` → `fooBar`).
+
+    If your plugin cannot be auto-resolved, use the **function form** (JS/TS config) to call `md.use()` directly.
+
+    **Array form** (works with all config formats, including JSON and YAML):
+
+    ```yaml
+    config:
+      mdIt:
+        - "@mdit/plugin-attr"
+        - ["@mdit/plugin-container", { name: "hint" }]
+    ```
+
+    **Function form** (JS/TS configs only, allows advanced usage):
+
+    ```ts
+    import containerPlugin from "@mdit/plugin-container";
+    export default {
+      config: {
+        mdIt: (md) => {
+          md.use(containerPlugin, { name: "hint" });
+        },
+      },
+      locales: {
+        /* ... */
+      },
+    };
+    ```
+
 ## Locale Configuration
 
 - `locales` entry:
@@ -391,28 +430,20 @@ You can always use a full URL for icons and images (e.g., `https://example.com/i
 
 We support all icon name from [iconify](https://iconify.design/), and you can either use FontAwesome 7 solid icons directly with its name (e.g.: `book` for `fa7-solid:book`), or use the full icon name (e.g., `mdi:github`).
 
-## Customizing Theme Colors
+## Customizing Styles
 
-The project's theme colors are defined via CSS variables, and the system automatically generates a complete color palette based on the base colors.
-
-You can modify the following variables in `src/index.css` to change the theme colors:
+Create a `custom.css` file in the project root directory. It will be **automatically injected** at the end of the main stylesheet at build time — no extra configuration needed. This is the recommended way to add custom styles.
 
 ```css
+/* custom.css — place this file in the project root */
+
+/* Override theme colors */
 :root {
-  /**
-   * Define your default font family here.
-   */
-  --font:
-    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
-  /* 
-    Define your brand colors here. 
-    The system will automatically generate the palette based on these colors.
-  */
-  --primary-base: #3b82f6; /* Primary color (Default Blue) */
-  --secondary-base: #6366f1; /* Secondary color (Default Indigo) */
+  --primary-base: #10b981; /* Emerald */
+}
+
+/* Add any custom styles below */
+.my-section h2 {
+  font-size: 2rem;
 }
 ```
-
-After modification, Tailwind CSS will automatically generate the corresponding color scales from `primary-50` to `primary-950` and `secondary-50` to `secondary-950`.

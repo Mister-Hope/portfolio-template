@@ -1,15 +1,51 @@
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import type { ViteDevServer } from "vite";
+import type { Plugin, ViteDevServer } from "vite";
 import { defineConfig } from "vite";
 
 import { CONFIG_FILES, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const customCssPlugin = (): Plugin => {
+  const customCssPath = path.resolve(__dirname, "custom.css");
+  const indexCssPath = path.resolve(__dirname, "src/index.css");
+  let cachedCustomCss: string | null = null;
+
+  const readCustomCss = (): string | null => {
+    if (!fs.existsSync(customCssPath)) return null;
+
+    cachedCustomCss ??= fs.readFileSync(customCssPath, "utf-8");
+    return cachedCustomCss;
+  };
+
+  return {
+    name: "inject-custom-css",
+    enforce: "pre",
+    transform(code: string, id: string): { code: string } | null {
+      const customCss = id.split("?")[0] === indexCssPath ? readCustomCss() : null;
+
+      return customCss ? { code: `${code}\n${customCss}` } : null;
+    },
+    configureServer(server: ViteDevServer): void {
+      // Watch the file even if it does not exist yet so creation is detected
+      server.watcher.add(customCssPath);
+      server.watcher.on("change", (file: string) => {
+        if (file === customCssPath) {
+          cachedCustomCss = null;
+          const module = server.moduleGraph.getModuleById(indexCssPath);
+
+          if (module) void server.reloadModule(module);
+        }
+      });
+    },
+  };
+};
 
 export default defineConfig(async () => {
   const config = await loadConfig(__dirname);
@@ -34,6 +70,7 @@ export default defineConfig(async () => {
     plugins: [
       react(),
       tailwindcss(),
+      customCssPlugin(),
       ssgPlugin(__dirname),
       {
         name: "inject-title-and-meta",

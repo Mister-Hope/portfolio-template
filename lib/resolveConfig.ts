@@ -1,7 +1,9 @@
 import type { Config, LocaleConfig, Section } from "../src/types/index.js";
-import { renderMarkdown } from "./markdown.js";
+import { createMarkdownRenderer } from "./markdown.js";
 
-const processSection = (section: Section): Section => {
+type RenderMarkdown = (content: string, inline?: boolean) => string;
+
+const processSection = (section: Section, renderMarkdown: RenderMarkdown): Section => {
   const result = { ...section };
 
   switch (result.type) {
@@ -93,9 +95,12 @@ const processSection = (section: Section): Section => {
   return result;
 };
 
-export const resolveLocaleConfig = (config: LocaleConfig): LocaleConfig => ({
+const resolveLocaleConfig = (
+  config: LocaleConfig,
+  renderMarkdown: RenderMarkdown,
+): LocaleConfig => ({
   ...config,
-  sections: config.sections.map(processSection),
+  sections: config.sections.map((section) => processSection(section, renderMarkdown)),
   ...(config.footer
     ? {
         footer: {
@@ -111,12 +116,26 @@ export const resolveLocaleConfig = (config: LocaleConfig): LocaleConfig => ({
     : {}),
 });
 
-export const resolveConfig = (config: Config): Config => ({
-  ...config,
-  locales: Object.fromEntries(
-    Object.entries(config.locales).map(([path, localeConfig]) => [
-      path,
-      resolveLocaleConfig(localeConfig),
-    ]),
-  ),
-});
+export const resolveConfig = async (config: Config): Promise<Config> => {
+  const renderMarkdown = await createMarkdownRenderer(config.config?.mdIt);
+
+  const resolved: Config = {
+    ...config,
+    locales: Object.fromEntries(
+      Object.entries(config.locales).map(([localePath, localeConfig]) => [
+        localePath,
+        resolveLocaleConfig(localeConfig, renderMarkdown),
+      ]),
+    ),
+  };
+
+  // Strip mdIt from the serialized config — it is only needed during resolution
+  // and cannot be serialized (function form) or is not useful at runtime.
+  if (resolved.config?.mdIt) {
+    const { mdIt: _mdIt, ...restConfig } = resolved.config;
+
+    resolved.config = restConfig;
+  }
+
+  return resolved;
+};

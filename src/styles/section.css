@@ -8,7 +8,7 @@
   }
 
   .section-header {
-    @apply flex flex-col gap-2 pl-2 md:pl-4;
+    @apply flex flex-col gap-2 ps-2 md:ps-4;
   }
 
   .section-title-row {

@@ -4,15 +4,15 @@
   }
 
   .list-ol {
-    @apply list-inside list-decimal space-y-4 text-lg marker:font-black marker:text-primary-400 dark:marker:text-primary-500;
+    @apply list-decimal space-y-4 ps-6 text-lg marker:font-black marker:text-primary-400 dark:marker:text-primary-500;
   }
 
   .list-li-unordered {
-    @apply flex items-start gap-4;
+    @apply flex items-start gap-2;
   }
 
   .list-li-ordered {
-    @apply pl-2;
+    @apply ps-2;
   }
 
   .list-marker-container {

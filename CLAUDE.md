@@ -15,21 +15,20 @@ This is a **configuration-driven** portfolio template. Users should primarily cu
 ### Template Developer Mode
 
 - You are helping develop/extend the template
-- Full source code access
-- Can modify anything in src/
+- Full source code access — can modify anything in `src/`
 
 ### User Mode
 
 - You are helping an end-user customize their portfolio
 - **Always prefer config first**
-- Only modify src/ when user explicitly requests style changes or strongly expresses a new feature need
-- Follow minimalism: CSS override (src/index.css) before component changes
+- For style changes: suggest `custom.css` in the project root (auto-injected at build time)
+- Only modify `src/` when the user explicitly requests style changes or strongly expresses a new feature need
 
 ## Key Points
 
-- Users should edit their config file (`config.ts`, `config.js`, `config.json`, `config.yml`, or `config.yaml`)
-- For style changes: suggest CSS override in `src/index.css` first
-- Only modify components as last resort
+- Content changes → edit the config file (`config.ts`, `config.js`, `config.json`, `config.yml`, or `config.yaml`)
+- Style changes → create or edit `custom.css` in the project root
+- Only modify components as a last resort
 
 ## References
 

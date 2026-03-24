@@ -33,6 +33,45 @@
     - `icon`: 字符串。时间轴节点的图标名称 (例如 "mdi:briefcase")。
     - `iconClass`: 字符串。时间轴节点的图标类名 (例如 "text-white")。
 
+- `mdIt`:
+  - 类型: `(string | [string, options?])[]`（所有配置格式）或 `(md: MarkdownIt) => void`（仅 JS/TS）(可选)。
+  - 详情:
+    为 Markdown 渲染应用额外的 [markdown-it](https://markdown-it.github.io/) 插件。
+    数组中每个条目为 `插件包名` 或 `[插件包名, 插件选项?]`。
+
+    加载插件时按以下顺序自动解析导出：
+    1. 模块本身是函数 → 直接使用。
+    2. `module.default` 存在 → 使用它。
+    3. 从包名推导导出名并尝试该具名导出
+       （`markdown-it-foo` / `@scope/plugin-foo` → `foo`；`foo-bar` → `fooBar`）。
+
+    如果你的插件无法被自动解析，请使用**函数形式**（JS/TS 配置）直接调用 `md.use()`。
+
+    **数组形式**（适用于所有配置格式，包括 JSON 和 YAML）：
+
+    ```yaml
+    config:
+      mdIt:
+        - "@mdit/plugin-attr"
+        - ["@mdit/plugin-container", { name: "hint" }]
+    ```
+
+    **函数形式**（仅适用于 JS/TS 配置，支持高级用法）：
+
+    ```ts
+    import containerPlugin from "@mdit/plugin-container";
+    export default {
+      config: {
+        mdIt: (md) => {
+          md.use(containerPlugin, { name: "hint" });
+        },
+      },
+      locales: {
+        /* ... */
+      },
+    };
+    ```
+
 ## 多语言配置 (`LocaleConfig`)
 
 - `locales` 条目:
@@ -391,21 +430,20 @@
 
 我们支持来自 [iconify](https://iconify.design/) 的所有图标名称，您可以直接使用 FontAwesome 7 实心图标名称 (例如 `book` 对应 `fa7-solid:book`)，或使用完整的图标名称 (例如 `mdi:github`)。
 
-## 自定义主题色
+## 自定义样式
 
-项目的主题色通过 CSS 变量定义，系统会自动根据基础色生成完整的色板。
-
-你可以在 `src/index.css` 文件中修改以下变量来改变主题色：
+在项目根目录创建 `custom.css` 文件，构建时会**自动注入**到主样式表的末尾，无需任何额外配置。这是添加自定义样式的推荐方式。
 
 ```css
+/* custom.css — 放置在项目根目录 */
+
+/* 覆盖主题色 */
 :root {
-  /* 
-    在此处定义你的品牌颜色。
-    系统将根据这些颜色自动生成调色板。
-  */
-  --primary-base: #3b82f6; /* 主色调 (默认蓝色) */
-  --secondary-base: #6366f1; /* 次要色调 (默认靛青色) */
+  --primary-base: #10b981; /* 绿色 */
+}
+
+/* 在此添加任意自定义样式 */
+.my-section h2 {
+  font-size: 2rem;
 }
 ```
-
-修改后，Tailwind CSS 会自动生成对应的 `primary-50` 到 `primary-950` 以及 `secondary-50` 到 `secondary-950` 的色阶。
