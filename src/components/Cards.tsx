@@ -93,7 +93,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
               <AdaptiveImage
                 src={logo}
                 alt={title}
-                className="card-logo float-right mb-2 ml-4"
+                className="card-logo float-right ms-4 mb-2"
                 loading="lazy"
               />
             )}

@@ -1,10 +1,10 @@
 @layer components {
   .timeline {
-    @apply space-y-0 pl-0 md:pl-4;
+    @apply space-y-0 ps-0 md:ps-4;
   }
 
   .timeline-item {
-    @apply relative pb-5 pl-7 last:pb-0 md:pl-9;
+    @apply relative pb-5 ps-4 last:pb-0 md:ps-9;
   }
 
   .timeline-line {

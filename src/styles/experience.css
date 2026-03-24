@@ -1,10 +1,10 @@
 @layer components {
   .experience-list {
-    @apply space-y-8 pl-0 md:pl-4;
+    @apply space-y-8 ps-0 md:ps-4;
   }
 
   .experience-item {
-    @apply relative pl-10 md:pl-12;
+    @apply relative ps-10 md:ps-12;
   }
 
   .experience-line {

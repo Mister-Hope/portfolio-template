@@ -44,7 +44,7 @@
   }
 
   .navbar-actions {
-    @apply flex items-center gap-3 border-slate-200 md:border-l md:pl-5 dark:border-white/10;
+    @apply flex items-center gap-3 border-slate-200 md:border-l md:ps-5 dark:border-white/10;
   }
 
   .nav-btn-base {
