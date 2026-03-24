@@ -4,7 +4,7 @@
   }
 
   .timeline-item {
-    @apply relative pb-5 ps-4 last:pb-0 md:ps-9;
+    @apply relative ps-4 pb-5 last:pb-0 md:ps-9;
   }
 
   .timeline-line {

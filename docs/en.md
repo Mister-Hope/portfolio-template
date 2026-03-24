@@ -39,6 +39,14 @@ The optional `config` object contains the following fields:
     Apply additional [markdown-it](https://markdown-it.github.io/) plugins to extend Markdown rendering.
     Each entry in the array is `[pluginPackageName, pluginOptions?]`.
 
+    When loading a plugin the export is resolved automatically in this order:
+    1. The module itself is a function → use it.
+    2. `module.default` exists → use it.
+    3. Derive a name from the package name and use that named export
+       (`markdown-it-foo` / `@scope/plugin-foo` → `foo`; `foo-bar` → `fooBar`).
+
+    If your plugin cannot be auto-resolved, use the **function form** (JS/TS config) to call `md.use()` directly.
+
     **Array form** (works with all config formats, including JSON and YAML):
 
     ```yaml

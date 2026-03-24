@@ -39,6 +39,14 @@
     为 Markdown 渲染应用额外的 [markdown-it](https://markdown-it.github.io/) 插件。
     数组中每个条目为 `[插件包名, 插件选项?]`。
 
+    加载插件时按以下顺序自动解析导出：
+    1. 模块本身是函数 → 直接使用。
+    2. `module.default` 存在 → 使用它。
+    3. 从包名推导导出名并尝试该具名导出
+       （`markdown-it-foo` / `@scope/plugin-foo` → `foo`；`foo-bar` → `fooBar`）。
+
+    如果你的插件无法被自动解析，请使用**函数形式**（JS/TS 配置）直接调用 `md.use()`。
+
     **数组形式**（适用于所有配置格式，包括 JSON 和 YAML）：
 
     ```yaml
