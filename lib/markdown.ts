@@ -46,15 +46,18 @@ export const createMarkdownRenderer = async (
     } else {
       const loadedPlugins = await Promise.all(
         mdIt.map(async (entry) => {
-          // oxlint-disable-next-line no-undefined, typescript/no-unsafe-assignment
-          const [pluginName, options] = typeof entry === "string" ? [entry, undefined] : entry;
+          // oxlint-disable-next-line typescript/no-unsafe-assignment
+          const [pluginName, options] = typeof entry === "string" ? [entry, null] : entry;
 
           try {
             // oxlint-disable-next-line typescript/no-unsafe-assignment
             const mod = await import(pluginName);
 
-            // oxlint-disable-next-line typescript/no-unsafe-assignment
-            return { plugin: resolvePlugin(mod, pluginName), options };
+            return {
+              plugin: resolvePlugin(mod, pluginName),
+              // oxlint-disable-next-line typescript/no-unsafe-assignment
+              options,
+            };
           } catch (err) {
             throw new Error(`Failed to load markdown-it plugin "${pluginName}": ${String(err)}`, {
               cause: err,

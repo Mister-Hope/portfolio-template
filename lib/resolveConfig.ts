@@ -45,7 +45,7 @@ const processSection = (section: Section, renderMarkdown: RenderMarkdown): Secti
         typeof item === "object"
           ? {
               ...item,
-              text: renderMarkdown(item.text, true),
+              text: renderMarkdown(item.text, Boolean(item.link)),
             }
           : renderMarkdown(item),
       );
