@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import type { NavLink } from "../types/index.js";
 import type { FC } from "react";
+
+import type { NavLink } from "../types/index.js";
 import { Icon } from "./Icon.js";
 
 /**

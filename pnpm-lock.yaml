@@ -55,8 +55,8 @@ importers:
         specifier: ^19.6.5
         version: 19.6.5
       oxc-config-hope:
-        specifier: 0.0.8
-        version: 0.0.8(oxfmt@0.41.0)(oxlint-tsgolint@0.17.2)(oxlint@1.56.0(oxlint-tsgolint@0.17.2))
+        specifier: 0.0.10
+        version: 0.0.10(oxfmt@0.41.0)(oxlint-tsgolint@0.17.2)(oxlint@1.56.0(oxlint-tsgolint@0.17.2))
       oxfmt:
         specifier: 0.41.0
         version: 0.41.0
@@ -907,12 +907,12 @@ packages:
     engines: {node: '>=20.0.0', npm: '>=8.12.1'}
     hasBin: true
 
-  oxc-config-hope@0.0.8:
-    resolution: {integrity: sha512-BD5VY/+xUsrYM6UdHJ8rjcgwAIO+tR7tuzmA6vdpSrU+LzV5IHqAo+7gnRepbOJQ3JM/L4Ss5kNKzEIRT+UuKg==}
+  oxc-config-hope@0.0.10:
+    resolution: {integrity: sha512-vVc/HdVK83Wx9iXZ8Ir3/rxg3UPeMlcbVzlUuco76NeMsfkYpOXF0cCaE9GU7n8SBNH5q+SBKf0SghUiVi4elw==}
     peerDependencies:
-      oxfmt: '>=0.40.0'
-      oxlint: ^1.55.0
-      oxlint-tsgolint: '>=0.17.0'
+      oxfmt: '>=0.41.0'
+      oxlint: ^1.56.0
+      oxlint-tsgolint: '>=0.17.2'
     peerDependenciesMeta:
       oxfmt:
         optional: true
@@ -1591,7 +1591,7 @@ snapshots:
 
   npm-check-updates@19.6.5: {}
 
-  oxc-config-hope@0.0.8(oxfmt@0.41.0)(oxlint-tsgolint@0.17.2)(oxlint@1.56.0(oxlint-tsgolint@0.17.2)):
+  oxc-config-hope@0.0.10(oxfmt@0.41.0)(oxlint-tsgolint@0.17.2)(oxlint@1.56.0(oxlint-tsgolint@0.17.2)):
     optionalDependencies:
       oxfmt: 0.41.0
       oxlint: 1.56.0(oxlint-tsgolint@0.17.2)

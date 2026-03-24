@@ -8,5 +8,5 @@
 export const isCJKLocale = (locale?: string): boolean => {
   if (!locale) return false;
 
-  return ["zh", "ja", "ko"].includes(locale);
+  return ["zh", "ja", "ko"].some((item) => locale.includes(item));
 };

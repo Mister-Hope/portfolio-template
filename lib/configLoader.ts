@@ -3,11 +3,11 @@ import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 
-import { unrun } from "unrun";
 import { load } from "js-yaml";
+import { unrun } from "unrun";
 
-import { resolveConfig } from "./resolveConfig.js";
 import type { Config } from "../src/types/index.js";
+import { resolveConfig } from "./resolveConfig.js";
 
 const require = createRequire(import.meta.url);
 

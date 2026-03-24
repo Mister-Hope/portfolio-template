@@ -1,4 +1,5 @@
 import type { FC, ImgHTMLAttributes } from "react";
+
 import type { AdaptiveImageSource } from "../types/index.js";
 
 export interface AdaptiveImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {

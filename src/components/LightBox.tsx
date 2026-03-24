@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from "react";
 import type { FC } from "react";
-import { Icon } from "./Icon.js";
+
 import type { GalleryItem } from "./GalleryCard.js";
+import { Icon } from "./Icon.js";
 
 export const LightBox: FC<{
   item: GalleryItem;

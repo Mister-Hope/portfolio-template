@@ -1,4 +1,5 @@
 import type { FC } from "react";
+
 import { Icon } from "./Icon.js";
 import { RichContent } from "./RichContent.js";
 

@@ -1,4 +1,5 @@
 import type { FC } from "react";
+
 import { Icon } from "./Icon.js";
 import { RichContent } from "./RichContent.js";
 
@@ -104,9 +105,7 @@ export const Profile: FC<ProfileProps> = ({ data, ui }) => (
           {Array.isArray(value) ? (
             <div className="profile-tags-wrapper">
               {value.map((item) => (
-                <span key={item} className="profile-tag">
-                  {item}
-                </span>
+                <RichContent key={item} className="profile-tag" content={item} />
               ))}
             </div>
           ) : (

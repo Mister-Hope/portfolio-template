@@ -1,4 +1,5 @@
 import type { FC } from "react";
+
 import type { AdaptiveImageSource } from "../types/index.js";
 import { isCJKLocale } from "../utils/index.js";
 import { AdaptiveImage } from "./AdaptiveImage.js";

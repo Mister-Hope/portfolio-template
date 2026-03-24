@@ -1,7 +1,8 @@
 import type { FC } from "react";
+
+import type { ExperienceTypeConfig } from "../utils/index.js";
 import { Icon } from "./Icon.js";
 import { RichContent } from "./RichContent.js";
-import type { ExperienceTypeConfig } from "../utils/index.js";
 
 /**
  * Experience item (work or study)

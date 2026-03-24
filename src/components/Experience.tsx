@@ -1,4 +1,5 @@
 import type { FC } from "react";
+
 import type { ExperienceTypesConfig } from "../utils/index.js";
 import { defaultExperienceTypes } from "../utils/index.js";
 import { ExperienceItem } from "./ExperienceItem.js";

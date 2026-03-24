@@ -1,5 +1,5 @@
-import { renderMarkdown } from "./markdown.js";
 import type { Config, LocaleConfig, Section } from "../src/types/index.js";
+import { renderMarkdown } from "./markdown.js";
 
 const processSection = (section: Section): Section => {
   const result = { ...section };

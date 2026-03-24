@@ -4,8 +4,8 @@ import { dirname, join, resolve } from "node:path";
 import type { Plugin, ResolvedConfig } from "vite";
 import { build } from "vite";
 
-import { loadConfig } from "./configLoader.js";
 import type { Config } from "../src/types/index.js";
+import { loadConfig } from "./configLoader.js";
 
 const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Promise<void> => {
   if (viteConfig.build.ssr !== false) return;

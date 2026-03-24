@@ -2,22 +2,22 @@
 import type { FC, ReactElement } from "react";
 import { useState, useEffect, useCallback } from "react";
 import { flushSync } from "react-dom";
-import { Hero } from "./components/Hero.js";
-import { SectionWrapper } from "./components/SectionWrapper.js";
-import { Experience } from "./components/Experience.js";
-import { Timeline } from "./components/Timeline.js";
-import { Gallery } from "./components/Gallery.js";
+
 import { Banner } from "./components/Banner.js";
-import { Navbar } from "./components/Navbar.js";
-import { Profile } from "./components/Profile.js";
 import { Cards } from "./components/Cards.js";
+import { Experience } from "./components/Experience.js";
+import { Footer } from "./components/Footer.js";
+import { Gallery } from "./components/Gallery.js";
+import { Hero } from "./components/Hero.js";
 import { List } from "./components/List.js";
 import { Markdown } from "./components/Markdown.js";
-import { Footer } from "./components/Footer.js";
-import type { LocaleConfig, Section } from "./types/index.js";
-import { getLocaleFromPath } from "./utils/getLocaleFromPath.js";
+import { Navbar } from "./components/Navbar.js";
+import { Profile } from "./components/Profile.js";
+import { SectionWrapper } from "./components/SectionWrapper.js";
+import { Timeline } from "./components/Timeline.js";
 import { config, localePaths, locales } from "./config.js";
-import { isSSR } from "./utils/index.js";
+import type { LocaleConfig, Section } from "./types/index.js";
+import { isSSR, getLocaleFromPath } from "./utils/index.js";
 
 export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const [localePath, setLocalePath] = useState<string>(() => initialLocale ?? getLocaleFromPath());

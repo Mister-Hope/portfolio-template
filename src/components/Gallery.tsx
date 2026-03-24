@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import type { FC } from "react";
+
 import type { GalleryItem } from "./GalleryCard.js";
 import { GalleryCard } from "./GalleryCard.js";
 import { LightBox } from "./LightBox.js";

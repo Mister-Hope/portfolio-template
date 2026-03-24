@@ -1,4 +1,5 @@
 import { renderToString } from "react-dom/server";
+
 import { App } from "./App.js";
 import type { Config } from "./types/index.js";
 

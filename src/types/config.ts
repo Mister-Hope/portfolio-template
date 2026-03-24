@@ -1,8 +1,8 @@
+import type { FooterProps } from "../components/Footer.js";
+import type { ExperienceTypesConfig } from "../utils/index.js";
 import type { HeroConfig } from "./hero.js";
 import type { NavbarConfig } from "./navbar.js";
 import type { Section } from "./sections.js";
-import type { FooterProps } from "../components/Footer.js";
-import type { ExperienceTypesConfig } from "../utils/index.js";
 
 export interface LocaleConfig {
   /**

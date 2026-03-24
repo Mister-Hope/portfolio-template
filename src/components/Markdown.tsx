@@ -1,4 +1,5 @@
 import type { FC } from "react";
+
 import { RichContent } from "./RichContent.js";
 
 export interface MarkdownProps {

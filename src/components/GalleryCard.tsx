@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import type { FC } from "react";
+
 import { Icon } from "./Icon.js";
 
 /**
