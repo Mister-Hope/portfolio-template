@@ -40,6 +40,7 @@ Guide users to edit their portfolio configuration file first:
 
 - "Change your name in `config.yml` under `locales[/].hero.name`"
 - "Add a new section by editing the `sections` array in your config file"
+- Add custom styles to `custom.css` in the project root (auto-injected at build time).
 
 ### Rule 2: Source Modification Only When Explicitly Requested
 
@@ -52,15 +53,14 @@ Only modify source code (`src/`) when:
 
 When source modification is necessary, follow the **minimalism principle**:
 
-1. **CSS Override First**: Add custom styles to `src/index.css` rather than modifying component Tailwind classes
-2. **Least Invasive**: Prefer CSS/Config solutions over component code changes
-3. **Non-Breaking**: Avoid changes that would affect other users' configurations
+1. **Least Invasive**: Prefer CSS/Config solutions over component code changes.
+1. **Non-Breaking**: Avoid changes that would affect other users' configurations
 
 **Example Workflow**:
 
-- User: "I want to change the hero background color"
-- Response: "Can you change it in your config file under `hero.bgImage`?"
-- If config doesn't support it: "You can add custom CSS to `src/index.css` to override the style"
+- User: "I want to change the hero background"
+- Response: "You can change it in your config file under `hero.bgImage`, place your image in public folder and tell me the file name."
+- If config doesn't support it: "Custom CSS can be added to `custom.css` in the project root, adding it for you now."
 
 ---
 
@@ -81,13 +81,13 @@ When source modification is necessary, follow the **minimalism principle**:
 ### 3. Style Customization
 
 - **Step 1**: Check if config supports it (e.g., `experienceStyles`)
-- **Step 2**: If not, suggest CSS override in `src/index.css`
-- **Step 3**: Only modify component code as last resort
+- **Step 2**: If not, suggest creating or editing `custom.css` in the project root
+- **Step 4**: Only modify component code as last resort
 
 ### 4. New Feature Requests
 
 - **Step 1**: Check if achievable via config
-- **Step 2**: If not, propose CSS-based solution
+- **Step 2**: If not, propose `custom.css` in the project root for style changes
 - **Step 3**: If still not possible, create a coding plan with minimal changes
 
 ---
@@ -108,7 +108,7 @@ When developing the template itself:
 1. **Identify**: Who is asking — template developer or end user?
 2. **Analyze**: Can this be done via config?
 3. **Guide**: If yes, direct user to their config file
-4. **CSS First**: If style change needed, suggest `src/index.css` override
+4. **CSS First**: If style change needed, suggest `custom.css` in project root
 5. **Minimal Code**: Only if absolutely necessary, propose minimal source modification
 
 ---

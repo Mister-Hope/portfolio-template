@@ -22,13 +22,13 @@ This is a **configuration-driven** portfolio template. Users should primarily cu
 
 - You are helping an end-user customize their portfolio
 - **Always prefer config first**
+- Style request: `custom.css` in the project root (auto-injected)
 - Only modify src/ when user explicitly requests style changes or strongly expresses a new feature need
-- Follow minimalism: CSS override (src/index.css) before component changes
 
 ## Key Points
 
 - Users should edit their config file (`config.ts`, `config.js`, `config.json`, `config.yml`, or `config.yaml`)
-- For style changes: suggest CSS override in `src/index.css` first
+- For style changes: suggest creating `custom.css` in the project root
 - Only modify components as last resort
 
 ## References

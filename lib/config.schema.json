@@ -8,6 +8,15 @@
       "properties": {
         "experienceTypes": {
           "$ref": "#/definitions/ExperienceTypes"
+        },
+        "mdIt": {
+          "description": "markdown-it plugins configuration. Each entry is [pluginName, options?].\nmarkdown-it 插件配置，每个条目为 [插件包名, 选项?]。",
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Plugin entry: [pluginName, options?]\n插件条目：[插件包名, 选项?]"
+          }
         }
       },
       "additionalProperties": false

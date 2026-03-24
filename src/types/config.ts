@@ -4,6 +4,25 @@ import type { HeroConfig } from "./hero.js";
 import type { NavbarConfig } from "./navbar.js";
 import type { Section } from "./sections.js";
 
+/**
+ * A single markdown-it plugin entry: [pluginName, options?]
+ * markdown-it 插件条目：[插件包名, 选项?]
+ */
+// oxlint-disable-next-line typescript/no-explicit-any
+export type MdItPluginEntry = [string, ...any[]];
+
+/**
+ * markdown-it plugin configuration.
+ * - Array form (all config formats): [[pluginName, options?], ...]
+ * - Function form (JS/TS configs only): (md) => { md.use(plugin) }
+ *
+ * markdown-it 插件配置。
+ * - 数组形式（所有配置格式）：[[插件包名, 选项?], ...]
+ * - 函数形式（仅 JS/TS 配置）：(md) => { md.use(plugin) }
+ */
+// oxlint-disable-next-line typescript/no-explicit-any, typescript/explicit-module-boundary-types
+export type MdItConfig = MdItPluginEntry[] | ((md: any) => void);
+
 export interface LocaleConfig {
   /**
    * Language code (e.g., "en", "zh")
@@ -83,6 +102,17 @@ export interface GlobalConfig {
    * 经历类型配置
    */
   experienceTypes?: ExperienceTypesConfig;
+
+  /**
+   * markdown-it plugin configuration.
+   * - Array form (all config formats): [[pluginName, options?], ...]
+   * - Function form (JS/TS configs only): (md) => { md.use(plugin) }
+   *
+   * markdown-it 插件配置。
+   * - 数组形式（所有配置格式）：[[插件包名, 选项?], ...]
+   * - 函数形式（仅 JS/TS 配置）：(md) => { md.use(plugin) }
+   */
+  mdIt?: MdItConfig;
 }
 
 export interface Config {
