@@ -18,6 +18,11 @@ export interface ListItem {
    * 可选链接地址
    */
   link?: string;
+  /**
+   * Optional icon name to replace the list marker for this item
+   * 可选图标名称，设置后替换该项的列表标记
+   */
+  icon?: string;
 }
 
 export interface ListProps {
@@ -49,30 +54,48 @@ export const List: FC<ListProps> = ({ items, dot = "number" }) => {
 
   return (
     <ListTag className={isOrderedList ? "list-ol" : "list-ul"}>
-      {items.map((item) => (
-        <li
-          key={typeof item === "object" ? item.text : item}
-          className={`text-content ${isOrderedList ? "list-li-ordered" : "list-li-unordered"}`}
-        >
-          {!isOrderedList && (
-            <div className="list-marker-container">
-              {dot === "check" && <Icon icon="circle-check" className="list-marker-check" />}
-              {dot === "circle" && <div className="list-marker-circle" />}
-              {dot === "square" && <div className="list-marker-square" />}
-              {dot === "diamond" && <div className="list-marker-diamond" />}
-            </div>
-          )}
-          <div className="list-content">
-            {typeof item === "object" && item.link ? (
-              <a href={item.link} target="_blank" rel="noopener noreferrer" className="list-link">
-                <RichContent content={item.text} />
-              </a>
-            ) : (
-              <RichContent content={typeof item === "object" ? item.text : item} block />
+      {items.map((item) => {
+        const itemObj = typeof item === "object" ? item : { text: item };
+        const itemIcon = typeof item === "object" && item.icon ? item.icon : "";
+        const hasItemIcon = itemIcon !== "";
+        const showMarker = !isOrderedList || hasItemIcon;
+
+        return (
+          <li
+            key={itemObj.text}
+            className={`text-content ${hasItemIcon || !isOrderedList ? "list-li-unordered" : "list-li-ordered"} ${hasItemIcon && isOrderedList ? "list-none" : ""}`.trim()}
+          >
+            {showMarker && (
+              <div className="list-marker-container">
+                {hasItemIcon ? (
+                  <Icon icon={itemIcon} className="list-marker-check" />
+                ) : (
+                  <>
+                    {dot === "check" && <Icon icon="circle-check" className="list-marker-check" />}
+                    {dot === "circle" && <div className="list-marker-circle" />}
+                    {dot === "square" && <div className="list-marker-square" />}
+                    {dot === "diamond" && <div className="list-marker-diamond" />}
+                  </>
+                )}
+              </div>
             )}
-          </div>
-        </li>
-      ))}
+            <div className="list-content">
+              {itemObj.link ? (
+                <a
+                  href={itemObj.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="list-link"
+                >
+                  <RichContent content={itemObj.text} />
+                </a>
+              ) : (
+                <RichContent content={itemObj.text} block />
+              )}
+            </div>
+          </li>
+        );
+      })}
     </ListTag>
   );
 };

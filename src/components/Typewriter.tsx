@@ -25,6 +25,17 @@ interface TypewriterProps {
    * @default 2000
    */
   pause?: number;
+  /**
+   * Maximum total time in milliseconds allowed for deleting a string.
+   * When a string is longer, the per-character delete interval is reduced
+   * so the full deletion always completes within this budget.
+   * 删除一段文字所允许的最大总时间（毫秒）。
+   * 当文字较长时，每个字符的删除间隔会相应缩短，
+   * 以确保删除过程始终在该时间内完成。
+   *
+   * @default 1000
+   */
+  maxDeleteTime?: number;
 }
 
 /**
@@ -36,7 +47,12 @@ interface TypewriterProps {
  *
  * 通过循环显示字符串列表来模拟打字机效果。
  */
-export const Typewriter: FC<TypewriterProps> = ({ texts, speed = 100, pause = 2000 }) => {
+export const Typewriter: FC<TypewriterProps> = ({
+  texts,
+  speed = 100,
+  pause = 2000,
+  maxDeleteTime = 1000,
+}) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [reverse, setReverse] = useState(false);
@@ -57,14 +73,18 @@ export const Typewriter: FC<TypewriterProps> = ({ texts, speed = 100, pause = 20
       return;
     }
 
-    const timeout = setTimeout(() => {
-      setSubIndex((prev) => prev + (reverse ? -1 : 1));
-    }, speed);
+    const deleteInterval = Math.min(speed, maxDeleteTime / texts[index].length);
+    const timeout = setTimeout(
+      () => {
+        setSubIndex((prev) => prev + (reverse ? -1 : 1));
+      },
+      reverse ? deleteInterval : speed,
+    );
 
     return (): void => {
       clearTimeout(timeout);
     };
-  }, [subIndex, index, reverse, texts, speed, pause]);
+  }, [subIndex, index, reverse, texts, speed, pause, maxDeleteTime]);
 
   return <span className="typewriter-cursor">{texts[index].slice(0, subIndex)}</span>;
 };

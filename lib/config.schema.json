@@ -213,7 +213,7 @@
           "description": "URL link to the profile\n个人主页链接地址"
         }
       },
-      "required": ["icon", "name", "link"],
+      "required": ["icon", "name"],
       "description": "Portfolio media link configuration\n个人作品集媒体链接配置",
       "additionalProperties": false
     },
@@ -715,6 +715,10 @@
         "link": {
           "type": "string",
           "description": "Optional link URL\n可选链接地址"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Optional icon name to replace the list marker for this item\n可选图标名称，设置后替换该项的列表标记"
         }
       },
       "required": ["text"],

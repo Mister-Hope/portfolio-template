@@ -35,10 +35,36 @@ const resolvePlugin = (mod: unknown, pluginName: string): unknown => {
   return mod;
 };
 
+// Built-in plugin: add target="_blank" rel="noopener noreferrer" to external links
+// (absolute URLs starting with http:// or https://); leave internal links unchanged.
+const externalLinkPlugin = (md: MarkdownIt): void => {
+  const defaultRender = md.renderer.rules.link_open ?? md.renderer.renderToken.bind(md.renderer);
+
+  // oxlint-disable-next-line max-params
+  md.renderer.rules.link_open = (tokens, idx, options, env, self): string => {
+    const token = tokens[idx];
+    const hrefIndex = token.attrIndex("href");
+
+    if (hrefIndex >= 0 && token.attrs) {
+      const [, href] = token.attrs[hrefIndex];
+
+      if (/^https?:\/\//i.test(href)) {
+        token.attrSet("target", "_blank");
+        token.attrSet("rel", "noopener noreferrer");
+      }
+    }
+
+    return defaultRender(tokens, idx, options, env, self);
+  };
+};
+
 export const createMarkdownRenderer = async (
   mdIt?: MdItConfig,
 ): Promise<(content: string, inline?: boolean) => string> => {
   const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
+
+  // Always apply the built-in external-link plugin first
+  md.use(externalLinkPlugin);
 
   if (mdIt) {
     if (typeof mdIt === "function") {
