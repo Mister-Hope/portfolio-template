@@ -68,10 +68,10 @@ export const List: FC<ListProps> = ({ items, dot = "number" }) => {
             {showMarker && (
               <div className="list-marker-container">
                 {hasItemIcon ? (
-                  <Icon icon={itemIcon} className="list-marker-check" />
+                  <Icon icon={itemIcon} className="list-marker-icon" />
                 ) : (
                   <>
-                    {dot === "check" && <Icon icon="circle-check" className="list-marker-check" />}
+                    {dot === "check" && <Icon icon="circle-check" className="list-marker-icon" />}
                     {dot === "circle" && <div className="list-marker-circle" />}
                     {dot === "square" && <div className="list-marker-square" />}
                     {dot === "diamond" && <div className="list-marker-diamond" />}

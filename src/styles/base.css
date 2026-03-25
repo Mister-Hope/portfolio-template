@@ -82,7 +82,5 @@ body {
 }
 
 mark {
-  @apply bg-transparent bg-[linear-gradient(var(--color-secondary-300)_50%,var(--color-secondary-300)_50%)] bg-no-repeat text-inherit;
-
-  background-position: 100% 0.55lh;
+  @apply bg-transparent bg-[linear-gradient(var(--color-secondary-300)_50%,var(--color-secondary-300)_50%)] bg-size-[100%_4px] bg-position-[100%_0.55lh] bg-no-repeat text-inherit dark:bg-[linear-gradient(var(--color-secondary-600)_50%,var(--color-secondary-600)_50%)];
 }

@@ -12,37 +12,51 @@ import { ssgPlugin } from "./lib/ssgPlugin.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const customCssPlugin = (): Plugin => {
-  const customCssPath = path.resolve(__dirname, "custom.css");
-  const indexCssPath = path.resolve(__dirname, "src/index.css");
-  let cachedCustomCss: string | null = null;
-
-  const readCustomCss = (): string | null => {
-    if (!fs.existsSync(customCssPath)) return null;
-
-    cachedCustomCss ??= fs.readFileSync(customCssPath, "utf-8");
-    return cachedCustomCss;
-  };
+const injectCustomCssImportPlugin = ({
+  customCSS = "../custom.css",
+  entry = "index.css",
+} = {}): Plugin => {
+  let root = "";
+  let indexCssPath = "";
+  let customCssPath = "";
 
   return {
     name: "inject-custom-css",
     enforce: "pre",
-    transform(code: string, id: string): { code: string } | null {
-      const customCss = id.split("?")[0] === indexCssPath ? readCustomCss() : null;
 
-      return customCss ? { code: `${code}\n${customCss}` } : null;
+    configResolved(config) {
+      ({ root } = config);
+      // 统一转换为正斜杠，防止 Windows 路径匹配失败
+      indexCssPath = path.resolve(root, entry).replaceAll("\\", "/");
+      customCssPath = path.resolve(root, customCSS).replaceAll("\\", "/");
     },
-    configureServer(server: ViteDevServer): void {
-      // Watch the file even if it does not exist yet so creation is detected
-      server.watcher.add(customCssPath);
-      server.watcher.on("change", (file: string) => {
-        if (file === customCssPath) {
-          cachedCustomCss = null;
-          const module = server.moduleGraph.getModuleById(indexCssPath);
 
-          if (module) void server.reloadModule(module);
+    transform(code: string, id: string): { code: string; map: null } | null {
+      const cleanId = id.split("?")[0].replaceAll("\\", "/");
+
+      if (cleanId === indexCssPath) {
+        this.addWatchFile(customCssPath);
+
+        if (fs.existsSync(customCssPath)) {
+          const relativePath = path.posix.relative(path.posix.dirname(indexCssPath), customCssPath);
+
+          return {
+            code: `${code}\n@import '${relativePath}';`,
+            map: null,
+          };
         }
-      });
+      }
+
+      return null;
+    },
+
+    handleHotUpdate({ file, server }) {
+      const cleanFile = file.replaceAll("\\", "/");
+
+      if (cleanFile === customCssPath) {
+        const indexModules = server.moduleGraph.getModulesByFile(indexCssPath);
+        if (indexModules && indexModules.size > 0) return [...indexModules];
+      }
     },
   };
 };
@@ -69,8 +83,8 @@ export default defineConfig(async () => {
     },
     plugins: [
       react(),
+      injectCustomCssImportPlugin(),
       tailwindcss(),
-      customCssPlugin(),
       ssgPlugin(__dirname),
       {
         name: "inject-title-and-meta",
