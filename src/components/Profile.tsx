@@ -131,6 +131,8 @@ export const Profile: FC<ProfileProps> = ({ data, ui }) => (
                   <a
                     href={contact.link ?? `mailto:${contact.value}`}
                     className="profile-contact-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {contact.value}
                   </a>

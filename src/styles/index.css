@@ -17,3 +17,6 @@
 @import "./hero.css";
 @import "./section.css";
 @import "./footer.css";
+
+/* helper */
+@import "./utils.css";

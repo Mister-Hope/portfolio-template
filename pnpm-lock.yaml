@@ -51,9 +51,6 @@ importers:
       nano-staged:
         specifier: 0.9.0
         version: 0.9.0
-      npm-check-updates:
-        specifier: ^19.6.5
-        version: 19.6.5
       oxc-config-hope:
         specifier: 0.0.10
         version: 0.0.10(oxfmt@0.41.0)(oxlint-tsgolint@0.17.2)(oxlint@1.56.0(oxlint-tsgolint@0.17.2))
@@ -902,11 +899,6 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  npm-check-updates@19.6.5:
-    resolution: {integrity: sha512-XlBUMC30relXfEerrnX239W9iB30U6Woz0Hj42Sv6iSF4EGOvj2mS2r45sZ3RglH0VPBxXOWooMxObZ/SMZhrw==}
-    engines: {node: '>=20.0.0', npm: '>=8.12.1'}
-    hasBin: true
-
   oxc-config-hope@0.0.10:
     resolution: {integrity: sha512-vVc/HdVK83Wx9iXZ8Ir3/rxg3UPeMlcbVzlUuco76NeMsfkYpOXF0cCaE9GU7n8SBNH5q+SBKf0SghUiVi4elw==}
     peerDependencies:
@@ -1588,8 +1580,6 @@ snapshots:
       picocolors: 1.1.1
 
   nanoid@3.3.11: {}
-
-  npm-check-updates@19.6.5: {}
 
   oxc-config-hope@0.0.10(oxfmt@0.41.0)(oxlint-tsgolint@0.17.2)(oxlint@1.56.0(oxlint-tsgolint@0.17.2)):
     optionalDependencies:

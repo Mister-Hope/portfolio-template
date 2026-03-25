@@ -1,4 +1,4 @@
-@layer component {
+@layer components {
   .navbar-base {
     @apply fixed top-0 right-0 left-0 z-[100] border-b transition-all duration-500;
   }

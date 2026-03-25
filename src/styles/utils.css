@@ -1,0 +1,5 @@
+@layer utilities {
+  a.plain {
+    @apply text-inherit no-underline underline-offset-2 transition-all duration-200 decoration-2 hover:text-primary-600 hover:dark:text-primary-400 hover:underline;
+  }
+}
