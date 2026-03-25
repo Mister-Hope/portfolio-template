@@ -19,7 +19,7 @@ export interface HeroMedia {
    * URL link to the profile
    * 个人主页链接地址
    */
-  link: string;
+  link?: string;
 }
 
 /**
