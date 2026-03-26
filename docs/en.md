@@ -419,7 +419,7 @@ The optional `config` object contains the following fields:
 
   - `copyright`:
     - Type: String
-    - Details: Copyright text.
+    - Details: Copyright text. Use `$year` to dynamically insert the current year.
   - `description`:
     - Type: String (optional)
     - Details: Footer description or short blurb.

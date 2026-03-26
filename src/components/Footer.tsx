@@ -28,7 +28,13 @@ export const Footer: FC<FooterProps> = ({ copyright, description }) =>
   copyright || description ? (
     <footer className="footer-container">
       <div className="footer-content">
-        {copyright && <RichContent content={copyright} className="footer-copyright" block />}
+        {copyright && (
+          <RichContent
+            content={copyright.replaceAll("$year", String(new Date().getFullYear()))}
+            className="footer-copyright"
+            block
+          />
+        )}
         {description && <RichContent content={description} className="footer-description" block />}
       </div>
     </footer>
