@@ -49,7 +49,7 @@ cd your-repository
 ### 3. 本地运行
 
 ```bash
-pnpm dev
+pnpm run dev
 ```
 
 打开 <http://localhost:3000> 即可实时查看更改。
@@ -61,7 +61,7 @@ pnpm dev
 生产环境构建：
 
 ```bash
-pnpm build
+pnpm run build
 ```
 
 输出文件将位于 `dist/` 文件夹中，可随时部署到 GitHub Pages、Vercel 或 Netlify。

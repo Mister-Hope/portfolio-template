@@ -25,12 +25,12 @@ jobs:
           cache: pnpm
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build Docs
         run: |-
           cp examples/config.example.yml config.yml
-          pnpm build
+          pnpm run build
           > dist/.nojekyll
 
       - name: Deploy Docs

@@ -96,10 +96,10 @@ When source modification is necessary, follow the **minimalism principle**:
 
 This project uses **pnpm** as its package manager (`pnpm-lock.yaml` is the lockfile).
 
-- Install dependencies: `pnpm install`
-- Dev server: `pnpm dev`
-- Production build: `pnpm build`
-- Lint + format: `pnpm lint`
+- Install dependencies: `pnpm install --frozen-lockfile`
+- Dev server: `pnpm run dev`
+- Production build: `pnpm run build`
+- Lint + format: `pnpm run lint`
 
 ---
 
