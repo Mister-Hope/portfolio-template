@@ -107,9 +107,14 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="hero-scroll-indicator" onClick={handleScroll}>
+      <button
+        type="button"
+        className="hero-scroll-indicator"
+        onClick={handleScroll}
+        aria-label="Scroll to content"
+      >
         <Icon icon="chevron-down" className="text-3xl text-white" />
-      </div>
+      </button>
     </header>
   );
 };

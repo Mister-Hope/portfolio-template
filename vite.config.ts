@@ -1,16 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import type { Plugin, ViteDevServer } from "vite";
+import type { ModuleNode, Plugin, ViteDevServer } from "vite";
 import { defineConfig } from "vite";
 
 import { CONFIG_FILES, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = import.meta.dirname;
 
 const injectCustomCssImportPlugin = ({
   customCSS = "../custom.css",
@@ -50,7 +49,8 @@ const injectCustomCssImportPlugin = ({
       return null;
     },
 
-    handleHotUpdate({ file, server }) {
+    // oxlint-disable-next-line typescript/consistent-return
+    handleHotUpdate({ file, server }): ModuleNode[] | undefined {
       const cleanFile = file.replaceAll("\\", "/");
 
       if (cleanFile === customCssPath) {

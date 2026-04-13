@@ -55,7 +55,12 @@ export const GalleryCard: FC<{
   const hasMeta = Boolean(item.location) || Boolean(item.date);
 
   return (
-    <div className="group gallery-item" onClick={handleSelect}>
+    <button
+      type="button"
+      className="group gallery-item"
+      onClick={handleSelect}
+      aria-label={item.title}
+    >
       <img src={item.url} alt={item.title} className="gallery-image" loading="lazy" />
       <div className="gallery-overlay">
         <h4 className="gallery-title">{item.title}</h4>
@@ -72,6 +77,6 @@ export const GalleryCard: FC<{
           </p>
         )}
       </div>
-    </div>
+    </button>
   );
 };

@@ -28,6 +28,10 @@ export const LightBox: FC<{
     event.stopPropagation();
   }, []);
 
+  const stopPropagationKeyDown = useCallback((event: React.KeyboardEvent) => {
+    event.stopPropagation();
+  }, []);
+
   const handlePrev = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
@@ -55,7 +59,12 @@ export const LightBox: FC<{
   const hasMeta = Boolean(item.location) || Boolean(item.date);
 
   return (
-    <div className="lightbox-overlay" onClick={onClose}>
+    <button
+      type="button"
+      className="lightbox-overlay"
+      onClick={onClose}
+      aria-label="Close lightbox"
+    >
       <button className="lightbox-nav lightbox-nav-left" type="button" onClick={handlePrev}>
         <Icon icon="chevron-left" className="text-4xl" />
       </button>
@@ -71,7 +80,12 @@ export const LightBox: FC<{
         <div className="lightbox-image-wrapper">
           <img src={item.url} alt={item.title} className="lightbox-image" loading="lazy" />
         </div>
-        <div className="lightbox-content" onClick={stopPropagation}>
+        <div
+          className="lightbox-content"
+          onClick={stopPropagation}
+          onKeyDown={stopPropagationKeyDown}
+          role="presentation"
+        >
           <div className="space-y-1">
             <h3 className="lightbox-title">{item.title}</h3>
 
@@ -91,6 +105,6 @@ export const LightBox: FC<{
           {Boolean(item.description) && <p className="lightbox-description">{item.description}</p>}
         </div>
       </div>
-    </div>
+    </button>
   );
 };

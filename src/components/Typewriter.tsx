@@ -81,6 +81,7 @@ export const Typewriter: FC<TypewriterProps> = ({
       reverse ? deleteInterval : speed,
     );
 
+    // oxlint-disable-next-line typescript/consistent-return
     return (): void => {
       clearTimeout(timeout);
     };

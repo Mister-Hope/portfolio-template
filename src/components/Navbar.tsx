@@ -87,6 +87,7 @@ export const Navbar: FC<NavbarProps> = ({
   return (
     <nav className={`navbar-base ${scrolled ? "navbar-scrolled" : "navbar-transparent"}`}>
       <div className="navbar-container">
+        {/* oxlint-disable-next-line jsx_a11y/anchor-is-valid */}
         <a
           href="#"
           className={`navbar-brand ${
@@ -95,7 +96,6 @@ export const Navbar: FC<NavbarProps> = ({
         >
           {brand}
         </a>
-
         <div className="flex items-center gap-4 md:gap-8">
           <div className="navbar-links">
             {links.map(({ label, anchor }) => (

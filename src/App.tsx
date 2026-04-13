@@ -16,12 +16,12 @@ import { Profile } from "./components/Profile.js";
 import { SectionWrapper } from "./components/SectionWrapper.js";
 import { Timeline } from "./components/Timeline.js";
 import { config, localePaths, locales } from "./config.js";
-import type { LocaleConfig, Section } from "./types/index.js";
+import type { Section } from "./types/index.js";
 import { isSSR, getLocaleFromPath } from "./utils/index.js";
 
 export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const [localePath, setLocalePath] = useState<string>(() => initialLocale ?? getLocaleFromPath());
-  const [localeConfig, setLocaleConfig] = useState<LocaleConfig>(locales[localePath]);
+  const [localeConfig, setLocaleConfig] = useState(locales[localePath]);
 
   const [theme, setTheme] = useState<"light" | "dark">(() =>
     isSSR
