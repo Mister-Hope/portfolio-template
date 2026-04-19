@@ -1,0 +1,160 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # Only run on forks, not the original template repository
+    if: github.repository != 'Mister-Hope/portfolio-template'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Save user files
+        run: |
+          mkdir -p /tmp/user-files
+
+          # Save config files if they exist
+          for f in config.ts config.js config.json config.yml config.yaml; do
+            [ -f "$f" ] && cp "$f" /tmp/user-files/ || true
+          done
+
+          # Save custom.css if it exists (optional)
+          [ -f "custom.css" ] && cp "custom.css" /tmp/user-files/ || true
+
+          # Save public folder
+          [ -d "public" ] && cp -r "public" /tmp/user-files/ || true
+
+          # Save README.md and README-*.md
+          [ -f "README.md" ] && cp "README.md" /tmp/user-files/ || true
+          for f in README-*.md; do
+            [ -f "$f" ] && cp "$f" /tmp/user-files/ || true
+          done
+
+          # Save package.json name, description, and version
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const meta = {};
+            if (pkg.name !== undefined) meta.name = pkg.name;
+            if (pkg.description !== undefined) meta.description = pkg.description;
+            if (pkg.version !== undefined) meta.version = pkg.version;
+            fs.writeFileSync('/tmp/user-files/pkg-meta.json', JSON.stringify(meta, null, 2));
+          "
+
+          # Record whether the examples folder exists
+          [ -d "examples" ] && echo "true" > /tmp/user-files/has-examples || echo "false" > /tmp/user-files/has-examples
+
+      - name: Fetch upstream
+        run: |
+          git remote add upstream https://github.com/Mister-Hope/portfolio-template.git
+          git fetch upstream main
+
+      - name: Reset sync-upstream branch to upstream main
+        run: git checkout -B sync-upstream upstream/main
+
+      - name: Remove examples if user had deleted it
+        run: |
+          if [ "$(cat /tmp/user-files/has-examples)" = "false" ]; then
+            rm -rf examples
+          fi
+
+      - name: Restore user files
+        run: |
+          # Restore config files
+          for f in config.ts config.js config.json config.yml config.yaml; do
+            [ -f "/tmp/user-files/$f" ] && cp "/tmp/user-files/$f" . || true
+          done
+
+          # Restore custom.css
+          [ -f "/tmp/user-files/custom.css" ] && cp "/tmp/user-files/custom.css" . || true
+
+          # Restore public folder
+          if [ -d "/tmp/user-files/public" ]; then
+            rm -rf public
+            cp -r "/tmp/user-files/public" .
+          fi
+
+          # Restore README files
+          [ -f "/tmp/user-files/README.md" ] && cp "/tmp/user-files/README.md" . || true
+          shopt -s nullglob
+          for f in /tmp/user-files/README-*.md; do
+            cp "$f" .
+          done
+          shopt -u nullglob
+
+          # Merge package.json name, description, version back
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const meta = JSON.parse(fs.readFileSync('/tmp/user-files/pkg-meta.json', 'utf8'));
+            if (meta.name !== undefined) pkg.name = meta.name;
+            if (meta.description !== undefined) pkg.description = meta.description;
+            if (meta.version !== undefined) pkg.version = meta.version;
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+      - name: Commit changes
+        id: commit
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: sync with upstream Mister-Hope/portfolio-template"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Force push to sync-upstream branch
+        if: steps.commit.outputs.changed == 'true'
+        run: git push origin sync-upstream --force
+
+      - name: Create Pull Request
+        if: steps.commit.outputs.changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:sync-upstream`,
+              base: 'main',
+              state: 'open',
+            });
+
+            if (prs.length === 0) {
+              await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'chore: sync with upstream Mister-Hope/portfolio-template',
+                head: 'sync-upstream',
+                base: 'main',
+                body: [
+                  'This PR syncs the latest changes from [Mister-Hope/portfolio-template](https://github.com/Mister-Hope/portfolio-template) while preserving your customizations.',
+                  '',
+                  '**Preserved files:**',
+                  '- Config files (`config.ts` / `config.js` / `config.json` / `config.yml` / `config.yaml`)',
+                  '- `custom.css` (if present)',
+                  '- `public/` folder',
+                  '- `README.md` and `README-*.md`',
+                  '- `package.json` `name`, `description`, `version`',
+                ].join('\n'),
+              });
+            }
