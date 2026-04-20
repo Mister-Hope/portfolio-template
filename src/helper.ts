@@ -16,6 +16,7 @@ import type {
 
 /**
  * Helper function to define configuration with type safety
+ *
  * 定义配置的辅助函数，提供类型安全
  *
  * @param config - The configuration object to define

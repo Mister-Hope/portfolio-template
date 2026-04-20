@@ -5,21 +5,25 @@ import { RichContent } from "./RichContent.js";
 
 /**
  * List item for publications, awards, etc.
+ *
  * 出版物、奖项等的列表项
  */
 export interface ListItem {
   /**
    * Item text (Markdown supported)
+   *
    * 列表项文本 (支持 Markdown)
    */
   text: string;
   /**
    * Optional link URL
+   *
    * 可选链接地址
    */
   link?: string;
   /**
    * Optional icon name to replace the list marker for this item
+   *
    * 可选图标名称，设置后替换该项的列表标记
    */
   icon?: string;
@@ -28,12 +32,14 @@ export interface ListItem {
 export interface ListProps {
   /**
    * List of items
+   *
    * 列表项
    */
   items: (ListItem | string)[];
 
   /**
    * Style of list markers for lists
+   *
    * 无序列表的列表标记样式
    */
   dot?: "circle" | "square" | "diamond" | "check" | "none" | "number";

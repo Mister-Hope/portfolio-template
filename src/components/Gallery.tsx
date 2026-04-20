@@ -8,6 +8,7 @@ import { LightBox } from "./LightBox.js";
 export interface GalleryProps {
   /**
    * List of gallery items (photos)
+   *
    * 画廊项 (照片) 列表
    */
   items: GalleryItem[];

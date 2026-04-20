@@ -5,27 +5,31 @@ import { RichContent } from "./RichContent.js";
 
 /**
  * Timeline item for news or events
+ *
  * 新闻或事件的时间轴项
  */
 export interface TimelineItem {
   /**
-   * Year or date string
    * Year or date (string or number)
+   *
    * 年份或日期（字符串或数字）
    */
   year: string | number;
   /**
    * Event content (Markdown supported)
+   *
    * 事件内容 (支持 Markdown)
    */
   content: string;
   /**
    * Optional link URL
+   *
    * 可选链接地址
    */
   link?: string;
   /**
    * Text for the link
+   *
    * 链接文本
    */
   linkText?: string;
@@ -34,6 +38,7 @@ export interface TimelineItem {
 export interface TimelineProps {
   /**
    * List of timeline items to display
+   *
    * 要显示的时间轴项列表
    */
   items: TimelineItem[];

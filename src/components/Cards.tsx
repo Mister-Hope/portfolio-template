@@ -9,16 +9,19 @@ import { RichContent } from "./RichContent.js";
 export interface CardAction {
   /**
    * Action button label (e.g., "View PDF")
+   *
    * 操作按钮标签 (例如 "查看 PDF")
    */
   text?: string;
   /**
    * Link URL
+   *
    * 链接地址
    */
   link?: string;
   /**
    * Icon class for the action button
+   *
    * 操作按钮的图标类名
    */
   icon?: string;
@@ -26,28 +29,33 @@ export interface CardAction {
 
 /**
  * Card item for projects or highlights
+ *
  * 项目或亮点的卡片项
  */
 export interface CardItem {
   /**
    * Card title
+   *
    * 卡片标题
    */
   title: string;
 
   /**
    * Optional logo URL or object with light/dark mode URLs
+   *
    * 可选的标志 URL 或包含亮色/暗色模式 URL 的对象
    */
   logo?: AdaptiveImageSource;
 
   /**
    * Category label (e.g., "Thesis")
+   *
    * 类别标签 (例如 "学位论文")
    */
   category?: string;
   /**
    * Optional description
+   *
    * 可选描述
    */
   description?: string;
@@ -58,11 +66,13 @@ export interface CardItem {
 export interface CardsProps {
   /**
    * List of card items
+   *
    * 卡片项列表
    */
   items: CardItem[];
   /**
    * Current locale
+   *
    * 当前语言
    */
   locale?: string;

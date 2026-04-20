@@ -6,16 +6,19 @@ import { Icon } from "./Icon.js";
 export interface SectionBase {
   /**
    * Section title
+   *
    * 章节标题
    */
   title?: string;
   /**
    * Section icon class
+   *
    * 章节图标类名
    */
   icon?: string;
   /**
    * Unique identifier for the block (used for navigation)
+   *
    * 块的唯一标识符 (用于导航)
    */
   id?: string;
@@ -23,16 +26,19 @@ export interface SectionBase {
 
 /**
  * Props for the SectionWrapper component
+ *
  * SectionWrapper 组件的属性
  */
 export interface SectionProps extends SectionBase {
   /**
    * Child components to render within the section
+   *
    * 在章节内渲染的子组件
    */
   children: ReactNode;
   /**
    * Current locale
+   *
    * 当前语言
    */
   locale?: string;

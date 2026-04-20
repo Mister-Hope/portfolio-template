@@ -7,16 +7,19 @@ import { ExperienceItem } from "./ExperienceItem.js";
 export interface ExperienceProps {
   /**
    * List of experience items to display
+   *
    * 要显示的经历项列表
    */
   items: ExperienceItem[];
   /**
    * Custom styles for experience types
+   *
    * 经历类型的自定义样式
    */
   types?: ExperienceTypesConfig;
   /**
    * Current locale
+   *
    * 当前语言
    */
   locale?: string;

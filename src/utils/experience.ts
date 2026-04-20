@@ -1,20 +1,24 @@
 /**
  * Style configuration for experience types
+ *
  * 经历类型的样式配置
  */
 export interface ExperienceTypeConfig {
   /**
    * Background class for the timeline node (e.g., "bg-indigo-600")
+   *
    * 时间轴节点的背景类名
    */
   bgClass: string;
   /**
    * Icon class for the timeline node (e.g., "fa-book-open")
+   *
    * 时间轴节点的图标类名
    */
   icon: string;
   /**
    * Background/Text class for the content icon box (e.g., "bg-indigo-50 text-indigo-600")
+   *
    * 内容图标框的背景/文本类名
    */
   iconClass: string;

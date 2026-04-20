@@ -5,11 +5,13 @@ import { RichContent } from "./RichContent.js";
 export interface FooterProps {
   /**
    * Copyright text
+   *
    * 版权文本
    */
   copyright?: string;
   /**
    * Optional footer description
+   *
    * 可选页脚描述
    */
   description?: string;

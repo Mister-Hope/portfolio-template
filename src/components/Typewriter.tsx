@@ -3,16 +3,19 @@ import type { FC } from "react";
 
 /**
  * Props for the Typewriter component
+ *
  * Typewriter 组件的属性
  */
 interface TypewriterProps {
   /**
    * Array of strings to type out sequentially
+   *
    * 按顺序打出的字符串数组
    */
   texts: string[];
   /**
    * Typing speed in milliseconds
+   *
    * 打字速度，单位毫秒
    *
    * @default 100
@@ -20,18 +23,18 @@ interface TypewriterProps {
   speed?: number;
   /**
    * Pause duration between texts in milliseconds
+   *
    * 文本之间的暂停时间，单位毫秒
    *
    * @default 2000
    */
   pause?: number;
   /**
-   * Maximum total time in milliseconds allowed for deleting a string.
-   * When a string is longer, the per-character delete interval is reduced
-   * so the full deletion always completes within this budget.
-   * 删除一段文字所允许的最大总时间（毫秒）。
-   * 当文字较长时，每个字符的删除间隔会相应缩短，
-   * 以确保删除过程始终在该时间内完成。
+   * Maximum total time in milliseconds allowed for deleting a string. When a string is longer, the
+   * per-character delete interval is reduced so the full deletion always completes within this
+   * budget.
+   *
+   * 删除一段文字所允许的最大总时间（毫秒）。当文字较长时，每个字符的删除间隔会相应缩短，以确保删除过程始终在该时间内完成。
    *
    * @default 1000
    */

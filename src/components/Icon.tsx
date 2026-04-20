@@ -4,6 +4,7 @@ import type { FC, HTMLAttributes } from "react";
 export interface IconProps extends HTMLAttributes<HTMLElement> {
   /**
    * The icon name or image URL
+   *
    * - Iconify name: "mdi:home", "fa7-solid:user"
    * - Image URL: "https://example.com/icon.png", "/icons/my-icon.svg"
    */

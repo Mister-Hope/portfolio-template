@@ -5,11 +5,13 @@ import { RichContent } from "./RichContent.js";
 export interface MarkdownProps {
   /**
    * Content text (Markdown supported)
+   *
    * 内容文本 (支持 Markdown)
    */
   content: string;
   /**
    * Whether to display as a card
+   *
    * 是否显示为卡片
    */
   card?: boolean;

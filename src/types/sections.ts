@@ -10,6 +10,7 @@ import type { TimelineItem, TimelineProps } from "../components/Timeline.js";
 
 /**
  * Supported Section types
+ *
  * 支持的章节类型
  */
 export type SectionType =
@@ -64,6 +65,7 @@ export interface MarkdownSection extends SectionBase {
 
 /**
  * Configuration for a Section block
+ *
  * 内容块配置
  */
 export type Section =

@@ -6,41 +6,49 @@ import { RichContent } from "./RichContent.js";
 
 /**
  * Experience item (work or study)
+ *
  * 经历项 (工作或学习)
  */
 export interface ExperienceItem {
   /**
    * Type of experience
+   *
    * 经历类型
    */
   type: string;
   /**
    * Place/Institution name
+   *
    * 地点/机构名称
    */
   place: string;
   /**
    * Job title or Degree
+   *
    * 职位或学位
    */
   title?: string;
   /**
    * Time period (e.g., "2020 - 2024")
+   *
    * 时间段 (例如 "2020 - 2024")
    */
   time: string;
   /**
    * Main content/description (Markdown supported)
+   *
    * 主要内容/描述 (支持 Markdown)
    */
   content?: string;
   /**
    * Additional detailed description (Markdown supported)
+   *
    * 额外详细描述 (支持 Markdown)
    */
   description?: string;
   /**
    * Optional custom icon
+   *
    * 可选自定义图标
    */
   icon?: string;
