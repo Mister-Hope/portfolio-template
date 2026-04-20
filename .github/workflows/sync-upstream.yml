@@ -47,7 +47,7 @@ jobs:
             [ -f "$f" ] && cp "$f" /tmp/user-files/ || true
           done
 
-          # Save package.json name, description, and version
+          # Save package.json name, description, version, and extra dependencies
           node -e "
             const fs = require('fs');
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
@@ -56,6 +56,10 @@ jobs:
             if (pkg.description !== undefined) meta.description = pkg.description;
             if (pkg.version !== undefined) meta.version = pkg.version;
             fs.writeFileSync('/tmp/user-files/pkg-meta.json', JSON.stringify(meta, null, 2));
+            const deps = {};
+            if (pkg.dependencies) deps.dependencies = pkg.dependencies;
+            if (pkg.devDependencies) deps.devDependencies = pkg.devDependencies;
+            fs.writeFileSync('/tmp/user-files/pkg-deps.json', JSON.stringify(deps, null, 2));
           "
 
           # Record whether the examples folder exists
@@ -105,7 +109,7 @@ jobs:
           done
           shopt -u nullglob
 
-          # Merge package.json name, description, version back
+          # Merge package.json name, description, version, and extra dependencies back
           node -e "
             const fs = require('fs');
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
@@ -113,8 +117,33 @@ jobs:
             if (meta.name !== undefined) pkg.name = meta.name;
             if (meta.description !== undefined) pkg.description = meta.description;
             if (meta.version !== undefined) pkg.version = meta.version;
+            const userDeps = JSON.parse(fs.readFileSync('/tmp/user-files/pkg-deps.json', 'utf8'));
+            if (userDeps.dependencies) {
+              pkg.dependencies = pkg.dependencies || {};
+              for (const [dep, ver] of Object.entries(userDeps.dependencies)) {
+                if (!(dep in pkg.dependencies)) pkg.dependencies[dep] = ver;
+              }
+            }
+            if (userDeps.devDependencies) {
+              pkg.devDependencies = pkg.devDependencies || {};
+              for (const [dep, ver] of Object.entries(userDeps.devDependencies)) {
+                if (!(dep in pkg.devDependencies)) pkg.devDependencies[dep] = ver;
+              }
+            }
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           "
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Update lock file
+        run: pnpm install --no-frozen-lockfile
 
       - name: Commit changes
         id: commit
@@ -162,6 +191,7 @@ jobs:
                     '- `public/` folder',
                     '- `README.md` and `README-*.md`',
                     '- `package.json` `name`, `description`, `version`',
+                    '- User-added `dependencies` and `devDependencies` (packages not present in upstream are preserved)',
                   ].join('\n'),
                 });
               } catch (err) {
