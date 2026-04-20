@@ -96,7 +96,8 @@ jobs:
             cp -r "/tmp/user-files/public" .
           fi
 
-          # Restore README files
+          # Restore README files (first remove all upstream README files, then restore only user's)
+          rm -f README.md README-*.md
           [ -f "/tmp/user-files/README.md" ] && cp "/tmp/user-files/README.md" . || true
           shopt -s nullglob
           for f in /tmp/user-files/README-*.md; do
