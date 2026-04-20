@@ -74,6 +74,11 @@ jobs:
           git checkout -B sync-upstream origin/main
           git read-tree -u --reset upstream/main
 
+          # Restore the user's .github/workflows/ so the push does not require
+          # the `workflows` permission (GitHub Apps cannot update workflow files
+          # without it). Users must sync workflow files manually.
+          git checkout origin/main -- .github/workflows/ 2>/dev/null || true
+
       - name: Remove examples if user had deleted it
         run: |
           if [ "$(cat /tmp/user-files/has-examples)" = "false" ]; then
@@ -162,6 +167,13 @@ jobs:
                     '- `public/` folder',
                     '- `README.md` and `README-*.md`',
                     '- `package.json` `name`, `description`, `version`',
+                    '- `.github/workflows/` (see note below)',
+                    '',
+                    '> [!NOTE]',
+                    '> **Workflow files are not updated automatically.**',
+                    '> GitHub Apps cannot push changes to `.github/workflows/` without the `workflows` permission.',
+                    '> Please manually review and apply any upstream workflow changes by comparing:',
+                    '> <https://github.com/Mister-Hope/portfolio-template/tree/main/.github/workflows>',
                   ].join('\n'),
                 });
               } catch (err) {
