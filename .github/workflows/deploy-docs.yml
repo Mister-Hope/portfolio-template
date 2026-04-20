@@ -27,9 +27,13 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Docs
+      - name: Copy Config
+        if: github.repository == 'Mister-Hope/portfolio-template'
         run: |-
           cp examples/config.example.yml config.yml
+
+      - name: Build Docs
+        run: |-
           pnpm run build
           > dist/.nojekyll
 
