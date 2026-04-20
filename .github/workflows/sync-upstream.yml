@@ -67,7 +67,12 @@ jobs:
           git fetch upstream main
 
       - name: Reset sync-upstream branch to upstream main
-        run: git checkout -B sync-upstream upstream/main
+        run: |
+          # Branch from origin/main so sync-upstream shares history with main.
+          # Then replace the entire tree with upstream/main's content, which
+          # makes the resulting commit a valid PR target against main.
+          git checkout -B sync-upstream origin/main
+          git read-tree -u --reset upstream/main
 
       - name: Remove examples if user had deleted it
         run: |
