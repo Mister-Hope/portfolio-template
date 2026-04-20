@@ -28,9 +28,18 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Copy Config
-        if: github.repository == 'Mister-Hope/portfolio-template'
-        run: |-
-          cp examples/config.example.yml config.yml
+        run: |
+          has_config=false
+          for f in config.ts config.js config.json config.yml config.yaml; do
+            [ -f "$f" ] && has_config=true && break
+          done
+          if [ "$has_config" = "false" ]; then
+            if [ -f "examples/config.example.yaml" ]; then
+              cp examples/config.example.yaml config.yaml
+            elif [ -f "examples/config.example.yml" ]; then
+              cp examples/config.example.yml config.yml
+            fi
+          fi
 
       - name: Build Docs
         run: |-
