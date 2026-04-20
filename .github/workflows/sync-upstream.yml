@@ -140,21 +140,36 @@ jobs:
             });
 
             if (prs.length === 0) {
-              await github.rest.pulls.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: 'chore: sync with upstream Mister-Hope/portfolio-template',
-                head: 'sync-upstream',
-                base: 'main',
-                body: [
-                  'This PR syncs the latest changes from [Mister-Hope/portfolio-template](https://github.com/Mister-Hope/portfolio-template) while preserving your customizations.',
-                  '',
-                  '**Preserved files:**',
-                  '- Config files (`config.ts` / `config.js` / `config.json` / `config.yml` / `config.yaml`)',
-                  '- `custom.css` (if present)',
-                  '- `public/` folder',
-                  '- `README.md` and `README-*.md`',
-                  '- `package.json` `name`, `description`, `version`',
-                ].join('\n'),
-              });
+              try {
+                await github.rest.pulls.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: 'chore: sync with upstream Mister-Hope/portfolio-template',
+                  head: 'sync-upstream',
+                  base: 'main',
+                  body: [
+                    'This PR syncs the latest changes from [Mister-Hope/portfolio-template](https://github.com/Mister-Hope/portfolio-template) while preserving your customizations.',
+                    '',
+                    '**Preserved files:**',
+                    '- Config files (`config.ts` / `config.js` / `config.json` / `config.yml` / `config.yaml`)',
+                    '- `custom.css` (if present)',
+                    '- `public/` folder',
+                    '- `README.md` and `README-*.md`',
+                    '- `package.json` `name`, `description`, `version`',
+                  ].join('\n'),
+                });
+              } catch (err) {
+                if (err.status === 403) {
+                  core.error(
+                    'Failed to create pull request: GitHub Actions is not permitted to create pull requests in this repository.\n' +
+                    'To fix this, go to your repository Settings → Actions → General → Workflow permissions\n' +
+                    'and enable "Allow GitHub Actions to create and approve pull requests".\n' +
+                    'The sync-upstream branch has been pushed and you can open the PR manually:\n' +
+                    `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/main...sync-upstream`
+                  );
+                  core.setFailed('PR creation blocked by repository settings. See the error message above for instructions.');
+                } else {
+                  throw err;
+                }
+              }
             }
