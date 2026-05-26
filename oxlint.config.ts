@@ -12,6 +12,20 @@ export default defineHopeConfig(
       // project settings
       "max-statements": ["warn", 30],
       "max-lines-per-function": ["warn", { max: 200, skipBlankLines: true, skipComments: true }],
+      "no-underscore-dangle": ["warn", { allow: ["__CONFIG__", "__dirname", "__filename"] }],
+      "react/forbid-component-props": [
+        "warn",
+        {
+          forbid: [
+            {
+              propName: "className",
+              allowedFor: ["AdaptiveImage", "Icon", "Iconify", "RichContent"],
+              allowedForPatterns: ["**Tag"],
+            },
+            { propName: "style", allowedFor: ["Iconify"], allowedForPatterns: ["**Tag"] },
+          ],
+        },
+      ],
       "unicorn/prefer-global-this": "off",
     },
   },

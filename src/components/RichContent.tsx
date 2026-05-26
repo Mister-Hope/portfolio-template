@@ -33,11 +33,11 @@ interface RichContentProps {
  * 渲染 HTML 字符串的 RichContent 组件
  */
 export const RichContent: FC<RichContentProps> = ({ content, block = false, className = "" }) => {
-  const Tag = block ? "div" : "span";
+  const RichContentTag = block ? "div" : "span";
   const html = useMemo(() => ({ __html: content }), [content]);
 
   return (
     // oxlint-disable-next-line react/no-danger
-    <Tag className={`rich-content ${className}`} dangerouslySetInnerHTML={html} />
+    <RichContentTag className={`rich-content ${className}`} dangerouslySetInnerHTML={html} />
   );
 };

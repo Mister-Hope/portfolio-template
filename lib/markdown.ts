@@ -11,9 +11,9 @@ const deriveExportName = (pluginName: string): string => {
     ? pluginName.slice(pluginName.lastIndexOf("/") + 1)
     : pluginName;
 
-  const unprefixed = base.replace(/^(?:markdown-it-|plugin-)/, "");
+  const unprefixed = base.replace(/^(?:markdown-it-|plugin-)/u, "");
 
-  return unprefixed.replaceAll(/-([a-z])/g, (_, chr: string) => chr.toUpperCase());
+  return unprefixed.replaceAll(/-([a-z])/gu, (_, chr: string) => chr.toUpperCase());
 };
 
 // Resolution order:
@@ -48,7 +48,7 @@ const externalLinkPlugin = (md: MarkdownIt): void => {
     if (hrefIndex >= 0 && token.attrs) {
       const [, href] = token.attrs[hrefIndex];
 
-      if (/^https?:\/\//i.test(href)) {
+      if (/^https?:\/\//iu.test(href)) {
         token.attrSet("target", "_blank");
         token.attrSet("rel", "noopener noreferrer");
       }

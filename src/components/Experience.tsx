@@ -25,6 +25,8 @@ export interface ExperienceProps {
   locale?: string;
 }
 
+const DEFAULT_TYPES: ExperienceTypesConfig = {};
+
 /**
  * Experience component
  *
@@ -34,7 +36,7 @@ export interface ExperienceProps {
  *
  * 显示工作和学习经历的垂直时间轴。
  */
-export const Experience: FC<ExperienceProps> = ({ items, types = {} }) => {
+export const Experience: FC<ExperienceProps> = ({ items, types = DEFAULT_TYPES }) => {
   const mergedTypes = { ...defaultExperienceTypes, ...types };
 
   return (

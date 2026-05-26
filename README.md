@@ -27,7 +27,7 @@ git clone https://github.com/your-username/your-repository.git
 cd your-repository
 
 # Install dependencies
-pnpm install
+pnpm ci
 ```
 
 ### 2. Configuration

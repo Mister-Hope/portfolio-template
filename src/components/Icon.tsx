@@ -16,7 +16,7 @@ const resolveIcon = (icon: string): string => {
   if (icon.includes(":")) return icon;
 
   // Strip fa- prefix if present (e.g. "fa-user" -> "user")
-  const cleanName = icon.replace(/^fa-/, "");
+  const cleanName = icon.replace(/^fa-/u, "");
 
   // Default to fa7-solid
   return `fa7-solid:${cleanName}`;
@@ -32,7 +32,7 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
   if (icon.startsWith("/") || icon.startsWith("http")) {
     const isExternal = icon.startsWith("http");
     // Handle base path for local images
-    const src = isExternal ? icon : `${import.meta.env.BASE_URL.replace(/\/$/, "") || ""}${icon}`;
+    const src = isExternal ? icon : `${import.meta.env.BASE_URL.replace(/\/$/u, "") || ""}${icon}`;
 
     return (
       <img

@@ -55,10 +55,10 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
 
     html = html
       .replace(
-        /<title>(.*?)<\/title>/,
+        /<title>(.*?)<\/title>/u,
         `<title>${title}</title>\n    <meta name="description" content="${description}" />`,
       )
-      .replace(/<html lang="(.*?)">/, `<html lang="${lang}">`);
+      .replace(/<html lang="(.*?)">/u, `<html lang="${lang}">`);
 
     const filePath =
       url === "/"

@@ -97,7 +97,7 @@ export default defineConfig(async () => {
           const description = localeConfig[defaultLocale].description ?? "Portfolio Template";
 
           return html.replace(
-            /<title>(.*?)<\/title>/,
+            /<title>(.*?)<\/title>/u,
             `<title>${title}</title>\n    <meta name="description" content="${description}" />`,
           );
         },

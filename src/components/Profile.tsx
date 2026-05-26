@@ -142,7 +142,7 @@ export const Profile: FC<ProfileProps> = ({ data, ui }) => (
               </div>
               <div className="profile-contact-info">
                 <span className="profile-contact-label">{contact.label}</span>
-                {contact.link || /^\S+@\S+\.\S+$/.test(contact.value) ? (
+                {contact.link || /^\S+@\S+\.\S+$/u.test(contact.value) ? (
                   <a
                     href={contact.link ?? `mailto:${contact.value}`}
                     className="profile-contact-link"
