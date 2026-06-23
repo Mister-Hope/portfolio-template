@@ -1,5 +1,5 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import path from "node:path";
 
 import type { Plugin, ResolvedConfig } from "vite";
 import { build } from "vite";
@@ -11,7 +11,7 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
   if (viteConfig.build.ssr !== false) return;
 
   const { outDir } = viteConfig.build;
-  const serverOutDir = join(outDir, "server");
+  const serverOutDir = path.join(outDir, "server");
 
   console.log("Building server entry...");
 
@@ -36,12 +36,12 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
   const appConfig = await loadConfig(root);
   const routesToPrerender = Object.keys(appConfig.locales);
 
-  const serverEntryPath = resolve(serverOutDir, "entry-server.js");
+  const serverEntryPath = path.resolve(serverOutDir, "entry-server.js");
   const { render } = (await import(serverEntryPath)) as {
     render: (url: string, config: Config) => string;
   };
 
-  const templatePath = resolve(outDir, "index.html");
+  const templatePath = path.resolve(outDir, "index.html");
   const template = readFileSync(templatePath, "utf-8");
 
   for (const url of routesToPrerender) {
@@ -55,17 +55,17 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
 
     html = html
       .replace(
-        /<title>(.*?)<\/title>/u,
+        /<title>(?:.*?)<\/title>/u,
         `<title>${title}</title>\n    <meta name="description" content="${description}" />`,
       )
-      .replace(/<html lang="(.*?)">/u, `<html lang="${lang}">`);
+      .replace(/<html lang="(?:.*?)">/u, `<html lang="${lang}">`);
 
     const filePath =
       url === "/"
-        ? join(outDir, "index.html")
-        : join(outDir, url.endsWith("/") ? `${url}index.html` : `${url}/index.html`);
+        ? path.join(outDir, "index.html")
+        : path.join(outDir, url.endsWith("/") ? `${url}index.html` : `${url}/index.html`);
 
-    const dir = dirname(filePath);
+    const dir = path.dirname(filePath);
 
     mkdirSync(dir, { recursive: true });
     writeFileSync(filePath, html);

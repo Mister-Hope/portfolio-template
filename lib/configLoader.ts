@@ -16,7 +16,7 @@ export const CONFIG_FILES = ["config.ts", "config.js", "config.yml", "config.yam
 const getImports = (filePath: string): string[] => {
   const content = fs.readFileSync(filePath, "utf-8");
   const imports: string[] = [];
-  const regex = /(?:import|export)(?:[\s\S]*?from\s+|\s+)['"](\.[^'"]+)['"]/gu;
+  const regex = /(?:import|export)(?:[\s\S]*?from\s+|\s+)['"](?<path>\.[^'"]+)['"]/gu;
   let match;
 
   while ((match = regex.exec(content)) != null) imports.push(match[1]);
@@ -72,7 +72,7 @@ export const getConfigDependencies = (root: string): string[] => {
     dependencies.add(currentFile);
 
     // Only parse JS/TS files
-    if (!/\.(js|ts|jsx|tsx|mjs|cjs)$/u.test(currentFile)) continue;
+    if (!/\.(?:js|ts|jsx|tsx|mjs|cjs)$/u.test(currentFile)) continue;
 
     try {
       const imports = getImports(currentFile);

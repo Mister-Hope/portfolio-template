@@ -1,8 +1,7 @@
 import MarkdownIt from "markdown-it";
+import type { PluginSimple, PluginWithOptions } from "markdown-it";
 
 import type { MdItConfig } from "../src/types/index.js";
-
-export type { MdItConfig };
 
 // Strip scope prefix, known plugin prefixes, then kebab→camelCase.
 // e.g. @scope/plugin-foo → foo, markdown-it-foo-bar → fooBar
@@ -13,7 +12,7 @@ const deriveExportName = (pluginName: string): string => {
 
   const unprefixed = base.replace(/^(?:markdown-it-|plugin-)/u, "");
 
-  return unprefixed.replaceAll(/-([a-z])/gu, (_, chr: string) => chr.toUpperCase());
+  return unprefixed.replaceAll(/-(?<char>[a-z])/gu, (_, char: string) => char.toUpperCase());
 };
 
 // Resolution order:
@@ -93,10 +92,8 @@ export const createMarkdownRenderer = async (
       );
 
       for (const { plugin, options } of loadedPlugins) {
-        // oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-argument
-        if (options == null) md.use(plugin as any);
-        // oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-argument
-        else md.use(plugin as any, options);
+        if (options == null) md.use(plugin as PluginSimple);
+        else md.use(plugin as PluginWithOptions, options);
       }
     }
   }
