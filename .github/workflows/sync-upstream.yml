@@ -52,15 +52,19 @@ jobs:
           # Save public folder
           [ -d "public" ] && cp -r "public" /tmp/user-files/ || true
 
-          # Save README.md and README-*.md
-          # Also record the exact list of README-*.md files, so we don't
+          # Save README.md and README-*.md / README.*.md
+          # Also record the exact list of localized readme files, so we don't
           # resurrect upstream readme files the user intentionally deleted.
           [ -f "README.md" ] && cp "README.md" /tmp/user-files/ || true
-          ls README-*.md 2>/dev/null > /tmp/user-files/readme-list.txt && {
+          {
+            ls README-*.md 2>/dev/null || true
+            ls README.*.md 2>/dev/null || true
+          } > /tmp/user-files/readme-list.txt
+          if [ -s "/tmp/user-files/readme-list.txt" ]; then
             while IFS= read -r f; do
-              cp "$f" /tmp/user-files/
+              [ -n "$f" ] && cp "$f" /tmp/user-files/
             done < /tmp/user-files/readme-list.txt
-          } || true
+          fi
 
           # Save package.json name, description, version, author, repository, and extra deps
           node -e "
@@ -121,9 +125,9 @@ jobs:
           fi
 
           # Restore README files
-          # Only restore README-*.md files the user had; don't bring back
+          # Only restore localized readme files the user had; don't bring back
           # upstream readme files the user intentionally deleted.
-          rm -f README.md README-*.md
+          rm -f README.md README-*.md README.*.md
           [ -f "/tmp/user-files/README.md" ] && cp "/tmp/user-files/README.md" . || true
           if [ -s "/tmp/user-files/readme-list.txt" ]; then
             while IFS= read -r f; do
@@ -211,7 +215,7 @@ jobs:
                     '- Config files (`config.ts` / `config.js` / `config.json` / `config.yml` / `config.yaml`)',
                     '- `custom.css` (if present)',
                     '- `public/` folder',
-                    '- `README.md` and `README-*.md`',
+                    '- `README.md` and localized `README-*.md` / `README.*.md`',
                     '- `package.json` `name`, `description`, `version`, `author`, `repository`, and extra dependencies',
                     '- `.github/workflows/` (see note below)',
                     '',
