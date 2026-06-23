@@ -53,10 +53,14 @@ jobs:
           [ -d "public" ] && cp -r "public" /tmp/user-files/ || true
 
           # Save README.md and README-*.md
+          # Also record the exact list of README-*.md files, so we don't
+          # resurrect upstream readme files the user intentionally deleted.
           [ -f "README.md" ] && cp "README.md" /tmp/user-files/ || true
-          for f in README-*.md; do
-            [ -f "$f" ] && cp "$f" /tmp/user-files/ || true
-          done
+          ls README-*.md 2>/dev/null > /tmp/user-files/readme-list.txt && {
+            while IFS= read -r f; do
+              cp "$f" /tmp/user-files/
+            done < /tmp/user-files/readme-list.txt
+          } || true
 
           # Save package.json name, description, version, author, repository, and extra deps
           node -e "
@@ -117,13 +121,15 @@ jobs:
           fi
 
           # Restore README files
+          # Only restore README-*.md files the user had; don't bring back
+          # upstream readme files the user intentionally deleted.
           rm -f README.md README-*.md
           [ -f "/tmp/user-files/README.md" ] && cp "/tmp/user-files/README.md" . || true
-          shopt -s nullglob
-          for f in /tmp/user-files/README-*.md; do
-            cp "$f" .
-          done
-          shopt -u nullglob
+          if [ -s "/tmp/user-files/readme-list.txt" ]; then
+            while IFS= read -r f; do
+              [ -n "$f" ] && cp "/tmp/user-files/$f" . || true
+            done < /tmp/user-files/readme-list.txt
+          fi
 
           # Merge package.json name, description, version, author, repository, and extra deps back
           node -e "
@@ -154,6 +160,9 @@ jobs:
             }
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           "
+
+      - name: Update lockfile
+        run: pnpm install --lockfile-only
 
       - name: Format
         run: pnpm dlx oxfmt
