@@ -1,5 +1,5 @@
 configDependencies:
-  pacquet: "^0.11.10"
+  pacquet: ^0.11.12
 
 enableGlobalVirtualStore: true
 
@@ -8,6 +8,7 @@ minimumReleaseAgeExclude:
   - "@oxlint/*"
   - "@vitest/*"
   - "@vue/*"
+  - oxc-config-hope
   - oxfmt
   - oxlint
   - vitest
