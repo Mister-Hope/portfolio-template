@@ -66,9 +66,7 @@
           md.use(containerPlugin, { name: "hint" });
         },
       },
-      locales: {
-        /* ... */
-      },
+      locales: {/* ... */},
     };
     ```
 

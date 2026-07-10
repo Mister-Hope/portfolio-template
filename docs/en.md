@@ -66,9 +66,7 @@ The optional `config` object contains the following fields:
           md.use(containerPlugin, { name: "hint" });
         },
       },
-      locales: {
-        /* ... */
-      },
+      locales: {/* ... */},
     };
     ```
 

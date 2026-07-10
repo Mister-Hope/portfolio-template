@@ -17,13 +17,11 @@ export default defineHopeConfig(
         "warn",
         {
           forbid: [
-            // @ts-expect-error: https://github.com/oxc-project/oxc/issues/23732
             {
               propName: "className",
               allowedFor: ["AdaptiveImage", "Icon", "Iconify", "RichContent"],
               allowedForPatterns: ["**Tag"],
             },
-            // @ts-expect-error: https://github.com/oxc-project/oxc/issues/23732
             { propName: "style", allowedFor: ["Iconify"], allowedForPatterns: ["**Tag"] },
           ],
         },
