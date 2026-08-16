@@ -13,6 +13,7 @@ export default defineHopeConfig(
       "max-lines-per-function": ["warn", { max: 200, skipBlankLines: true, skipComments: true }],
       "no-underscore-dangle": ["warn", { allow: ["__CONFIG__", "__dirname", "__filename"] }],
       "node/no-sync": "off",
+      "react/function-component-definition": ["warn", { namedComponents: ["arrow-function"] }],
       "react/forbid-component-props": [
         "warn",
         {

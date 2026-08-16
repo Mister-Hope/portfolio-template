@@ -1,5 +1,5 @@
+import type { PluginSimple, PluginWithOptions } from "@mdit/helper";
 import MarkdownIt from "markdown-it";
-import type { PluginSimple, PluginWithOptions } from "markdown-it";
 
 import type { MdItConfig } from "../src/types/index.js";
 
@@ -36,7 +36,7 @@ const resolvePlugin = (mod: unknown, pluginName: string): unknown => {
 
 // Built-in plugin: add target="_blank" rel="noopener noreferrer" to external links
 // (absolute URLs starting with http:// or https://); leave internal links unchanged.
-const externalLinkPlugin = (md: MarkdownIt): void => {
+const externalLinkPlugin: PluginSimple = (md) => {
   const defaultRender = md.renderer.rules.link_open ?? md.renderer.renderToken.bind(md.renderer);
 
   // oxlint-disable-next-line max-params
@@ -47,7 +47,7 @@ const externalLinkPlugin = (md: MarkdownIt): void => {
     if (hrefIndex >= 0 && token.attrs) {
       const [, href] = token.attrs[hrefIndex];
 
-      if (/^https?:\/\//iu.test(href)) {
+      if (typeof href === "string" && /^https?:\/\//iu.test(href)) {
         token.attrSet("target", "_blank");
         token.attrSet("rel", "noopener noreferrer");
       }

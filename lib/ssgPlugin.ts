@@ -22,10 +22,10 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
       ssr: "entry-server.tsx",
       outDir: serverOutDir,
       emptyOutDir: true,
-      rollupOptions: {
-        onwarn(warning, warn) {
-          if (warning.code === "MODULE_LEVEL_DIRECTIVE") return;
-          warn(warning);
+      rolldownOptions: {
+        onLog(level, log, defaultHandler) {
+          if (log.code === "MODULE_LEVEL_DIRECTIVE") return;
+          defaultHandler(level, log);
         },
       },
     },

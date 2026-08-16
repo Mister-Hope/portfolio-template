@@ -9,7 +9,7 @@ import { defineConfig } from "vite";
 import { CONFIG_FILES, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
-const __dirname = import.meta.dirname;
+const { dirname } = import.meta;
 
 const injectCustomCssImportPlugin = ({
   customCSS = "../custom.css",
@@ -62,17 +62,17 @@ const injectCustomCssImportPlugin = ({
 };
 
 export default defineConfig(async () => {
-  const config = await loadConfig(__dirname);
+  const config = await loadConfig(dirname);
 
   return {
-    root: path.resolve(__dirname, "src"),
+    root: path.resolve(dirname, "src"),
 
     build: {
-      outDir: path.resolve(__dirname, "dist"),
+      outDir: path.resolve(dirname, "dist"),
       emptyOutDir: true,
     },
 
-    publicDir: path.resolve(__dirname, "public"),
+    publicDir: path.resolve(dirname, "public"),
 
     define: {
       __CONFIG__: JSON.stringify(config),
@@ -85,7 +85,7 @@ export default defineConfig(async () => {
       react(),
       injectCustomCssImportPlugin(),
       tailwindcss(),
-      ssgPlugin(__dirname),
+      ssgPlugin(dirname),
       {
         name: "inject-title-and-meta",
         transformIndexHtml(html: string): string {
@@ -105,17 +105,17 @@ export default defineConfig(async () => {
       {
         name: "watch-config",
         configureServer(server: ViteDevServer): void {
-          const configPath = path.resolve(__dirname, "config");
-          const configDependencies = getConfigDependencies(__dirname);
+          const configPath = path.resolve(dirname, "config");
+          const configDependencies = getConfigDependencies(dirname);
 
           server.watcher.add(configPath);
-          server.watcher.add(CONFIG_FILES.map((filePath) => path.resolve(__dirname, filePath)));
+          server.watcher.add(CONFIG_FILES.map((filePath) => path.resolve(dirname, filePath)));
           server.watcher.add(configDependencies);
 
           server.watcher.on("change", (file: string) => {
             if (
               file.startsWith(configPath) ||
-              CONFIG_FILES.some((filePath) => file === path.resolve(__dirname, filePath)) ||
+              CONFIG_FILES.some((filePath) => file === path.resolve(dirname, filePath)) ||
               configDependencies.includes(file)
             )
               void server.restart();
@@ -125,7 +125,7 @@ export default defineConfig(async () => {
     ],
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "."),
+        "@": path.resolve(dirname, "."),
       },
     },
   };

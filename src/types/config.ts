@@ -29,7 +29,7 @@ export type MdItPluginEntry = string | [pluginName: string, options?: any];
  * - 数组形式（所有配置格式）：[插件包名 | [插件包名, 选项?], ...]
  * - 函数形式（仅 JS/TS 配置）：(md) => { md.use(plugin) }
  */
-// oxlint-disable-next-line typescript/no-explicit-any, typescript/explicit-module-boundary-types
+// oxlint-disable-next-line typescript/no-explicit-any
 export type MdItConfig = MdItPluginEntry[] | ((md: any) => void);
 
 export interface LocaleConfig {
