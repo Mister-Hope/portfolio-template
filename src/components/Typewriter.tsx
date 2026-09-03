@@ -62,18 +62,26 @@ export const Typewriter: FC<TypewriterProps> = ({
 
   useEffect(() => {
     if (subIndex === texts[index].length + 1 && !reverse) {
-      setTimeout(() => {
+      // 打字完成，等待 pause 后开始删除
+      const timeout = setTimeout(() => {
         setReverse(true);
       }, pause);
 
-      return;
+      return (): void => {
+        clearTimeout(timeout);
+      };
     }
 
     if (subIndex === 0 && reverse) {
-      setReverse(false);
-      setIndex((prev) => (prev + 1) % texts.length);
+      // 删除完成，立即切换到下一个文本
+      const timeout = setTimeout(() => {
+        setReverse(false);
+        setIndex((prev) => (prev + 1) % texts.length);
+      }, 0);
 
-      return;
+      return (): void => {
+        clearTimeout(timeout);
+      };
     }
 
     const deleteInterval = Math.min(speed, maxDeleteTime / texts[index].length);
@@ -84,7 +92,6 @@ export const Typewriter: FC<TypewriterProps> = ({
       reverse ? deleteInterval : speed,
     );
 
-    // oxlint-disable-next-line typescript/consistent-return
     return (): void => {
       clearTimeout(timeout);
     };

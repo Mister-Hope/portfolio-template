@@ -21,7 +21,7 @@ import { isSSR, getLocaleFromPath } from "./utils/index.js";
 
 export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const [localePath, setLocalePath] = useState<string>(() => initialLocale ?? getLocaleFromPath());
-  const [localeConfig, setLocaleConfig] = useState(locales[localePath]);
+  const localeConfig = locales[localePath];
 
   const [theme, setTheme] = useState<"light" | "dark">(() =>
     isSSR
@@ -30,10 +30,8 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
         (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")),
   );
 
-  // update config and link based on locale path
+  // update link based on locale path
   useEffect(() => {
-    setLocaleConfig(locales[localePath]);
-
     if (!isSSR && window.location.pathname !== localePath)
       window.history.pushState(null, "", localePath);
   }, [localePath]);

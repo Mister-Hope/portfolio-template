@@ -1,6 +1,6 @@
 import type { BannerProps } from "../components/Banner.js";
 import type { CardItem } from "../components/Cards.js";
-import type { ExperienceItem } from "../components/ExperienceItem.js";
+import type { ExperienceItemData } from "../components/ExperienceItem.js";
 import type { GalleryItem } from "../components/GalleryCard.js";
 import type { ListItem, ListProps } from "../components/List.js";
 import type { MarkdownProps } from "../components/Markdown.js";
@@ -30,7 +30,7 @@ export interface ProfileSection extends SectionBase {
 
 export interface ExperienceSection extends SectionBase {
   type: "experience";
-  data: ExperienceItem[];
+  data: ExperienceItemData[];
 }
 
 export interface BannerSection extends SectionBase {

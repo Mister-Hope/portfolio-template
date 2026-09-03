@@ -2,6 +2,7 @@ import type { FC } from "react";
 
 import type { ExperienceTypesConfig } from "../utils/index.js";
 import { defaultExperienceTypes } from "../utils/index.js";
+import type { ExperienceItemData } from "./ExperienceItem.js";
 import { ExperienceItem } from "./ExperienceItem.js";
 
 export interface ExperienceProps {
@@ -10,7 +11,7 @@ export interface ExperienceProps {
    *
    * 要显示的经历项列表
    */
-  items: ExperienceItem[];
+  items: ExperienceItemData[];
   /**
    * Custom styles for experience types
    *

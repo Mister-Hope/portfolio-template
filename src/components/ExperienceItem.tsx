@@ -9,7 +9,7 @@ import { RichContent } from "./RichContent.js";
  *
  * 经历项 (工作或学习)
  */
-export interface ExperienceItem {
+export interface ExperienceItemData {
   /**
    * Type of experience
    *
@@ -55,7 +55,7 @@ export interface ExperienceItem {
 }
 
 interface ExperienceItemProps {
-  item: ExperienceItem;
+  item: ExperienceItemData;
   index: number;
   itemsCount: number;
   config: ExperienceTypeConfig;
