@@ -35,7 +35,7 @@
     "markdown-it": "^15.0.1",
     "nano-staged": "^1.0.2",
     "oxc-config-hope": "0.3.13",
-    "oxfmt": "0.66.0",
+    "oxfmt": "0.67.0",
     "oxlint": "1.81.0",
     "oxlint-tsgolint": "7.0.2001",
     "rimraf": "^6.1.3",
