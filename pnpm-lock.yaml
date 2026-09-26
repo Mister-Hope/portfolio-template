@@ -120,8 +120,8 @@ importers:
         version: 19.2.8(react@19.2.8)
     devDependencies:
       '@mdit/helper':
-        specifier: 1.1.1
-        version: 1.1.1(markdown-it@15.0.1)
+        specifier: 1.1.2
+        version: 1.1.2(markdown-it@15.0.1)
       '@mr-hope/tsconfig':
         specifier: 0.0.4
         version: 0.0.4(typescript@7.0.2)
@@ -203,11 +203,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@mdit/helper@1.1.1':
-    resolution: {integrity: sha512-Rrl14ZjFerzfAqCt0zxAWbPgRpsumgm9iBLrCVE05WS8dM6v/LnF1ppPFVnRz1F7fAaxn0kTFOlYwzcY+kRsHQ==}
+  '@mdit/helper@1.1.2':
+    resolution: {integrity: sha512-xZywQ7aXrmkRCuGvFXguXVKeiQ7kHCxPkjtR+nK/n31YiSPPi/Rmb/ll+CYt0LdyeXR0Y1I16da7gxDT4/VXWg==}
     engines: {node: '>=22'}
     peerDependencies:
-      markdown-it: ^15.0.1
+      markdown-it: ^15.0.2
     peerDependenciesMeta:
       markdown-it:
         optional: true
@@ -1276,7 +1276,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@mdit/helper@1.1.1(markdown-it@15.0.1)':
+  '@mdit/helper@1.1.2(markdown-it@15.0.1)':
     optionalDependencies:
       markdown-it: 15.0.1
 
