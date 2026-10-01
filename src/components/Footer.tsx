@@ -2,6 +2,13 @@ import type { FC } from "react";
 
 import { RichContent } from "./RichContent.js";
 
+/**
+ * Current year, resolved once per render session so the render path stays pure.
+ *
+ * 当前年份，每次渲染会话仅解析一次，保证渲染过程纯净。
+ */
+const CURRENT_YEAR = new Date().getFullYear();
+
 export interface FooterProps {
   /**
    * Copyright text
@@ -32,7 +39,7 @@ export const Footer: FC<FooterProps> = ({ copyright, description }) =>
       <div className="footer-content">
         {copyright && (
           <RichContent
-            content={copyright.replaceAll("$year", String(new Date().getFullYear()))}
+            content={copyright.replaceAll("$year", String(CURRENT_YEAR))}
             className="footer-copyright"
             block
           />

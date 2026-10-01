@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": ["config:recommended", ":prHourlyLimitNone", ":prConcurrentLimitNone"],
   "dependencyDashboard": true,
   "schedule": ["every weekend"],
   "packageRules": [
@@ -21,5 +21,7 @@
   },
   "vulnerabilityAlerts": {
     "enabled": true
-  }
+  },
+  "minimumReleaseAge": "1 day",
+  "timezone": "Asia/Shanghai"
 }

@@ -22,12 +22,9 @@ jobs:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: pnpm/setup@v3
         with:
-          node-version: 24
+          runtime: node@^24.20.0
 
       - name: Install dependencies
         run: pnpm ci
