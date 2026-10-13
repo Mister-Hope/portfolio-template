@@ -7,12 +7,10 @@ minimumReleaseAgeExclude:
   - "@oxlint/*"
   - "@vitest/*"
   - "@vue/*"
-  - "oxc-config-hope"
-  - "oxfmt"
-  - "oxlint"
-
-trustPolicy: no-downgrade
-
+  - oxc-config-hope
+  - oxfmt
+  - oxlint
 minimumReleaseAgeExcludePrune: true
+trustPolicy: no-downgrade
 trustPolicyExcludePrune: true
 trustPolicyIgnoreAfter: 720
