@@ -178,7 +178,7 @@ importers:
     devDependencies:
       '@mdit/helper':
         specifier: 1.1.2
-        version: 1.1.2(markdown-it@15.0.2)
+        version: 1.1.2(markdown-it@15.0.3)
       '@mr-hope/tsconfig':
         specifier: 0.0.4
         version: 0.0.4(typescript@7.0.2)
@@ -202,7 +202,7 @@ importers:
         version: 5.5.0
       markdown-it:
         specifier: ^15.0.2
-        version: 15.0.2
+        version: 15.0.3
       nano-staged:
         specifier: ^1.0.2
         version: 1.0.2
@@ -892,9 +892,6 @@ packages:
       oxc-transform-react:
         optional: true
 
-  argparse@3.0.2:
-    resolution: {integrity: sha512-mFdDM6WqWKraGLsVb+C9CahPnzTXOefAOLq3jYcca2YZ8bEWpr++Tzj+zSaKW9+X9L5uSxcm1AZ3Y6aZJ09OhQ==}
-
   argparse@3.0.3:
     resolution: {integrity: sha512-Sn98ftV3KfsO8xfLPHG6oT8y+b0yvbrLgZjgPDXsharNY15tTAjqIsIju4S32nl6/iEUNNE4v+yL2Zhm8ooP3w==}
 
@@ -1108,8 +1105,8 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  markdown-it@15.0.2:
-    resolution: {integrity: sha512-q4IGxMv56jCqT4OCRCADBoDP3LO4MhmTXjFbphHPXs4g3j9Xg5RDnxqN8IF/3vIWEU+VCnUq+7JUg/cfy2E6Qw==}
+  markdown-it@15.0.3:
+    resolution: {integrity: sha512-+Az7Ojz3iRGu8KYMvJ6xVhvrxP3eE+vEtJX75Ow88XBpcQNV/0lGX5ZynIIBftREo4DC2jsveAMDaeltmm8QvQ==}
     hasBin: true
 
   mdurl@2.1.0:
@@ -1336,9 +1333,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@mdit/helper@1.1.2(markdown-it@15.0.2)':
+  '@mdit/helper@1.1.2(markdown-it@15.0.3)':
     optionalDependencies:
-      markdown-it: 15.0.2
+      markdown-it: 15.0.3
 
   '@mr-hope/tsconfig@0.0.4(typescript@7.0.2)':
     dependencies:
@@ -1670,8 +1667,6 @@ snapshots:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.4(@types/node@24.19.2)(jiti@2.7.0)
 
-  argparse@3.0.2: {}
-
   argparse@3.0.3: {}
 
   balanced-match@4.0.4: {}
@@ -1820,9 +1815,9 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  markdown-it@15.0.2:
+  markdown-it@15.0.3:
     dependencies:
-      argparse: 3.0.2
+      argparse: 3.0.3
       entities: 8.1.0
       linkify-it: 6.1.0
       mdurl: 2.1.0
