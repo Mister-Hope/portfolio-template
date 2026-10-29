@@ -19,10 +19,8 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/setup@v3
         with:
-          runtime: node@^24.22.1
-
-      - name: Install Dependencies
-        run: pnpm ci
+          runtime: node@^26.13.0
+          require-lockfile: true
 
       - name: Copy Config
         if: github.repository == 'Mister-Hope/portfolio-template'
