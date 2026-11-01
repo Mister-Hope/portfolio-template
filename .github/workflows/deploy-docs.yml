@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,6 +25,11 @@ jobs:
         with:
           runtime: node@^26.13.0
           require-lockfile: true
+
+      # The tests create/remove their own config files, so they run before the example config is
+      # copied below and also cover the main branch (test-docs only runs on PRs/branches).
+      - name: Run Tests
+        run: pnpm test
 
       - name: Copy Config
         run: |

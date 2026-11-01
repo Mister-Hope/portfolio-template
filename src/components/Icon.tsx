@@ -34,8 +34,8 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
   const iconStyle = useMemo(
     () => ({
       display: "inline-flex",
-      width: "1em",
-      height: "1em",
+      minWidth: "1em",
+      minHeight: "1em",
       alignItems: "center",
       justifyContent: "center",
       verticalAlign: "-0.125em",
