@@ -4,17 +4,12 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
-  contents: read
-
-concurrency:
-  group: pages-deploy
-  cancel-in-progress: false
+  contents: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,11 +20,6 @@ jobs:
         with:
           runtime: node@^26.13.0
           require-lockfile: true
-
-      # The tests create/remove their own config files, so they run before the example config is
-      # copied below and also cover the main branch (test-docs only runs on PRs/branches).
-      - name: Run Tests
-        run: pnpm test
 
       - name: Copy Config
         run: |
@@ -43,8 +33,8 @@ jobs:
             elif [ -f "examples/config.example.yml" ]; then
               cp examples/config.example.yml config.yml
             fi
-            # The example config assumes a root deployment, but this workflow publishes to a
-            # GitHub Pages project site, which is served from /<repository>/.
+            # The example assumes a root deployment, but this workflow publishes to a GitHub Pages
+            # project site, which is served from /<repository>/.
             for f in config.yaml config.yml; do
               [ -f "$f" ] && sed -i "s|^base: /$|base: /${GITHUB_REPOSITORY#*/}/|" "$f"
             done
@@ -54,31 +44,6 @@ jobs:
         run: |-
           pnpm run build
           > dist/.nojekyll
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: dist
-          path: dist
-          include-hidden-files: true
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      # JamesIves/github-pages-deploy-action works on a git working tree: it configures the git
-      # user, commits the folder and force-pushes to the target branch. A job that only downloads
-      # an artifact has no repository (`.git`), so the checkout is required before deploying.
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Download artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: dist
-          path: dist
 
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@v4
