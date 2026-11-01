@@ -167,6 +167,26 @@ export interface Config {
   siteUrl?: string;
 
   /**
+   * Favicon URL (absolute URL or `public/` path). Defaults to `"/favicon.svg"`; set it to `""` to
+   * disable the tag.
+   *
+   * 网站图标 URL（完整 URL 或 `public/` 路径），默认 `"/favicon.svg"`；设为 `""` 可禁用。
+   */
+  favicon?: string;
+
+  /**
+   * Social preview image (absolute URL or `public/` path) used for `og:image`/`twitter:image`.
+   *
+   * Provide a 1200×630 PNG/JPEG for reliable previews; AVIF is not supported by all social
+   * crawlers. Defaults to the hero avatar when omitted.
+   *
+   * 社交分享图（完整 URL 或 `public/` 路径），用于 `og:image`/`twitter:image`。
+   *
+   * 建议提供 1200×630 的 PNG/JPEG；部分社交爬虫不支持 AVIF。不填时回退到头像。
+   */
+  ogImage?: string;
+
+  /**
    * Global configuration
    *
    * 全局配置

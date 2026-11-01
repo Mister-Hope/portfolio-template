@@ -51,6 +51,14 @@
       "type": "string",
       "description": "Public site URL used for canonical/hreflang/sitemap/Open Graph tags, e.g. \"https://example.com\". Include the deployment base path when the site is served from a sub-path (e.g. \"https://<user>.github.io/<repository>\"). Absolute URLs are only generated when this is set.\n站点公开 URL，用于 canonical/hreflang/sitemap/Open Graph 等绝对链接（例如 \"https://example.com\"）。部署在子路径时需包含 base 路径。未设置时不生成绝对链接。"
     },
+    "favicon": {
+      "type": "string",
+      "description": "Favicon URL or public path. Defaults to \"/favicon.svg\"; set it to an empty string to disable the icon tag.\n网站图标 URL 或 public 路径。默认 \"/favicon.svg\"；设为空字符串可禁用该标签。"
+    },
+    "ogImage": {
+      "type": "string",
+      "description": "Social preview image URL or public path, used for og:image/twitter:image. A 1200x630 PNG/JPEG is recommended (AVIF is not supported by all social crawlers). Defaults to the hero avatar.\n社交分享图 URL 或 public 路径，用于 og:image/twitter:image。建议 1200x630 的 PNG/JPEG（部分社交爬虫不支持 AVIF）。默认回退到头像。"
+    },
     "locales": {
       "type": "object",
       "additionalProperties": {

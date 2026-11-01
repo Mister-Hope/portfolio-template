@@ -90,7 +90,8 @@ pnpm test
 > [Deployment and base path](./docs/en.md#deployment-and-base-path).
 >
 > To emit `canonical`/`hreflang`/Open Graph/Twitter tags plus `sitemap.xml` and `robots.txt`, also
-> set `siteUrl` to the public URL of the deployed site.
+> set `siteUrl` to the public URL of the deployed site. The build writes a base-aware `404.html`
+> automatically, and `favicon`/`ogImage` can be overridden in the config.
 
 ## 🛠️ Tech Stack (For Developers)
 

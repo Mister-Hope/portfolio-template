@@ -324,7 +324,7 @@
         }
       ],
       "footer": {
-        "copyright": "© 2025 Mister Hope. All rights reserved.",
+        "copyright": "© $year Mister Hope. All rights reserved.",
         "description": "Built with Love."
       }
     },
@@ -648,7 +648,7 @@
         }
       ],
       "footer": {
-        "copyright": "© 2025 Mister Hope。保留所有权利。",
+        "copyright": "© $year Mister Hope。保留所有权利。",
         "description": "用爱构建。"
       }
     }

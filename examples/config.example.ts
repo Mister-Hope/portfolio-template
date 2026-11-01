@@ -318,7 +318,7 @@ const enContents = defineSections([
 ]);
 
 const enFooter = defineFooterConfig({
-  copyright: "© 2025 Mister Hope. All rights reserved.",
+  copyright: "© $year Mister Hope. All rights reserved.",
   description: "Built with Love.",
 });
 
@@ -638,7 +638,7 @@ const zhContents = defineSections([
 ]);
 
 const zhFooter = defineFooterConfig({
-  copyright: "© 2025 Mister Hope。保留所有权利。",
+  copyright: "© $year Mister Hope。保留所有权利。",
   description: "用爱构建。",
 });
 
@@ -666,6 +666,9 @@ export default defineConfig({
   // Public site URL used for canonical/hreflang/sitemap/Open Graph tags.
   // Set it to your deployed URL, e.g. "https://example.com" (include the base path for sub-path deploys).
   // siteUrl: "https://example.com",
+  // Optional: favicon (defaults to /favicon.svg) and social preview image (defaults to the hero avatar).
+  // favicon: "/favicon.svg",
+  // ogImage: "https://example.com/social-preview.png",
   locales: {
     "/": enLocale,
     "/zh/": zhLocale,

@@ -101,6 +101,8 @@ export default defineConfig(async () => {
     );
   }
 
+  const buildYear = String(new Date().getFullYear());
+
   return {
     root: path.resolve(rootDir, "src"),
 
@@ -115,6 +117,7 @@ export default defineConfig(async () => {
 
     define: {
       __CONFIG__: serializedConfig,
+      __BUILD_YEAR__: buildYear,
     },
     server: {
       port: 3000,
@@ -124,7 +127,7 @@ export default defineConfig(async () => {
       react(),
       injectCustomCssImportPlugin(),
       tailwindcss(),
-      ssgPlugin(config, serializedConfig),
+      ssgPlugin(config, serializedConfig, buildYear),
       {
         name: "inject-title-and-meta",
         transformIndexHtml(html: string): string {
