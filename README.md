@@ -113,3 +113,7 @@ pnpm test
 ├── src/                # Source code (Do not edit unless necessary)
 └── ...
 ```
+
+## 📄 License
+
+[MIT](./LICENSE) © [Mister-Hope](https://github.com/Mister-Hope)
