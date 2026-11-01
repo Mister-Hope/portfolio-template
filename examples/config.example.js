@@ -1,4 +1,8 @@
 export default {
+  // Deployment base path. Keep "/" when the site is served from a domain root
+  // (e.g. Netlify/Vercel). For a sub-path such as a GitHub Pages project site
+  // (https://<user>.github.io/<repository>/), set it to "/<repository>/".
+  base: "/",
   locales: {
     "/": {
       lang: "zh-CN",

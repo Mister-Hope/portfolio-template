@@ -1,4 +1,5 @@
 import { localePaths, locales } from "../config.js";
+import { stripBase } from "./base.js";
 import { isSSR } from "./isSSR.js";
 
 const sortedPaths = [...localePaths].sort((a, b) => b.length - a.length);
@@ -31,7 +32,7 @@ export const getBrowserLanguage = (): string | null => {
 export const getLocaleFromPath = (): string => {
   if (isSSR) return "/";
 
-  const path = window.location.pathname;
+  const path = stripBase(window.location.pathname);
 
   for (const localePath of sortedPaths) if (path.startsWith(localePath)) return localePath;
 

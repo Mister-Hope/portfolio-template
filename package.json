@@ -10,6 +10,10 @@
     "url": "https://github.com/Mister-Hope/portfolio-template.git"
   },
   "type": "module",
+  "imports": {
+    "#helper": "./src/helper.ts",
+    "#types": "./src/types/index.ts"
+  },
   "scripts": {
     "build": "tsc --noEmit && vite build",
     "clean": "rimraf dist",

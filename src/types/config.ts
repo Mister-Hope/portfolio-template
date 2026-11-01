@@ -140,6 +140,21 @@ export interface GlobalConfig {
 
 export interface Config {
   /**
+   * Deployment base path.
+   *
+   * Keep `"/"` when the site is served from a domain root (e.g. Netlify/Vercel custom domain). Set
+   * it to the sub-path (e.g. `"/my-repository/"`) when deploying to a GitHub Pages project site
+   * (`https://<user>.github.io/<repository>/`) or any other non-root path.
+   *
+   * 部署基础路径。
+   *
+   * 站点部署在域名根路径（如 Netlify/Vercel）时保持 `"/"`。
+   *
+   * 部署到 GitHub Pages 项目页等子路径时，设置为对应子路径（例如 `"/my-repository/"`）。
+   */
+  base?: string;
+
+  /**
    * Global configuration
    *
    * 全局配置

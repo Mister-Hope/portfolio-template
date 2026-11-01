@@ -33,6 +33,11 @@ jobs:
             elif [ -f "examples/config.example.yml" ]; then
               cp examples/config.example.yml config.yml
             fi
+            # The example config assumes a root deployment, but this workflow publishes to a
+            # GitHub Pages project site, which is served from /<repository>/.
+            for f in config.yaml config.yml; do
+              [ -f "$f" ] && sed -i "s|^base: /$|base: /${GITHUB_REPOSITORY#*/}/|" "$f"
+            done
           fi
 
       - name: Build Docs

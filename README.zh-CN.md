@@ -56,6 +56,9 @@ pnpm run dev
 
 ## 📖 文档
 
+- [English configuration guide](./docs/en.md)
+- [中文配置指南](./docs/zh.md)
+
 ## 📦 构建与部署
 
 生产环境构建：
@@ -64,7 +67,13 @@ pnpm run dev
 pnpm run build
 ```
 
-输出文件将位于 `dist/` 文件夹中，可随时部署到 GitHub Pages、Vercel 或 Netlify。
+输出文件将位于 `dist/` 文件夹中，可随时部署到 Vercel、Netlify 或任意静态托管服务。
+
+> [!NOTE]
+> 模板默认假设站点部署在**域名根路径**。如果部署在子路径（例如 GitHub Pages 项目页
+> `https://<user>.github.io/<repository>/`），请把配置文件中的顶层 `base` 选项设为该子路径
+> （例如 `base: "/<repository>/"`）。它会作用于构建产物资源 URL、语言切换链接与配置中的图片路径。
+> 详见 [部署与 base 路径](./docs/zh.md#部署与-base-路径)。
 
 ## 🛠️ 技术栈（面向开发者）
 

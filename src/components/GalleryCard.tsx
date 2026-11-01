@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import type { FC } from "react";
 
+import { resolveAssetUrl } from "../utils/index.js";
 import { Icon } from "./Icon.js";
 
 /**
@@ -68,7 +69,12 @@ export const GalleryCard: FC<{
       onClick={handleSelect}
       aria-label={item.title}
     >
-      <img src={item.url} alt={item.title} className="gallery-image" loading="lazy" />
+      <img
+        src={resolveAssetUrl(item.url)}
+        alt={item.title}
+        className="gallery-image"
+        loading="lazy"
+      />
       <div className="gallery-overlay">
         <h4 className="gallery-title">{item.title}</h4>
         {hasMeta && (

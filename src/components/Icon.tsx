@@ -1,6 +1,8 @@
 import { Icon as Iconify } from "@iconify/react";
 import type { FC, HTMLAttributes } from "react";
 
+import { resolveAssetUrl } from "../utils/index.js";
+
 export interface IconProps extends HTMLAttributes<HTMLElement> {
   /**
    * The icon name or image URL
@@ -30,13 +32,9 @@ const resolveIcon = (icon: string): string => {
 export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
   // Check for image URL
   if (icon.startsWith("/") || icon.startsWith("http")) {
-    const isExternal = icon.startsWith("http");
-    // Handle base path for local images
-    const src = isExternal ? icon : `${import.meta.env.BASE_URL.replace(/\/$/u, "") || ""}${icon}`;
-
     return (
       <img
-        src={src}
+        src={resolveAssetUrl(icon)}
         alt=""
         className={`icon-img ${className ?? ""}`}
         loading="lazy"

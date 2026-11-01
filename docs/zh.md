@@ -13,6 +13,10 @@
 
 配置文件默认导出一个 `Config` 对象，包含以下字段：
 
+- `base`:
+  - 类型: `String` (可选)
+  - 详情: 部署基础路径。站点部署在域名根路径（Netlify、Vercel、自定义域名等）时保持 `"/"`；部署到 GitHub Pages 项目页等子路径时设置为对应子路径（例如 `"/my-repository/"`）。详见 [部署与 base 路径](#部署与-base-路径)。
+
 - `locales`:
   - 类型: `Record<string, LocaleConfig>`
   - 详情: 多语言配置映射。键是路径前缀 (例如 `"/"`, `"/zh/"`)，值是 `LocaleConfig` 对象。
@@ -445,3 +449,22 @@
   font-size: 2rem;
 }
 ```
+
+## 部署与 base 路径
+
+模板默认假设站点部署在**域名根路径**（例如 `https://example.com/`），Netlify、Vercel 与自定义域名都属于这种情况，此时 `base` 保持 `"/"` 即可。
+
+部分托管服务会把站点部署在**子路径**下——最常见的是 GitHub Pages 项目页 `https://<user>.github.io/<repository>/`。此时请在配置文件中设置顶层 `base` 选项：
+
+```yaml
+base: /your-repository/
+```
+
+该值会作为 Vite 的构建 base 使用，模板会用它来生成：
+
+- 构建产物中的 JS/CSS/`public/` 资源 URL；
+- 语言切换链接与客户端语言识别（`/zh/` 会变成 `/your-repository/zh/`）；
+- 配置中的图片路径（例如 `avatar: "/avatar.avif"`）。
+
+`base` 必须是**以 `/` 开头和结尾的路径**（不能是完整 URL）。使用 `pnpm run build` 时也可以不改配置、直接从命令行传入：
+`pnpm run build --base /your-repository/`。
