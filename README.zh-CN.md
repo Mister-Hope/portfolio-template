@@ -85,7 +85,8 @@ pnpm test
 > 详见 [部署与 base 路径](./docs/zh.md#部署与-base-路径)。
 >
 > 若要生成 `canonical` / `hreflang` / Open Graph / Twitter 标签以及 `sitemap.xml` 与 `robots.txt`，
-> 还需把 `siteUrl` 设为站点的公开 URL。
+> 还需把 `siteUrl` 设为站点的公开 URL。构建会自动生成 base-aware 的 `404.html`，
+> 也可在配置中覆盖 `favicon`/`ogImage`。
 
 ## 🛠️ 技术栈（面向开发者）
 

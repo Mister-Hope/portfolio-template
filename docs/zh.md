@@ -21,6 +21,14 @@
   - 类型: `String` (可选)
   - 详情: 站点公开 URL（子路径部署时需包含 base 路径，例如 `"https://<user>.github.io/<repository>"`）。设置后会生成 `canonical`、`hreflang`、Open Graph/Twitter 标签以及 `sitemap.xml` 与 `robots.txt`。详见 [部署与 base 路径](#部署与-base-路径)。
 
+- `favicon`:
+  - 类型: `String` (可选)
+  - 详情: 网站图标 URL 或 `public/` 路径，默认 `"/favicon.svg"`（仓库自带）。设为 `""` 可禁用图标标签。
+
+- `ogImage`:
+  - 类型: `String` (可选)
+  - 详情: 社交分享图 URL 或 `public/` 路径，用于 `og:image`/`twitter:image`。建议使用 1200×630 的 PNG/JPEG——部分社交爬虫不支持 AVIF。不填时回退到头像。
+
 - `locales`:
   - 类型: `Record<string, LocaleConfig>`
   - 详情: 多语言配置映射。键是路径前缀 (例如 `"/"`, `"/zh/"`)，值是 `LocaleConfig` 对象。必须包含键为 `"/"` 的根语言配置。
@@ -492,3 +500,5 @@ base: /your-repository/
 另外请把 `siteUrl` 设为站点的公开 URL（子路径部署时包含 base 路径），构建会自动生成 canonical、hreflang、Open Graph/Twitter 标签以及 `sitemap.xml` 与 `robots.txt`。
 
 仓库自带 `lib/config.schema.json`，`.vscode/settings.json` 已将其映射到 `config.json`、`config.yml`、`config.yaml`，在 VS Code 中可获得校验与自动补全。
+
+构建还会生成 base-aware 的 `404.html`（GitHub Pages 与 Netlify 会用其处理未知路径）。社交分享图建议通过 `ogImage` 指定 1200×630 的 PNG/JPEG——部分爬虫不识别 AVIF。

@@ -158,3 +158,76 @@ describe("config validation", () => {
     expect(runBuildExpectingError()).toContain("No configuration file found");
   }, 120_000);
 });
+
+describe("static extras", () => {
+  it("emits a 404 page, default favicon and resolved $year", () => {
+    clearConfigs();
+    const config = readJsonExample();
+    const locales = config.locales as Record<string, Record<string, unknown>>;
+
+    locales["/"].footer = { copyright: "© $year Test" };
+    writeConfig("json", JSON.stringify(config));
+    runBuild();
+
+    const index = readDist("index.html");
+    const notFound = readDist("404.html");
+
+    expect(index).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml" />');
+    expect(index).toContain(`© ${new Date().getFullYear()} Test`);
+    expect(index).not.toContain("$year");
+    expect(notFound).toContain('name="robots" content="noindex"');
+    expect(notFound).toContain('href="/"');
+    expect(fs.existsSync(distPath("favicon.svg"))).toBe(true);
+  }, 120_000);
+
+  it("prefixes the favicon and the 404 home link with base", () => {
+    clearConfigs();
+    const config = readJsonExample();
+
+    config.base = "/repo/";
+    writeConfig("json", JSON.stringify(config));
+    runBuild();
+
+    expect(readDist("index.html")).toContain('rel="icon" href="/repo/favicon.svg"');
+    expect(readDist("404.html")).toContain('href="/repo/"');
+  }, 120_000);
+
+  it("uses ogImage for social tags when siteUrl is set", () => {
+    clearConfigs();
+    const config = readJsonExample();
+
+    config.siteUrl = "https://example.com";
+    config.ogImage = "/social.png";
+    writeConfig("json", JSON.stringify(config));
+    runBuild();
+
+    const html = readDist("index.html");
+
+    expect(html).toContain('<meta property="og:image" content="https://example.com/social.png" />');
+    expect(html).toContain(
+      '<meta name="twitter:image" content="https://example.com/social.png" />',
+    );
+  }, 120_000);
+
+  it("supports a custom absolute favicon and disabling the tag", () => {
+    clearConfigs();
+    const config = readJsonExample();
+
+    config.favicon = "https://cdn.example.com/icon.png";
+    writeConfig("json", JSON.stringify(config));
+    runBuild();
+
+    expect(readDist("index.html")).toContain('rel="icon" href="https://cdn.example.com/icon.png"');
+
+    clearConfigs();
+    const disabled = readJsonExample();
+
+    disabled.favicon = "";
+    writeConfig("json", JSON.stringify(disabled));
+    runBuild();
+
+    expect(readDist("index.html")).not.toContain('rel="icon"');
+
+    clearConfigs();
+  }, 240_000);
+});

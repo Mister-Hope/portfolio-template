@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import type { Plugin, ResolvedConfig } from "vite";
@@ -29,6 +29,52 @@ const getSiteUrl = (config: Config): string => config.siteUrl?.replace(/\/+$/u, 
 const getPageUrl = (siteUrl: string, localePath: string): string => `${siteUrl}${localePath}`;
 
 /**
+ * Resolve a public-directory path against the deployment base ("/favicon.svg" ->
+ * "/repo/favicon.svg").
+ *
+ * 将 public 目录路径解析到部署 base 下。
+ *
+ * @param base - Vite base path
+ * @param value - Config-provided path or absolute URL
+ * @returns Absolute URL or base-prefixed path
+ */
+const getPublicUrl = (base: string, value: string): string =>
+  /^(?:https?:)?\/\//u.test(value) ? value : `${base}${value.replace(/^\/+/u, "")}`;
+
+/**
+ * Build the `<link rel="icon">` tag. Defaults to `/favicon.svg`, overridable with `config.favicon`.
+ *
+ * 生成 `<link rel="icon">` 标签，默认 `/favicon.svg`，可用 `config.favicon` 覆盖。
+ *
+ * @param base - Vite base path
+ * @param config - Resolved user config
+ * @param outDir - Build output directory
+ * @returns HTML tag, or `""` when disabled or the default file is missing
+ */
+const getFaviconTag = (base: string, config: Config, outDir: string): string => {
+  const favicon = config.favicon ?? "/favicon.svg";
+
+  if (!favicon) return "";
+
+  // Existing forks that sync the template may not have `public/favicon.svg` (their `public/` folder
+  // is preserved). Only reference the default when the file was actually copied to the output.
+  const defaultFaviconMissing =
+    config.favicon == null && !existsSync(path.join(outDir, favicon.replace(/^\/+/u, "")));
+
+  if (defaultFaviconMissing) return "";
+
+  const type = favicon.endsWith(".svg")
+    ? ' type="image/svg+xml"'
+    : favicon.endsWith(".png")
+      ? ' type="image/png"'
+      : favicon.endsWith(".ico")
+        ? ' type="image/x-icon"'
+        : "";
+
+  return `<link rel="icon" href="${escapeHtml(getPublicUrl(base, favicon))}"${type} />`;
+};
+
+/**
  * Resolve the configured avatar/background image to an absolute URL for Open Graph.
  *
  * 将配置中的头像/背景图解析为 Open Graph 使用的绝对 URL。
@@ -38,6 +84,14 @@ const getPageUrl = (siteUrl: string, localePath: string): string => `${siteUrl}$
  * @returns Absolute image URL, or `""` when unavailable
  */
 const getOgImage = (config: Config, siteUrl: string): string => {
+  if (config.ogImage) {
+    if (/^(?:https?:)?\/\//u.test(config.ogImage)) return config.ogImage;
+
+    return siteUrl
+      ? `${siteUrl}${config.ogImage.startsWith("/") ? config.ogImage : `/${config.ogImage}`}`
+      : "";
+  }
+
   const [firstLocale] = Object.values(config.locales);
 
   if (firstLocale == null) return "";
@@ -189,6 +243,58 @@ const getLocaleOutputPath = (outDir: string, localePath: string): string => {
 };
 
 /**
+ * Generate a base-aware `404.html` (GitHub Pages and Netlify serve it for unknown paths).
+ *
+ * 生成 base-aware 的 `404.html`（GitHub Pages 与 Netlify 会自动用于未知路径）。
+ *
+ * @param outDir - Build output directory
+ * @param base - Vite base path
+ * @param config - Resolved user config
+ * @param faviconTag - Favicon `<link>` tag (may be empty)
+ */
+const writeNotFoundPage = (
+  outDir: string,
+  base: string,
+  config: Config,
+  faviconTag: string,
+): void => {
+  const [defaultPath = "/"] = Object.keys(config.locales);
+  const locale = config.locales[defaultPath];
+
+  writeFileSync(
+    path.join(outDir, "404.html"),
+    `<!doctype html>
+<html lang="${escapeHtml(locale.lang)}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>404 | ${escapeHtml(locale.title ?? "Portfolio")}</title>
+    ${faviconTag}
+    <style>
+      :root { color-scheme: light dark; }
+      body { min-height: 100vh; margin: 0; display: grid; place-items: center; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }
+      main { padding: 2rem; text-align: center; }
+      h1 { margin: 0; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: -0.04em; }
+      p { margin: 1rem 0 0; color: #475569; }
+      a { display: inline-block; margin-top: 1.5rem; color: #2563eb; font-weight: 600; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      @media (prefers-color-scheme: dark) { body { background: #020617; color: #e2e8f0; } p { color: #94a3b8; } a { color: #60a5fa; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>404</h1>
+      <p>This page could not be found.</p>
+      <a href="${escapeHtml(base)}">Go home</a>
+    </main>
+  </body>
+</html>
+`,
+  );
+};
+
+/**
  * Prerender the app for every locale and post-process the HTML head.
  *
  * 为每个 locale 预渲染应用，并处理 HTML head 中的 SEO 信息。
@@ -202,6 +308,7 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
   const routes = Object.keys(config.locales);
   const siteUrl = getSiteUrl(config);
   const ogImage = siteUrl ? getOgImage(config, siteUrl) : "";
+  const faviconTag = getFaviconTag(viteConfig.base, config, outDir);
 
   const serverEntryPath = path.resolve(serverOutDir, "entry-server.js");
   const { render } = (await import(serverEntryPath)) as {
@@ -242,9 +349,11 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
       )
       .replace(/<html lang="(?:.*?)">/u, () => `<html lang="${escapeHtml(locale.lang)}">`);
 
-    const seoTags = getSeoTags(localePath, config, siteUrl, ogImage);
+    const headTags = [faviconTag, getSeoTags(localePath, config, siteUrl, ogImage)]
+      .filter((tag) => tag.length > 0)
+      .join("\n    ");
 
-    if (seoTags) html = html.replace("</head>", () => `    ${seoTags}\n  </head>`);
+    if (headTags) html = html.replace("</head>", () => `    ${headTags}\n  </head>`);
 
     mkdirSync(path.dirname(outputPath), { recursive: true });
     writeFileSync(outputPath, html);
@@ -252,6 +361,7 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
   }
 
   writeSitemapAndRobots(outDir, config, siteUrl, routes);
+  writeNotFoundPage(outDir, viteConfig.base, config, faviconTag);
 
   console.log("Cleaning up server build...");
   rmSync(serverOutDir, { recursive: true, force: true });
@@ -265,11 +375,13 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
  * @param viteConfig - Resolved Vite config
  * @param config - Resolved user config
  * @param serializedConfig - Config serialized for the client/SSR bundles
+ * @param buildYear - Build year injected as `__BUILD_YEAR__`
  */
 const handleCloseBundle = async (
   viteConfig: ResolvedConfig,
   config: Config,
   serializedConfig: string,
+  buildYear: string,
 ): Promise<void> => {
   if (viteConfig.build.ssr !== false) return;
 
@@ -291,6 +403,7 @@ const handleCloseBundle = async (
     // config file has side effects (or simply has changed between the two evaluations).
     define: {
       __CONFIG__: serializedConfig,
+      __BUILD_YEAR__: buildYear,
     },
     build: {
       ssr: "entry-server.tsx",
@@ -311,7 +424,7 @@ const handleCloseBundle = async (
   console.log("SSG complete.");
 };
 
-export const ssgPlugin = (config: Config, serializedConfig: string): Plugin => {
+export const ssgPlugin = (config: Config, serializedConfig: string, buildYear: string): Plugin => {
   let viteConfig: ResolvedConfig;
   let clientBuildSucceeded = false;
 
@@ -329,7 +442,7 @@ export const ssgPlugin = (config: Config, serializedConfig: string): Plugin => {
       // original build error with an unrelated ENOENT on dist/index.html.
       if (!clientBuildSucceeded || viteConfig.build.ssr !== false) return;
 
-      await handleCloseBundle(viteConfig, config, serializedConfig);
+      await handleCloseBundle(viteConfig, config, serializedConfig, buildYear);
     },
   };
 };

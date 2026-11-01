@@ -1,13 +1,7 @@
+import { useEffect, useState } from "react";
 import type { FC } from "react";
 
 import { RichContent } from "./RichContent.js";
-
-/**
- * Current year, resolved once per render session so the render path stays pure.
- *
- * 当前年份，每次渲染会话仅解析一次，保证渲染过程纯净。
- */
-const CURRENT_YEAR = new Date().getFullYear();
 
 export interface FooterProps {
   /**
@@ -33,13 +27,27 @@ export interface FooterProps {
  *
  * 显示带有版权和可选描述的页脚。
  */
-export const Footer: FC<FooterProps> = ({ copyright, description }) =>
-  copyright || description ? (
+export const Footer: FC<FooterProps> = ({ copyright, description }) => {
+  // Start with the build year (the server rendered it and the first client render must match),
+  // then update to the visitor's current year after mounting. This keeps `$year` correct for
+  // pages built in a previous year without breaking hydration.
+  const [year, setYear] = useState(__BUILD_YEAR__);
+
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+
+    // oxlint-disable-next-line react/set-state-in-effect -- one-shot sync with the visitor's clock after hydration
+    if (currentYear !== year) setYear(currentYear);
+  }, [year]);
+
+  if (!copyright && !description) return null;
+
+  return (
     <footer className="footer-container">
       <div className="footer-content">
         {copyright && (
           <RichContent
-            content={copyright.replaceAll("$year", String(CURRENT_YEAR))}
+            content={copyright.replaceAll("$year", String(year))}
             className="footer-copyright"
             block
           />
@@ -47,4 +55,5 @@ export const Footer: FC<FooterProps> = ({ copyright, description }) =>
         {description && <RichContent content={description} className="footer-description" block />}
       </div>
     </footer>
-  ) : null;
+  );
+};

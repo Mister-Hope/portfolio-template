@@ -21,6 +21,14 @@ The configuration file exports a `Config` object by default, containing the foll
   - Type: String (optional)
   - Details: Public site URL (including the base path for sub-path deployments, e.g. `"https://<user>.github.io/<repository>"`). When set, the build emits `canonical`, `hreflang`, Open Graph/Twitter tags plus `sitemap.xml` and `robots.txt`. See [Deployment and base path](#deployment-and-base-path).
 
+- `favicon`:
+  - Type: String (optional)
+  - Details: Favicon URL or `public/` path. Defaults to `"/favicon.svg"` (shipped in `public/`). Set it to `""` to disable the icon tag.
+
+- `ogImage`:
+  - Type: String (optional)
+  - Details: Social preview image URL or `public/` path, used for `og:image`/`twitter:image`. A 1200×630 PNG/JPEG is recommended — AVIF is not supported by all social crawlers. Defaults to the hero avatar.
+
 - `locales`:
   - Type: `Record<string, LocaleConfig>`
   - Details: Multi-language configuration map. Keys are path prefixes (e.g., `"/"`, `"/zh/"`), and values are `LocaleConfig` object. A root locale with the key `"/"` is required.
@@ -491,3 +499,5 @@ The value is passed to Vite as the build base, and the template uses it for:
 Separately, set `siteUrl` to the public URL of the site (include the base path when deploying under a sub-path). Canonical/hreflang links, Open Graph/Twitter tags, `sitemap.xml` and `robots.txt` are generated automatically once it is set.
 
 The repository also ships `lib/config.schema.json`; `.vscode/settings.json` wires it up so `config.json`, `config.yml` and `config.yaml` get validation and autocomplete in VS Code.
+
+The build also writes a base-aware `404.html` (served by GitHub Pages and Netlify for unknown paths). For social previews, set `ogImage` to a 1200×630 PNG/JPEG: some crawlers ignore AVIF images.

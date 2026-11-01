@@ -11,7 +11,10 @@ export default defineHopeConfig(
     rules: {
       "max-statements": ["warn", 30],
       "max-lines-per-function": ["warn", { max: 200, skipBlankLines: true, skipComments: true }],
-      "no-underscore-dangle": ["warn", { allow: ["__CONFIG__", "__dirname", "__filename"] }],
+      "no-underscore-dangle": [
+        "warn",
+        { allow: ["__BUILD_YEAR__", "__CONFIG__", "__dirname", "__filename"] },
+      ],
       "node/no-sync": "off",
       "react/function-component-definition": ["warn", { namedComponents: ["arrow-function"] }],
       "react/forbid-component-props": [
