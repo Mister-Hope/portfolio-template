@@ -23,10 +23,18 @@ jobs:
           require-lockfile: true
 
       - name: Copy Config
-        if: github.repository == 'Mister-Hope/portfolio-template'
-        run: |-
-          cp examples/config.example.yml config.yml
+        run: |
+          has_config=false
+          for f in config.ts config.js config.json config.yml config.yaml; do
+            [ -f "$f" ] && has_config=true && break
+          done
+          if [ "$has_config" = "false" ]; then
+            cp examples/config.example.yml config.yml
+          fi
 
       - name: Build Docs
         run: |-
           pnpm run build
+
+      - name: Run Tests
+        run: pnpm test

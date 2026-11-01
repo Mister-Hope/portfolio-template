@@ -2,7 +2,7 @@
   "base": "/",
   "locales": {
     "/": {
-      "lang": "zh-CN",
+      "lang": "en-US",
       "langName": "EN",
       "title": "Mister-Hope | Portfolio",
       "description": "The personal portfolio of Mister-Hope, a front-end developer.",

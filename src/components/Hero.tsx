@@ -58,7 +58,7 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
       <div className="hero-bg-wrapper">
         <AdaptiveImage
           src={hero.bgImage}
-          alt="Background"
+          alt=""
           className="absolute inset-0 h-full w-full object-cover object-center"
           fetchPriority="high"
         />
@@ -75,7 +75,7 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
         {/* Info Section */}
         <div className="hero-info">
           <div className="hero-text-wrapper">
-            <h2 className={`hero-welcome ${isCJK ? "" : "tracking-[0.2em]"}`}>{hero.welcome}</h2>
+            <p className={`hero-welcome ${isCJK ? "" : "tracking-[0.2em]"}`}>{hero.welcome}</p>
             <h1 className={`hero-name ${isCJK ? "" : "tracking-tighter"}`}>{hero.name}</h1>
             <div className={`hero-titles ${isCJK ? "" : "tracking-tight"}`}>
               <Typewriter texts={hero.titles} />

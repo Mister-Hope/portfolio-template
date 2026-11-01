@@ -8,7 +8,7 @@ A modern, responsive, and **configuration-driven** portfolio template. Designed 
 
 ## Highlights
 
-- **Zero Code Required**: Manage all content via a single configuration file (`config.yml`, `config.json`, or `config.ts`).
+- **Zero Code Required**: Manage all content via a single configuration file (`config.yml`, `config.json`, `config.ts`, …).
 - **Highly Customizable**: Make customizations and add sections easily.
 - **Fast & SEO Friendly**: Built with React & Vite, supporting Static Site Generation (SSG), built and loaded in seconds. (See [PageSpeed Insights](https://pagespeed.web.dev/analysis/https-cheng-shang-me/n71ps5slz1?form_factor=desktop))
 - **Multi-language**: Built-in i18n support.
@@ -46,7 +46,7 @@ This project is driven by a configuration file. You **do not** need to edit the 
    # cp examples/config.example.js config.js
    ```
 
-2. Open the copied config file (e.g.: `config.yml`) and start adding your information!
+2. Open the copied config file (e.g.: `config.yml`) and start adding your information! The shipped `lib/config.schema.json` (wired up in `.vscode/settings.json`) provides validation and autocomplete for `config.json`, `config.yml` and `config.yaml`.
 
 Detailed guides on how to configure every section:
 
@@ -76,12 +76,21 @@ pnpm run build
 
 The output will be in the `dist/` folder, ready to deploy to Vercel, Netlify or any static host.
 
+Run the build integration tests (builds every example config and asserts the prerendered output):
+
+```bash
+pnpm test
+```
+
 > [!NOTE]
 > This template assumes the site is served from the **domain root**. If you deploy under a sub-path
 > (for example a GitHub Pages project site at `https://<user>.github.io/<repository>/`), set the
 > top-level `base` option in your config file to that path (e.g. `base: "/<repository>/"`). It is
 > applied to built asset URLs, language links and config image paths. See
 > [Deployment and base path](./docs/en.md#deployment-and-base-path).
+>
+> To emit `canonical`/`hreflang`/Open Graph/Twitter tags plus `sitemap.xml` and `robots.txt`, also
+> set `siteUrl` to the public URL of the deployed site.
 
 ## 🛠️ Tech Stack (For Developers)
 
@@ -95,8 +104,10 @@ The output will be in the `dist/` folder, ready to deploy to Vercel, Netlify or 
 ```text
 .
 ├── config.yml          # <--- YOUR CONFIGURATION FILE
+├── custom.css          # Optional custom styles (auto-injected at build time)
 ├── docs/               # Detailed documentation
 ├── examples/           # Example configurations
+├── lib/                # Config schema and build-time loaders
 ├── public/             # Your static assets (images, pdfs)
 ├── src/                # Source code (Do not edit unless necessary)
 └── ...

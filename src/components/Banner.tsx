@@ -64,7 +64,7 @@ export interface BannerProps {
    *
    * 操作按钮列表
    */
-  actions: BannerAction[];
+  actions?: BannerAction[];
 }
 
 /**
@@ -111,7 +111,7 @@ export const Banner: FC<BannerProps> = ({ header, content, footer, tags, actions
       </div>
 
       <div className="flex w-full flex-col gap-4 sm:flex-row lg:w-auto">
-        {actions.map(({ link, primary, label }) => (
+        {actions?.map(({ link, primary, label }) => (
           <a
             key={link}
             href={link}

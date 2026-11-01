@@ -57,11 +57,22 @@ export const Typewriter: FC<TypewriterProps> = ({
   maxDeleteTime = 1000,
 }) => {
   const [index, setIndex] = useState(0);
-  const [subIndex, setSubIndex] = useState(0);
+  // Start fully typed so the prerendered HTML contains the first title (SEO / no-JS / LCP),
+  // instead of an empty span. The effect below then animates from there.
+  const [subIndex, setSubIndex] = useState(() => texts[0]?.length ?? 0);
   const [reverse, setReverse] = useState(false);
 
   useEffect(() => {
-    if (subIndex === texts[index].length + 1 && !reverse) {
+    const currentText = texts[index];
+
+    // No titles configured: nothing to animate.
+    if (!currentText) {
+      return (): void => {
+        /* nothing to clean up */
+      };
+    }
+
+    if (subIndex === currentText.length + 1 && !reverse) {
       // 打字完成，等待 pause 后开始删除
       const timeout = setTimeout(() => {
         setReverse(true);
@@ -84,7 +95,7 @@ export const Typewriter: FC<TypewriterProps> = ({
       };
     }
 
-    const deleteInterval = Math.min(speed, maxDeleteTime / texts[index].length);
+    const deleteInterval = Math.min(speed, maxDeleteTime / currentText.length);
     const timeout = setTimeout(
       () => {
         setSubIndex((prev) => prev + (reverse ? -1 : 1));
@@ -97,5 +108,5 @@ export const Typewriter: FC<TypewriterProps> = ({
     };
   }, [subIndex, index, reverse, texts, speed, pause, maxDeleteTime]);
 
-  return <span className="typewriter-cursor">{texts[index].slice(0, subIndex)}</span>;
+  return <span className="typewriter-cursor">{texts[index]?.slice(0, subIndex) ?? ""}</span>;
 };

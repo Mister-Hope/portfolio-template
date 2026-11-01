@@ -1,3 +1,4 @@
+// oxlint-disable jsx-a11y/prefer-tag-over-role -- the card contains block-level content (image + heading + meta), which a <button> cannot legally wrap; the wrapper keeps role/tabIndex/keyboard handling.
 import { useCallback } from "react";
 import type { FC } from "react";
 
@@ -40,6 +41,20 @@ export interface GalleryItem {
    * 描述或故事 (支持 Markdown)
    */
   description?: string;
+  /**
+   * Intrinsic image width in pixels
+   *
+   * Set it together with `height` to reserve space and avoid layout shift.
+   *
+   * 图片原始宽度（像素）。与 `height` 一起设置可预留空间、避免布局抖动。
+   */
+  width?: number;
+  /**
+   * Intrinsic image height in pixels
+   *
+   * 图片原始高度（像素）。
+   */
+  height?: number;
 }
 
 export interface GalleryProps {
@@ -60,13 +75,25 @@ export const GalleryCard: FC<{
     onSelect(index);
   }, [index, onSelect]);
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent): void => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onSelect(index);
+      }
+    },
+    [index, onSelect],
+  );
+
   const hasMeta = Boolean(item.location) || Boolean(item.date);
 
   return (
-    <button
-      type="button"
+    <div
       className="group gallery-item"
       onClick={handleSelect}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
       aria-label={item.title}
     >
       <img
@@ -74,9 +101,11 @@ export const GalleryCard: FC<{
         alt={item.title}
         className="gallery-image"
         loading="lazy"
+        width={item.width}
+        height={item.height}
       />
       <div className="gallery-overlay">
-        <h4 className="gallery-title">{item.title}</h4>
+        <h3 className="gallery-title">{item.title}</h3>
         {hasMeta && (
           <p className="gallery-meta">
             {Boolean(item.location) && (
@@ -90,6 +119,6 @@ export const GalleryCard: FC<{
           </p>
         )}
       </div>
-    </button>
+    </div>
   );
 };
