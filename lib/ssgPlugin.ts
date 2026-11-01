@@ -5,7 +5,6 @@ import type { Plugin, ResolvedConfig } from "vite";
 import { build } from "vite";
 
 import type { Config } from "../src/types/index.js";
-import { loadConfig } from "./configLoader.js";
 import { escapeHtml } from "./escapeHtml.js";
 
 /**
@@ -263,10 +262,15 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
  *
  * 在客户端构建成功后构建 SSR bundle 并预渲染所有路由。
  *
- * @param root - Project root directory
  * @param viteConfig - Resolved Vite config
+ * @param config - Resolved user config
+ * @param serializedConfig - Config serialized for the client/SSR bundles
  */
-const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Promise<void> => {
+const handleCloseBundle = async (
+  viteConfig: ResolvedConfig,
+  config: Config,
+  serializedConfig: string,
+): Promise<void> => {
   if (viteConfig.build.ssr !== false) return;
 
   const { outDir } = viteConfig.build;
@@ -282,6 +286,12 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
     // file value. A mismatch here means the prerendered HTML and the client bundle disagree.
     base: viteConfig.base,
     mode: viteConfig.mode,
+    // Keep the SSR bundle in sync with the config serialized into the client bundle. The nested
+    // build re-evaluates `vite.config.ts`, so without this the two bundles could disagree when the
+    // config file has side effects (or simply has changed between the two evaluations).
+    define: {
+      __CONFIG__: serializedConfig,
+    },
     build: {
       ssr: "entry-server.tsx",
       outDir: serverOutDir,
@@ -297,19 +307,19 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
 
   console.log("Prerendering...");
 
-  await prerender(viteConfig, await loadConfig(root));
+  await prerender(viteConfig, config);
   console.log("SSG complete.");
 };
 
-export const ssgPlugin = (root: string): Plugin => {
+export const ssgPlugin = (config: Config, serializedConfig: string): Plugin => {
   let viteConfig: ResolvedConfig;
   let clientBuildSucceeded = false;
 
   return {
     name: "vite-plugin-ssg",
     apply: "build",
-    configResolved(config): void {
-      viteConfig = config;
+    configResolved(resolvedConfig): void {
+      viteConfig = resolvedConfig;
     },
     writeBundle(): void {
       if (viteConfig.build.ssr === false) clientBuildSucceeded = true;
@@ -319,7 +329,7 @@ export const ssgPlugin = (root: string): Plugin => {
       // original build error with an unrelated ENOENT on dist/index.html.
       if (!clientBuildSucceeded || viteConfig.build.ssr !== false) return;
 
-      await handleCloseBundle(root, viteConfig);
+      await handleCloseBundle(viteConfig, config, serializedConfig);
     },
   };
 };

@@ -88,6 +88,18 @@ const injectCustomCssImportPlugin = ({
 
 export default defineConfig(async () => {
   const config = await loadConfig(rootDir);
+  let serializedConfig: string;
+
+  try {
+    serializedConfig = JSON.stringify(config);
+  } catch (err) {
+    throw new Error(
+      `Failed to serialize the configuration for the client bundle. The config must only contain JSON-serializable values: ${String(
+        err,
+      )}`,
+      { cause: err },
+    );
+  }
 
   return {
     root: path.resolve(rootDir, "src"),
@@ -102,7 +114,7 @@ export default defineConfig(async () => {
     publicDir: path.resolve(rootDir, "public"),
 
     define: {
-      __CONFIG__: JSON.stringify(config),
+      __CONFIG__: serializedConfig,
     },
     server: {
       port: 3000,
@@ -112,7 +124,7 @@ export default defineConfig(async () => {
       react(),
       injectCustomCssImportPlugin(),
       tailwindcss(),
-      ssgPlugin(rootDir),
+      ssgPlugin(config, serializedConfig),
       {
         name: "inject-title-and-meta",
         transformIndexHtml(html: string): string {
