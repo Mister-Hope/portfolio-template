@@ -108,3 +108,7 @@ pnpm test
 ├── src/                # 源代码（除非必要，请勿编辑）
 └── ...
 ```
+
+## 📄 许可
+
+[MIT](./LICENSE) © [Mister-Hope](https://github.com/Mister-Hope)
