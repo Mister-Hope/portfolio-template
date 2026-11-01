@@ -8,7 +8,7 @@
 
 ## 特色
 
-- **零代码要求**：通过单个配置文件（`config.yml`、`config.json` 或 `config.ts`）管理所有内容。
+- **零代码要求**：通过单个配置文件（`config.yml`、`config.json`、`config.ts` 等）管理所有内容。
 - **高度可定制**：轻松进行自定义病添加章节
 - **快速且 SEO 友好**：基于 React 和 Vite 构建，支持静态站点生成（SSG），秒级构建与加载。（参见 [PageSpeed Insights](https://pagespeed.web.dev/analysis/https-cheng-shang-me/n71ps5slz1?form_factor=desktop)）
 - **多语言支持**：内置国际化支持。
@@ -21,6 +21,9 @@
 # 克隆你创建的仓库
 git clone https://github.com/your-username/your-repository.git
 cd your-repository
+
+# 安装依赖
+pnpm ci
 ```
 
 ### 2. 配置
@@ -39,7 +42,7 @@ cd your-repository
    # cp examples/config.example.js config.js
    ```
 
-2. 打开复制的配置文件（例如：`config.yml`）并开始添加你的信息！
+2. 打开复制的配置文件（例如：`config.yml`）并开始添加你的信息！仓库自带的 `lib/config.schema.json`（已在 `.vscode/settings.json` 中配置）可为 `config.json`、`config.yml`、`config.yaml` 提供校验与自动补全。
 
 关于如何配置每个部分的详细指南：
 
@@ -69,11 +72,20 @@ pnpm run build
 
 输出文件将位于 `dist/` 文件夹中，可随时部署到 Vercel、Netlify 或任意静态托管服务。
 
+运行构建集成测试（会构建四种示例配置并校验预渲染结果）：
+
+```bash
+pnpm test
+```
+
 > [!NOTE]
 > 模板默认假设站点部署在**域名根路径**。如果部署在子路径（例如 GitHub Pages 项目页
 > `https://<user>.github.io/<repository>/`），请把配置文件中的顶层 `base` 选项设为该子路径
 > （例如 `base: "/<repository>/"`）。它会作用于构建产物资源 URL、语言切换链接与配置中的图片路径。
 > 详见 [部署与 base 路径](./docs/zh.md#部署与-base-路径)。
+>
+> 若要生成 `canonical` / `hreflang` / Open Graph / Twitter 标签以及 `sitemap.xml` 与 `robots.txt`，
+> 还需把 `siteUrl` 设为站点的公开 URL。
 
 ## 🛠️ 技术栈（面向开发者）
 
@@ -87,8 +99,10 @@ pnpm run build
 ```text
 .
 ├── config.yml          # <--- 你的配置文件
+├── custom.css          # 可选的自定义样式（构建时自动注入）
 ├── docs/               # 详细文档
 ├── examples/           # 示例配置
+├── lib/                # 配置 Schema 与构建期加载器
 ├── public/             # 你的静态资源（图片、PDF）
 ├── src/                # 源代码（除非必要，请勿编辑）
 └── ...

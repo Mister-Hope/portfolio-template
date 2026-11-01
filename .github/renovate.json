@@ -11,7 +11,8 @@
   "packageRules": [
     {
       "automerge": true,
-      "matchDepTypes": ["devDependencies"]
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"]
     }
   ],
   "lockFileMaintenance": {

@@ -47,7 +47,7 @@ const externalLinkPlugin: PluginSimple = (md) => {
     if (hrefIndex >= 0 && token.attrs) {
       const [, href] = token.attrs[hrefIndex];
 
-      if (typeof href === "string" && /^https?:\/\//iu.test(href)) {
+      if (typeof href === "string" && /^(?:https?:)?\/\//iu.test(href)) {
         token.attrSet("target", "_blank");
         token.attrSet("rel", "noopener noreferrer");
       }

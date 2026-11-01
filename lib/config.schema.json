@@ -22,7 +22,7 @@
                 "type": "array",
                 "minItems": 1,
                 "maxItems": 2,
-                "prefixItems": [
+                "items": [
                   {
                     "type": "string",
                     "description": "Plugin package name / 插件包名"
@@ -46,6 +46,10 @@
     "$schema": {
       "type": "string",
       "description": "Editor-only JSON Schema reference, e.g. \"./lib/config.schema.json\".\n仅用于编辑器校验的 JSON Schema 引用，例如 \"./lib/config.schema.json\"。"
+    },
+    "siteUrl": {
+      "type": "string",
+      "description": "Public site URL used for canonical/hreflang/sitemap/Open Graph tags, e.g. \"https://example.com\". Include the deployment base path when the site is served from a sub-path (e.g. \"https://<user>.github.io/<repository>\"). Absolute URLs are only generated when this is set.\n站点公开 URL，用于 canonical/hreflang/sitemap/Open Graph 等绝对链接（例如 \"https://example.com\"）。部署在子路径时需包含 base 路径。未设置时不生成绝对链接。"
     },
     "locales": {
       "type": "object",
@@ -268,7 +272,6 @@
           "description": "Optional footer description\n可选页脚描述"
         }
       },
-      "required": ["copyright"],
       "description": "Footer configuration\n页脚配置",
       "additionalProperties": false
     },
@@ -570,6 +573,17 @@
               "items": {
                 "$ref": "#/definitions/TimelineItem"
               }
+            },
+            "ui": {
+              "type": "object",
+              "properties": {
+                "details": {
+                  "type": "string",
+                  "description": "Label for the detail link, overrides locale-level ui.details\n详情链接标签，覆盖 locale 级 ui.details"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Section-level UI overrides\n章节级 UI 覆盖"
             }
           },
           "required": ["type", "data"]
@@ -777,6 +791,14 @@
         "description": {
           "type": "string",
           "description": "Description or story (Markdown supported)\n描述或故事 (支持 Markdown)"
+        },
+        "width": {
+          "type": "number",
+          "description": "Intrinsic image width in pixels. Set it together with height to reserve space and avoid layout shift.\n图片原始宽度（像素）。与 height 一起设置可预留空间、避免布局抖动。"
+        },
+        "height": {
+          "type": "number",
+          "description": "Intrinsic image height in pixels. Set it together with width to reserve space and avoid layout shift.\n图片原始高度（像素）。与 width 一起设置可预留空间、避免布局抖动。"
         }
       },
       "required": ["url", "title"],

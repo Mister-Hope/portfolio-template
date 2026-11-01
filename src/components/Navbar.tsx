@@ -86,6 +86,8 @@ export const Navbar: FC<NavbarProps> = ({
       setScrolled(window.scrollY > 50);
     };
 
+    // Sync with the initial scroll position (page reload / deep link / back-forward restore).
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
 
     return (): void => {

@@ -2,10 +2,7 @@
   "extends": "@mr-hope/tsconfig/web.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["vite/client"],
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "types": ["vite/client"]
   },
   "include": ["**/*.js", "**/*.ts", "**/*.tsx"]
 }

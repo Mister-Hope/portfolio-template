@@ -7,6 +7,6 @@
     }
   ],
   "yaml.schemas": {
-    "./lib/config.schema.json": "config.yml"
+    "./lib/config.schema.json": ["config.yml", "config.yaml"]
   }
 }

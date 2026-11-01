@@ -155,6 +155,18 @@ export interface Config {
   base?: string;
 
   /**
+   * Public site URL used for absolute links (canonical, hreflang, sitemap, Open Graph).
+   *
+   * Include the deployment base path when the site is served from a sub-path, e.g.
+   * `"https://<user>.github.io/<repository>"`. Leave it empty to skip absolute URLs.
+   *
+   * 站点公开 URL，用于 canonical、hreflang、sitemap、Open Graph 等绝对链接。
+   *
+   * 站点部署在子路径时需包含 base 路径，例如 `"https://<user>.github.io/<repository>"`。不填则跳过绝对链接。
+   */
+  siteUrl?: string;
+
+  /**
    * Global configuration
    *
    * 全局配置

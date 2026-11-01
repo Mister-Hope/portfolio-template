@@ -24,4 +24,4 @@ jobs:
           require-lockfile: true
 
       - name: Run linter
-        run: pnpm run lint
+        run: pnpm run lint:check

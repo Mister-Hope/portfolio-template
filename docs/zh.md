@@ -17,9 +17,13 @@
   - 类型: `String` (可选)
   - 详情: 部署基础路径。站点部署在域名根路径（Netlify、Vercel、自定义域名等）时保持 `"/"`；部署到 GitHub Pages 项目页等子路径时设置为对应子路径（例如 `"/my-repository/"`）。详见 [部署与 base 路径](#部署与-base-路径)。
 
+- `siteUrl`:
+  - 类型: `String` (可选)
+  - 详情: 站点公开 URL（子路径部署时需包含 base 路径，例如 `"https://<user>.github.io/<repository>"`）。设置后会生成 `canonical`、`hreflang`、Open Graph/Twitter 标签以及 `sitemap.xml` 与 `robots.txt`。详见 [部署与 base 路径](#部署与-base-路径)。
+
 - `locales`:
   - 类型: `Record<string, LocaleConfig>`
-  - 详情: 多语言配置映射。键是路径前缀 (例如 `"/"`, `"/zh/"`)，值是 `LocaleConfig` 对象。
+  - 详情: 多语言配置映射。键是路径前缀 (例如 `"/"`, `"/zh/"`)，值是 `LocaleConfig` 对象。必须包含键为 `"/"` 的根语言配置。
 
 - `config`:
   - 类型: `GlobalConfig` (可选)
@@ -123,7 +127,7 @@
       - 详情: 联系方式章节的标签。
     - `details`:
       - 类型: 字符串 (String)
-      - 详情: 详情链接的标签。
+      - 详情: 详情链接的标签（可选）。
 
 ## 首屏区域 (`hero`)
 
@@ -161,7 +165,7 @@
         - 类型: 字符串 (String)
         - 详情: 媒体项目的显示名称。
       - `link`:
-        - 类型: 字符串 (String)
+        - 类型: 字符串 (String) (可选)
         - 详情: 媒体项目的 URL。
 
 ## 导航栏 (`navbar`)
@@ -191,16 +195,16 @@
     - 详情: 组件标识符 (例如 'profile', 'experience', 'cards')。
 
   - `id`:
-    - 类型: 字符串 (String)
+    - 类型: 字符串 (String) (可选)
     - 详情: 用于导航锚点的唯一 id。
 
   - `title`:
-    - 类型: 字符串 (String)
+    - 类型: 字符串 (String) (可选)
     - 详情: 页面上显示的章节标题。
 
   - `icon`:
     - 类型: 字符串 (String) (可选)
-    - 详情: 章节页眉的图标类名。
+    - 详情: 章节页眉的 Iconify / FontAwesome 图标名（例如 'user-tie' 或 'mdi:github'）。
 
   - `data`:
     - 类型: 任意 (Any)
@@ -254,7 +258,7 @@
     - 项目架构 (ExperienceItem):
       - `type`:
         - 类型: 字符串 (String)
-        - 详情: 经历类别 (内置 'study' | 'work' | 'volunteer'，或自定义)。
+        - 详情: 经历类别 (内置 'study' | 'work' | 'volunteer' | 'project' | 'vacation'，或自定义)。
       - `place`:
         - 类型: 字符串 (String)
         - 详情: 机构或公司名称。
@@ -327,6 +331,13 @@
         - 类型: 字符串 (String) (可选)
         - 详情: 要显示的链接标签。
 
+  - `ui`:
+    - 类型: 对象 (Object) (可选)
+    - 详情: 章节级 UI 覆盖。
+      - `details`:
+        - 类型: 字符串 (String) (可选)
+        - 详情: 详情链接的标签，覆盖 locale 级 `ui.details`。
+
 - `cards` (类型: `cards`):
   - 类型: 组件 (Component)
   - 详情: 项目或工作卡片的网格布局。
@@ -349,7 +360,7 @@
         - 类型: `Array<CardAction>` (可选)
         - 详情: 操作按钮
           - `text`:
-            - 类型: 字符串 (String)
+            - 类型: 字符串 (String) (可选)
             - 详情: 按钮标签。
           - `link`:
             - 类型: 字符串 (String) (可选)
@@ -378,6 +389,9 @@
         - `link`:
           - 类型: 字符串 (String) (可选)
           - 详情: 列表项的可选 URL。
+        - `icon`:
+          - 类型: 字符串 (String) (可选)
+          - 详情: 可选的图标名，用于替换该列表项的标记。
 
 - `gallery` (类型: `gallery`):
   - 类型: 组件 (Component)
@@ -400,10 +414,16 @@
       - `description`:
         - 类型: 字符串 (String) (可选)
         - 详情: 长篇故事 (支持 markdown)。
+      - `width`:
+        - 类型: 数字 (Number) (可选)
+        - 详情: 图片原始宽度（像素）。与 `height` 一起设置可预留空间、避免布局抖动。
+      - `height`:
+        - 类型: 数字 (Number) (可选)
+        - 详情: 图片原始高度（像素）。
 
 - `markdown` (类型: `markdown`):
   - 类型: 组件 (Component)
-  - 详情: 简单的 Markdown/HTML 内容块。
+  - 详情: 简单的 Markdown/HTML 内容块。原始 HTML 会原样渲染：请把配置文件视为可信内容。
 
   - `data`:
     - `content`:
@@ -420,7 +440,7 @@
   - 详情: 语言的页脚配置。
 
   - `copyright`:
-    - 类型: 字符串 (String)
+    - 类型: 字符串 (String) (可选)
     - 详情: 版权文本。使用 `$year` 动态插入当前年份。
   - `description`:
     - 类型: 字符串 (String) (可选)
@@ -468,3 +488,7 @@ base: /your-repository/
 
 `base` 必须是**以 `/` 开头和结尾的路径**（不能是完整 URL）。使用 `pnpm run build` 时也可以不改配置、直接从命令行传入：
 `pnpm run build --base /your-repository/`。
+
+另外请把 `siteUrl` 设为站点的公开 URL（子路径部署时包含 base 路径），构建会自动生成 canonical、hreflang、Open Graph/Twitter 标签以及 `sitemap.xml` 与 `robots.txt`。
+
+仓库自带 `lib/config.schema.json`，`.vscode/settings.json` 已将其映射到 `config.json`、`config.yml`、`config.yaml`，在 VS Code 中可获得校验与自动补全。

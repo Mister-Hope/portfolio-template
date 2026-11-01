@@ -106,7 +106,7 @@ export default defineConfig(async () => {
     },
     server: {
       port: 3000,
-      host: "0.0.0.0",
+      strictPort: true,
     },
     plugins: [
       react(),
@@ -151,10 +151,5 @@ export default defineConfig(async () => {
         },
       },
     ],
-    resolve: {
-      alias: {
-        "@": path.resolve(rootDir, "."),
-      },
-    },
   };
 });
