@@ -17,7 +17,7 @@ import { SectionWrapper } from "./components/SectionWrapper.js";
 import { Timeline } from "./components/Timeline.js";
 import { config, localePaths, locales } from "./config.js";
 import type { Section } from "./types/index.js";
-import { isSSR, getLocaleFromPath } from "./utils/index.js";
+import { isSSR, getLocaleFromPath, withBase } from "./utils/index.js";
 
 export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const [localePath, setLocalePath] = useState<string>(() => initialLocale ?? getLocaleFromPath());
@@ -32,8 +32,10 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
 
   // update link based on locale path
   useEffect(() => {
-    if (!isSSR && window.location.pathname !== localePath)
-      window.history.pushState(null, "", localePath);
+    const localeUrl = withBase(localePath);
+
+    if (!isSSR && window.location.pathname !== localeUrl)
+      window.history.pushState(null, "", localeUrl);
   }, [localePath]);
 
   // update title and meta description based on locale config

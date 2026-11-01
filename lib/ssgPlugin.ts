@@ -6,6 +6,7 @@ import { build } from "vite";
 
 import type { Config } from "../src/types/index.js";
 import { loadConfig } from "./configLoader.js";
+import { escapeHtml } from "./escapeHtml.js";
 
 const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Promise<void> => {
   if (viteConfig.build.ssr !== false) return;
@@ -18,6 +19,11 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
   await build({
     root: viteConfig.root,
     configFile: viteConfig.configFile,
+    // Inherit the *resolved* base and mode: the CLI may override them (e.g. `--base`), and the
+    // nested build re-evaluates `vite.config.ts`, which would otherwise fall back to the config
+    // file value. A mismatch here means the prerendered HTML and the client bundle disagree.
+    base: viteConfig.base,
+    mode: viteConfig.mode,
     build: {
       ssr: "entry-server.tsx",
       outDir: serverOutDir,
@@ -47,18 +53,25 @@ const handleCloseBundle = async (root: string, viteConfig: ResolvedConfig): Prom
   for (const url of routesToPrerender) {
     const appHtml = render(url, appConfig);
 
-    let html = template.replace(`<!--app-html-->`, appHtml);
+    // Use a function replacer: `appHtml` may contain `$&`/`$'`/`$\`` sequences (ordinary
+    // Markdown code can), which would otherwise be interpreted as replacement patterns.
+    let html = template.replace("<!--app-html-->", () => appHtml);
 
     const title = appConfig.locales[url]?.title ?? "Portfolio";
     const description = appConfig.locales[url].description ?? "Portfolio Template";
     const { lang } = appConfig.locales[url];
 
+    const metaDescription = `<meta name="description" content="${escapeHtml(description)}" />`;
+
     html = html
+      // Drop the default-locale description injected by the Vite plugin: every page must
+      // contain exactly one `<meta name="description">`, localized for its own route.
+      .replace(/<meta name="description"[^>]*\/>\s*/u, "")
       .replace(
         /<title>(?:.*?)<\/title>/u,
-        `<title>${title}</title>\n    <meta name="description" content="${description}" />`,
+        () => `<title>${escapeHtml(title)}</title>\n    ${metaDescription}`,
       )
-      .replace(/<html lang="(?:.*?)">/u, `<html lang="${lang}">`);
+      .replace(/<html lang="(?:.*?)">/u, () => `<html lang="${escapeHtml(lang)}">`);
 
     const filePath =
       url === "/"

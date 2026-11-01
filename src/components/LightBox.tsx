@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import type { FC } from "react";
 
+import { resolveAssetUrl } from "../utils/index.js";
 import type { GalleryItem } from "./GalleryCard.js";
 import { Icon } from "./Icon.js";
 
@@ -78,7 +79,12 @@ export const LightBox: FC<{
           <Icon icon="xmark" className="text-3xl" />
         </button>
         <div className="lightbox-image-wrapper">
-          <img src={item.url} alt={item.title} className="lightbox-image" loading="lazy" />
+          <img
+            src={resolveAssetUrl(item.url)}
+            alt={item.title}
+            className="lightbox-image"
+            loading="lazy"
+          />
         </div>
         <div
           className="lightbox-content"

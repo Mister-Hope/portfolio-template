@@ -13,6 +13,10 @@ Supported configuration formats: `config.ts`, `config.js`, `config.json`, `confi
 
 The configuration file exports a `Config` object by default, containing the following fields:
 
+- `base`:
+  - Type: String (optional)
+  - Details: Deployment base path. Keep `"/"` when the site is served from a domain root (e.g. Netlify, Vercel or a custom domain). Set it to the sub-path (e.g. `"/my-repository/"`) when deploying to a GitHub Pages project site or any other non-root path. See [Deployment and base path](#deployment-and-base-path).
+
 - `locales`:
   - Type: `Record<string, LocaleConfig>`
   - Details: Multi-language configuration map. Keys are path prefixes (e.g., `"/"`, `"/zh/"`), and values are `LocaleConfig` object
@@ -445,3 +449,21 @@ Create a `custom.css` file in the project root directory. It will be **automatic
   font-size: 2rem;
 }
 ```
+
+## Deployment and base path
+
+By default the template assumes the site is served from the **root of a domain** (e.g. `https://example.com/`), which is the case for Netlify, Vercel and custom domains. In that case leave `base` as `"/"`.
+
+Some hosts serve the site from a **sub-path** instead — most commonly a GitHub Pages project site at `https://<user>.github.io/<repository>/`. In that case set the top-level `base` option in your config file to that path:
+
+```yaml
+base: /your-repository/
+```
+
+The value is passed to Vite as the build base, and the template uses it for:
+
+- the built JS/CSS/`public/` asset URLs,
+- language links and the client-side language detection (`/zh/` becomes `/your-repository/zh/`),
+- image paths coming from the config (e.g. `avatar: "/avatar.avif"`).
+
+`base` must be a path starting and ending with `/` (not a full URL). When using the `pnpm run build` script, it can also be provided from the CLI without editing the config: `pnpm run build --base /your-repository/`.

@@ -63,6 +63,9 @@ Open <http://localhost:3000> to see your changes instantly.
 
 ## 📖 Documentation
 
+- [English configuration guide](./docs/en.md)
+- [中文配置指南](./docs/zh.md)
+
 ## 📦 Build & Deploy
 
 To build for production:
@@ -71,7 +74,14 @@ To build for production:
 pnpm run build
 ```
 
-The output will be in the `dist/` folder, ready to be deployed to GitHub Pages, Vercel, or Netlify.
+The output will be in the `dist/` folder, ready to deploy to Vercel, Netlify or any static host.
+
+> [!NOTE]
+> This template assumes the site is served from the **domain root**. If you deploy under a sub-path
+> (for example a GitHub Pages project site at `https://<user>.github.io/<repository>/`), set the
+> top-level `base` option in your config file to that path (e.g. `base: "/<repository>/"`). It is
+> applied to built asset URLs, language links and config image paths. See
+> [Deployment and base path](./docs/en.md#deployment-and-base-path).
 
 ## 🛠️ Tech Stack (For Developers)
 

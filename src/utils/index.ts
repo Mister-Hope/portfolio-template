@@ -1,3 +1,4 @@
+export * from "./base.js";
 export * from "./experience.js";
 export * from "./locale.js";
 export * from "./isCJKLocale.js";

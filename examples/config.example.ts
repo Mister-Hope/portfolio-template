@@ -4,8 +4,8 @@ import {
   defineHeroConfig,
   defineNavbarConfig,
   defineSections,
-} from "../src/helper.js";
-import type { LocaleConfig } from "../src/types/index.js";
+} from "#helper";
+import type { LocaleConfig } from "#types";
 
 const enHero = defineHeroConfig({
   name: "Mister-Hope",
@@ -659,6 +659,10 @@ export const zhLocale: LocaleConfig = {
 };
 
 export default defineConfig({
+  // Deployment base path. Keep "/" when the site is served from a domain root
+  // (e.g. Netlify/Vercel). For a sub-path such as a GitHub Pages project site
+  // (https://<user>.github.io/<repository>/), set it to "/<repository>/".
+  base: "/",
   locales: {
     "/": enLocale,
     "/zh/": zhLocale,

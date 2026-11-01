@@ -39,15 +39,23 @@
       },
       "additionalProperties": false
     },
+    "base": {
+      "type": "string",
+      "description": "Deployment base path. Keep \"/\" when the site is served from a domain root. Set it to the sub-path (e.g. \"/my-repository/\") when deploying to GitHub Pages project sites or any non-root path.\n部署基础路径。站点部署在域名根路径时保持 \"/\"；部署到 GitHub Pages 项目页等子路径时设置为该子路径（例如 \"/my-repository/\"）。"
+    },
+    "$schema": {
+      "type": "string",
+      "description": "Editor-only JSON Schema reference, e.g. \"./lib/config.schema.json\".\n仅用于编辑器校验的 JSON Schema 引用，例如 \"./lib/config.schema.json\"。"
+    },
     "locales": {
       "type": "object",
       "additionalProperties": {
         "$ref": "#/definitions/LocaleConfig"
       },
       "description": "Multi-language configuration map. Keys are path prefixes (e.g., \"/\", \"/zh/\")\n多语言配置映射。键是路径前缀 (例如 \"/\", \"/zh/\")"
-    },
-    "additionalProperties": false
+    }
   },
+  "additionalProperties": false,
   "required": ["locales"],
   "definitions": {
     "AdaptiveImage": {
