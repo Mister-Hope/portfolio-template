@@ -17,7 +17,12 @@ import { SectionWrapper } from "./components/SectionWrapper.js";
 import { Timeline } from "./components/Timeline.js";
 import { config, localePaths, locales } from "./config.js";
 import type { Section } from "./types/index.js";
-import { isSSR, getLocaleFromPath, withBase } from "./utils/index.js";
+import { isSSR, getLocaleFromPath, getStorage, setStorage, withBase } from "./utils/index.js";
+
+const buildTimelineUi = (
+  sectionUi?: { details?: string },
+  localeUi?: { details?: string },
+): { details?: string } => ({ details: sectionUi?.details ?? localeUi?.details });
 
 export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const [localePath, setLocalePath] = useState<string>(() => initialLocale ?? getLocaleFromPath());
@@ -26,7 +31,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const [theme, setTheme] = useState<"light" | "dark">(() =>
     isSSR
       ? "light"
-      : ((localStorage.getItem("theme") as "light" | "dark" | undefined) ??
+      : ((getStorage("theme") as "light" | "dark" | undefined) ??
         (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")),
   );
 
@@ -68,7 +73,6 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
 
   useEffect(() => {
     window.document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
   }, [theme]);
 
   const toggleTheme = useCallback(
@@ -78,8 +82,13 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
         document.startViewTransition &&
         !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+      const nextTheme = theme === "light" ? "dark" : "light";
+
+      // Only persist an explicit user choice: the initial theme follows the OS preference.
+      setStorage("theme", nextTheme);
+
       if (!isAppearanceTransition) {
-        setTheme((prev) => (prev === "light" ? "dark" : "light"));
+        setTheme(nextTheme);
 
         return;
       }
@@ -95,7 +104,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
 
       const transition = document.startViewTransition(() => {
         flushSync(() => {
-          setTheme(isDark ? "dark" : "light");
+          setTheme(nextTheme);
         });
 
         // Manually toggle class to ensure it's updated for the transition snapshot
@@ -126,8 +135,11 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
   const handleLocaleChange = useCallback((): void => {
     const currentIndex = localePaths.indexOf(localePath);
     const nextIndex = (currentIndex + 1) % localePaths.length;
+    const nextLocale = localePaths[nextIndex];
 
-    setLocalePath(localePaths[nextIndex]);
+    // Remember an explicit language choice so the root auto-redirect can honor it.
+    setStorage("locale", nextLocale);
+    setLocalePath(nextLocale);
   }, [localePath]);
 
   const nextLocale = localePaths[(localePaths.indexOf(localePath) + 1) % localePaths.length];
@@ -158,7 +170,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
       }
 
       case "timeline": {
-        return <Timeline items={section.data} ui={section.ui} />;
+        return <Timeline items={section.data} ui={buildTimelineUi(section.ui, localeConfig.ui)} />;
       }
 
       case "cards": {

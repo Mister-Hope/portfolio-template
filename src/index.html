@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio</title>
     <script>
-      const theme = localStorage.getItem("theme");
+      let theme = null;
+      try {
+        theme = localStorage.getItem("theme");
+      } catch {
+        // Storage may be unavailable (private mode / blocked cookies): fall back to OS preference.
+      }
       const isDark =
         theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
       if (isDark) document.documentElement.classList.add("dark");

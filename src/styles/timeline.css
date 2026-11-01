@@ -30,8 +30,4 @@
   .timeline-link {
     @apply inline-flex items-center gap-2 rounded-2xl bg-slate-50 px-4 py-2 text-xs font-bold tracking-widest text-slate-400 uppercase shadow-sm transition-all hover:bg-primary-600 hover:text-white active:scale-95 dark:bg-slate-800 dark:text-slate-500 dark:hover:bg-primary-600 dark:hover:text-white;
   }
-
-  .timeline-link-icon {
-    @apply text-slate-400 transition-colors hover:text-primary-600 dark:text-slate-500 dark:hover:text-primary-400;
-  }
 }

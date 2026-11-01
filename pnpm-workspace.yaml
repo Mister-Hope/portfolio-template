@@ -1,5 +1,8 @@
 virtualStoreType: global
 
+# Supply-chain cooldown: do not install packages published less than a day ago.
+minimumReleaseAge: 1440
+
 minimumReleaseAgeExclude:
   - "@mdit/*"
   - "@mr-hope/*"

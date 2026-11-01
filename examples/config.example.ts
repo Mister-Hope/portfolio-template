@@ -663,6 +663,9 @@ export default defineConfig({
   // (e.g. Netlify/Vercel). For a sub-path such as a GitHub Pages project site
   // (https://<user>.github.io/<repository>/), set it to "/<repository>/".
   base: "/",
+  // Public site URL used for canonical/hreflang/sitemap/Open Graph tags.
+  // Set it to your deployed URL, e.g. "https://example.com" (include the base path for sub-path deploys).
+  // siteUrl: "https://example.com",
   locales: {
     "/": enLocale,
     "/zh/": zhLocale,

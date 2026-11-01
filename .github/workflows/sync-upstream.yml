@@ -164,7 +164,7 @@ jobs:
         run: pnpm install --lockfile-only
 
       - name: Format
-        run: pnpm dlx oxfmt
+        run: pnpm dlx oxfmt@0.75.0
 
       - name: Commit changes
         id: commit

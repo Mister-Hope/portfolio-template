@@ -1,4 +1,5 @@
 import { Icon as Iconify } from "@iconify/react";
+import { useMemo } from "react";
 import type { FC, HTMLAttributes } from "react";
 
 import { resolveAssetUrl } from "../utils/index.js";
@@ -30,6 +31,19 @@ const resolveIcon = (icon: string): string => {
  * Supports Iconify icons and image URLs.
  */
 export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
+  const iconStyle = useMemo(
+    () => ({
+      display: "inline-flex",
+      width: "1em",
+      height: "1em",
+      alignItems: "center",
+      justifyContent: "center",
+      verticalAlign: "-0.125em",
+      ...style,
+    }),
+    [style],
+  );
+
   // Check for image URL
   if (icon.startsWith("/") || icon.startsWith("http")) {
     return (
@@ -45,13 +59,18 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
     );
   }
 
+  // @iconify/react renders an empty <span> until the icon data is loaded from the Iconify API.
+  // That placeholder has no size, which causes layout shift when icons appear. Reserve the em-box
+  // on a wrapper so the prerendered HTML and the first client paint already occupy the final size;
+  // `1em` scales with the font-size applied through `className`.
   return (
-    <Iconify
-      icon={resolveIcon(icon)}
+    <span
       className={className}
-      style={style}
-      // oxlint-disable-next-line react/jsx-props-no-spreading, typescript/no-explicit-any
-      {...(props as any)}
-    />
+      style={iconStyle}
+      // oxlint-disable-next-line react/jsx-props-no-spreading
+      {...props}
+    >
+      <Iconify icon={resolveIcon(icon)} width="1em" height="1em" />
+    </span>
   );
 };

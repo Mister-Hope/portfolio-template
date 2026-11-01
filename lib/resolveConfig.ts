@@ -84,6 +84,9 @@ const processSection = (section: Section, renderMarkdown: RenderMarkdown): Secti
     }
 
     case "gallery": {
+      result.data = result.data.map((item) =>
+        item.description ? { ...item, description: renderMarkdown(item.description) } : item,
+      );
       break;
     }
 

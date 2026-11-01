@@ -80,7 +80,7 @@ When source modification is necessary, follow the **minimalism principle**:
 
 ### 3. Style Customization
 
-- **Step 1**: Check if config supports it (e.g., `experienceStyles`)
+- **Step 1**: Check if config supports it (e.g., `experienceTypes`)
 - **Step 2**: If not, suggest creating or editing `custom.css` in the project root
 - **Step 3**: Only modify component code as a last resort
 
@@ -100,6 +100,7 @@ This project uses **pnpm** as its package manager (`pnpm-lock.yaml` is the lockf
 - Dev server: `pnpm run dev`
 - Production build: `pnpm run build`
 - Lint + format: `pnpm run lint`
+- Run tests: `pnpm test`
 
 ---
 
