@@ -93,6 +93,27 @@ pnpm test
 > set `siteUrl` to the public URL of the deployed site. The build writes a base-aware `404.html`
 > automatically, and `favicon`/`ogImage` can be overridden in the config.
 
+## 🔄 Staying up to Date
+
+Your repository was created from this template, so it has its own squashed history and `git merge`
+cannot bring in template updates. Instead, `.github/workflows/sync-upstream.yml` runs every week and
+opens a pull request that replays **only the changes this template made since your last sync**:
+
+- Your own files (`config.*`, `custom.css`, `public/`, `README*.md`, `LICENSE`, `AGENTS.md`, …) are
+  never written by the sync; they only show up in the PR body for reference.
+- Every other file is three-way merged. Your edits survive unless they touch the exact same lines the
+  template changed — those files keep **your** version and are listed under "Kept your version".
+- `.github/workflows/` cannot be updated by GitHub Actions, so changes there are reported only; copy
+  them by hand if you want them.
+- The last synced template commit is stored in `.github/sync-state.json`. Merge that file together
+  with the PR so the next run only replays what is new.
+
+You can run the same sync locally at any time:
+
+```bash
+node .github/scripts/sync-upstream.mjs --dry-run
+```
+
 ## 🛠️ Tech Stack (For Developers)
 
 - React 19 + Vite

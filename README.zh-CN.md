@@ -88,6 +88,24 @@ pnpm test
 > 还需把 `siteUrl` 设为站点的公开 URL。构建会自动生成 base-aware 的 `404.html`，
 > 也可在配置中覆盖 `favicon`/`ogImage`。
 
+## 🔄 同步上游更新
+
+你的仓库由本模板创建，拥有独立的压缩历史，`git merge` 无法直接合入模板更新。因此
+`.github/workflows/sync-upstream.yml` 每周运行一次，开一个 PR，**只重放模板自你上次同步以来的改动**：
+
+- 属于你的文件（`config.*`、`custom.css`、`public/`、`README*.md`、`LICENSE`、`AGENTS.md` 等）
+  同步时绝不会被写入，只会出现在 PR 说明里供参考。
+- 其余文件做三方合并：只要你没有改动模板改到的同一批行，你的修改就会保留；真正冲突的文件保留
+  **你的版本**，并列在 "Kept your version" 中。
+- `.github/workflows/` 无法由 GitHub Actions 更新，相关改动只会被报告，需要时请手动复制。
+- 上次同步到的模板提交记录在 `.github/sync-state.json`，请连同 PR 一起合并，这样下次只重放新增改动。
+
+也可以随时在本地执行同样的同步：
+
+```bash
+node .github/scripts/sync-upstream.mjs --dry-run
+```
+
 ## 🛠️ 技术栈（面向开发者）
 
 - React 19 + Vite

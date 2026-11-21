@@ -4,10 +4,24 @@ on:
   schedule:
     - cron: "0 0 * * 0"
   workflow_dispatch:
+    inputs:
+      base_commit:
+        description: "Upstream commit to sync from (leave empty to detect it automatically)"
+        required: false
+        type: string
+      depth:
+        description: "How many upstream commits to scan when detecting the base commit"
+        required: false
+        default: "300"
+        type: string
 
 permissions:
   contents: write
   pull-requests: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
 
 jobs:
   sync:
@@ -32,142 +46,37 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Save user files
-        run: |
-          mkdir -p /tmp/user-files
-
-          # Save config files if they exist
-          for f in config.ts config.js config.json config.yml config.yaml; do
-            [ -f "$f" ] && cp "$f" /tmp/user-files/ || true
-          done
-
-          # Save custom.css if it exists (optional)
-          [ -f "custom.css" ] && cp "custom.css" /tmp/user-files/ || true
-
-          # Save public folder
-          [ -d "public" ] && cp -r "public" /tmp/user-files/ || true
-
-          # Save README.md and README-*.md / README.*.md
-          # Also record the exact list of localized readme files, so we don't
-          # resurrect upstream readme files the user intentionally deleted.
-          [ -f "README.md" ] && cp "README.md" /tmp/user-files/ || true
-          {
-            ls README-*.md 2>/dev/null || true
-            ls README.*.md 2>/dev/null || true
-          } > /tmp/user-files/readme-list.txt
-          if [ -s "/tmp/user-files/readme-list.txt" ]; then
-            while IFS= read -r f; do
-              [ -n "$f" ] && cp "$f" /tmp/user-files/
-            done < /tmp/user-files/readme-list.txt
-          fi
-
-          # Save package.json name, description, version, author, repository, and extra deps
-          node -e "
-            const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            const meta = {};
-            if (pkg.name !== undefined) meta.name = pkg.name;
-            if (pkg.description !== undefined) meta.description = pkg.description;
-            if (pkg.version !== undefined) meta.version = pkg.version;
-            if (pkg.author !== undefined) meta.author = pkg.author;
-            if (pkg.repository !== undefined) meta.repository = pkg.repository;
-            if (pkg.dependencies !== undefined) meta.dependencies = pkg.dependencies;
-            if (pkg.devDependencies !== undefined) meta.devDependencies = pkg.devDependencies;
-            fs.writeFileSync('/tmp/user-files/pkg-meta.json', JSON.stringify(meta, null, 2));
-          "
-
-          # Record whether the examples folder exists
-          [ -d "examples" ] && echo "true" > /tmp/user-files/has-examples || echo "false" > /tmp/user-files/has-examples
-
-      - name: Fetch upstream
-        run: |
           git remote add upstream https://github.com/Mister-Hope/portfolio-template.git
-          git fetch upstream main
+          git fetch --no-tags upstream main
 
-      - name: Reset sync-upstream branch to upstream main
+      - name: Create sync branch
+        run: git checkout -B sync-upstream
+
+      - name: Sync template changes
+        id: sync
+        env:
+          BASE_COMMIT: ${{ inputs.base_commit }}
+          DEPTH: ${{ inputs.depth }}
         run: |
-          # Branch from origin/main so sync-upstream shares history with main.
-          # Then replace the entire tree with upstream/main's content, which
-          # makes the resulting commit a valid PR target against main.
-          git checkout -B sync-upstream origin/main
-          git read-tree -u --reset upstream/main
+          args=(
+            --repo "$GITHUB_WORKSPACE"
+            --upstream upstream/main
+            --report "$RUNNER_TEMP/sync-report.md"
+            --summary "$RUNNER_TEMP/sync-summary.json"
+          )
 
-          # Restore the user's .github/workflows/ so the push does not require
-          # the `workflows` permission (GitHub Apps cannot update workflow files
-          # without it). Users must sync workflow files manually.
-          git checkout origin/main -- .github/workflows/ 2>/dev/null || true
+          [ -n "$BASE_COMMIT" ] && args+=(--base "$BASE_COMMIT")
+          [ -n "$DEPTH" ] && args+=(--depth "$DEPTH")
 
-      - name: Remove examples if user had deleted it
-        run: |
-          if [ "$(cat /tmp/user-files/has-examples)" = "false" ]; then
-            rm -rf examples
-          fi
-
-      - name: Restore user files
-        run: |
-          # Restore config files
-          for f in config.ts config.js config.json config.yml config.yaml; do
-            [ -f "/tmp/user-files/$f" ] && cp "/tmp/user-files/$f" . || true
-          done
-
-          # Restore custom.css
-          [ -f "/tmp/user-files/custom.css" ] && cp "/tmp/user-files/custom.css" . || true
-
-          # Restore public folder
-          if [ -d "/tmp/user-files/public" ]; then
-            rm -rf public
-            cp -r "/tmp/user-files/public" .
-          fi
-
-          # Restore README files
-          # Only restore localized readme files the user had; don't bring back
-          # upstream readme files the user intentionally deleted.
-          rm -f README.md README-*.md README.*.md
-          [ -f "/tmp/user-files/README.md" ] && cp "/tmp/user-files/README.md" . || true
-          if [ -s "/tmp/user-files/readme-list.txt" ]; then
-            while IFS= read -r f; do
-              [ -n "$f" ] && cp "/tmp/user-files/$f" . || true
-            done < /tmp/user-files/readme-list.txt
-          fi
-
-          # Merge package.json name, description, version, author, repository, and extra deps back
-          node -e "
-            const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            const meta = JSON.parse(fs.readFileSync('/tmp/user-files/pkg-meta.json', 'utf8'));
-            if (meta.name !== undefined) pkg.name = meta.name;
-            if (meta.description !== undefined) pkg.description = meta.description;
-            if (meta.version !== undefined) pkg.version = meta.version;
-            if (meta.author !== undefined) pkg.author = meta.author;
-            if (meta.repository !== undefined) pkg.repository = meta.repository;
-            // Preserve user's extra dependencies that don't exist in upstream
-            if (meta.dependencies) {
-              pkg.dependencies = pkg.dependencies || {};
-              for (const [key, value] of Object.entries(meta.dependencies)) {
-                if (!(key in pkg.dependencies)) {
-                  pkg.dependencies[key] = value;
-                }
-              }
-            }
-            if (meta.devDependencies) {
-              pkg.devDependencies = pkg.devDependencies || {};
-              for (const [key, value] of Object.entries(meta.devDependencies)) {
-                if (!(key in pkg.devDependencies)) {
-                  pkg.devDependencies[key] = value;
-                }
-              }
-            }
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-          "
+          node .github/scripts/sync-upstream.mjs "${args[@]}"
 
       - name: Update lockfile
+        if: steps.sync.outputs.package_json_changed == 'true'
         run: pnpm install --lockfile-only
-
-      - name: Format
-        run: pnpm dlx oxfmt@0.75.0
 
       - name: Commit changes
         id: commit
+        if: steps.sync.outputs.changed == 'true'
         run: |
           git add -A
           if git diff --cached --quiet; then
@@ -182,45 +91,39 @@ jobs:
         if: steps.commit.outputs.changed == 'true'
         run: git push origin sync-upstream --force
 
-      - name: Create Pull Request
+      - name: Create or update Pull Request
         if: steps.commit.outputs.changed == 'true'
         uses: actions/github-script@v9
         with:
           script: |
+            const fs = require('node:fs')
+
+            const body = fs.readFileSync(`${process.env.RUNNER_TEMP}/sync-report.md`, 'utf8')
+            const title = 'chore: sync with upstream Mister-Hope/portfolio-template'
+            const { owner, repo } = context.repo
+
             const { data: prs } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.repo.owner}:sync-upstream`,
+              owner,
+              repo,
+              head: `${owner}:sync-upstream`,
               base: 'main',
               state: 'open',
-            });
+            })
 
-            if (prs.length === 0) {
+            if (prs.length > 0) {
+              await github.rest.pulls.update({ owner, repo, pull_number: prs[0].number, body })
+              core.info(`Updated pull request #${prs[0].number}`)
+            } else {
               try {
-                await github.rest.pulls.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: 'chore: sync with upstream Mister-Hope/portfolio-template',
+                const { data: pr } = await github.rest.pulls.create({
+                  owner,
+                  repo,
+                  title,
                   head: 'sync-upstream',
                   base: 'main',
-                  body: [
-                    'This PR syncs the latest changes from [Mister-Hope/portfolio-template](https://github.com/Mister-Hope/portfolio-template) while preserving your customizations.',
-                    '',
-                    '**Preserved files:**',
-                    '- Config files (`config.ts` / `config.js` / `config.json` / `config.yml` / `config.yaml`)',
-                    '- `custom.css` (if present)',
-                    '- `public/` folder',
-                    '- `README.md` and localized `README-*.md` / `README.*.md`',
-                    '- `package.json` `name`, `description`, `version`, `author`, `repository`, and extra dependencies',
-                    '- `.github/workflows/` (see note below)',
-                    '',
-                    '> [!NOTE]',
-                    '> **Workflow files are not updated automatically.**',
-                    '> GitHub Apps cannot push changes to `.github/workflows/` without the `workflows` permission.',
-                    '> Please manually review and apply any upstream workflow changes by comparing:',
-                    '> <https://github.com/Mister-Hope/portfolio-template/tree/main/.github/workflows>',
-                  ].join('\n'),
-                });
+                  body,
+                })
+                core.info(`Created pull request #${pr.number}`)
               } catch (err) {
                 if (err.status === 403) {
                   core.error(
@@ -228,11 +131,11 @@ jobs:
                     'To fix this, go to your repository Settings → Actions → General → Workflow permissions\n' +
                     'and enable "Allow GitHub Actions to create and approve pull requests".\n' +
                     'The sync-upstream branch has been pushed and you can open the PR manually:\n' +
-                    `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/main...sync-upstream`
-                  );
-                  core.setFailed('PR creation blocked by repository settings. See the error message above for instructions.');
+                    `https://github.com/${owner}/${repo}/compare/main...sync-upstream`
+                  )
+                  core.setFailed('PR creation blocked by repository settings. See the error message above for instructions.')
                 } else {
-                  throw err;
+                  throw err
                 }
               }
             }
