@@ -46,7 +46,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git remote add upstream https://github.com/Mister-Hope/portfolio-template.git
+          # `remote add` fails when the repository already defines an `upstream`
+          # remote (e.g. the owner added one by hand), so fall back to updating it.
+          git remote add upstream https://github.com/Mister-Hope/portfolio-template.git 2>/dev/null ||
+            git remote set-url upstream https://github.com/Mister-Hope/portfolio-template.git
           git fetch --no-tags upstream main
 
       - name: Create sync branch
