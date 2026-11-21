@@ -618,6 +618,33 @@ describe("upstream sync", () => {
     expect(fs.readFileSync(path.join(outside, "en.md"), "utf8")).toBe("v1\n");
   });
 
+  it("does not report an upstream addition that already exists with the same content", () => {
+    const fixture = createFixture({
+      initial: { "src/lib.ts": "v1\n" },
+      local: { "docs/new.md": "same\n" },
+      upstream: { "docs/new.md": "same\n", "src/lib.ts": "v2\n" },
+    });
+
+    const { summary } = fixture.run();
+
+    expect(summary.updated).toStrictEqual(["src/lib.ts"]);
+    expect(fixture.status()).not.toContain("docs/new.md");
+  });
+
+  it("keeps a local executable bit when upstream only changes the content", () => {
+    const fixture = createFixture({
+      initial: { "scripts/run.sh": "#!/bin/sh\necho v1\n" },
+      upstream: { "scripts/run.sh": "#!/bin/sh\necho v2\n" },
+    });
+    const script = path.join(fixture.fork, "scripts", "run.sh");
+
+    fs.chmodSync(script, 0o755);
+    fixture.run();
+
+    expect(() => fs.accessSync(script, fs.constants.X_OK)).not.toThrow();
+    expect(fs.readFileSync(script, "utf8")).toContain("v2");
+  });
+
   it("fails with a helpful message when upstream is missing", () => {
     const fixture = createFixture({
       initial: { "src/app.ts": "one\n" },

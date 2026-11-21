@@ -348,27 +348,50 @@ const readWorktreeFile = (repo, relativePath) => {
   }
 };
 
-const writeWorktreeFile = (repo, relativePath, data, mode) => {
+const modeTarget = (mode) => (mode === "100755" ? 0o755 : mode === "100644" ? 0o644 : null);
+
+const isExecutable = (fullPath) => {
+  try {
+    fs.accessSync(fullPath, fs.constants.X_OK);
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// Only the entry's own mode change may touch the worktree mode: rewriting the
+// content of a file the user made executable must not silently revert it.
+const modeChanges = (entry) => entry.oldMode == null || entry.oldMode !== entry.newMode;
+
+const writeWorktreeFile = (repo, relativePath, data, mode = null) => {
   const fullPath = resolveInRepo(repo, relativePath);
 
   fs.mkdirSync(path.dirname(fullPath), { recursive: true });
   fs.writeFileSync(fullPath, data);
 
-  if (mode === "100755") fs.chmodSync(fullPath, 0o755);
-  else if (mode === "100644") fs.chmodSync(fullPath, 0o644);
+  const target = mode == null ? null : modeTarget(mode);
+
+  if (target != null && isExecutable(fullPath) !== (target === 0o755))
+    fs.chmodSync(fullPath, target);
 };
 
 // A chmod-only upstream commit changes nothing but the mode, and `git merge-file`
-// never sees it, so the worktree has to be updated on its own.
+// never sees it, so the worktree has to be updated on its own. Comparing the
+// current mode (not the recorded one) keeps the report honest when the file is
+// already in the state upstream asks for.
 const applyModeChange = (repo, relativePath, entry, dryRun) => {
-  if (entry.oldMode === entry.newMode) return false;
-  if (entry.newMode !== "100644" && entry.newMode !== "100755") return false;
+  if (!modeChanges(entry)) return false;
 
-  if (!dryRun) {
-    const fullPath = resolveInRepo(repo, relativePath);
+  const target = modeTarget(entry.newMode);
 
-    fs.chmodSync(fullPath, entry.newMode === "100755" ? 0o755 : 0o644);
-  }
+  if (target == null) return false;
+
+  const fullPath = resolveInRepo(repo, relativePath);
+
+  if (isExecutable(fullPath) === (target === 0o755)) return false;
+
+  if (!dryRun) fs.chmodSync(fullPath, target);
 
   return true;
 };
@@ -668,7 +691,8 @@ const syncEntry = (context, entry) => {
   }
 
   if (base != null && ours.data.equals(base)) {
-    if (!dryRun) writeWorktreeFile(repo, relativePath, theirs, entry.newMode);
+    if (!dryRun)
+      writeWorktreeFile(repo, relativePath, theirs, modeChanges(entry) ? entry.newMode : null);
     report.updated.push(relativePath);
 
     return;
@@ -711,7 +735,8 @@ const syncEntry = (context, entry) => {
     return;
   }
 
-  if (!dryRun) writeWorktreeFile(repo, relativePath, merge.merged, entry.newMode);
+  if (!dryRun)
+    writeWorktreeFile(repo, relativePath, merge.merged, modeChanges(entry) ? entry.newMode : null);
   report.merged.push({ path: relativePath, note: "changes from both sides combined" });
 };
 
@@ -736,11 +761,9 @@ const shortHash = (sha) => (typeof sha === "string" ? sha.slice(0, 7) : String(s
 const TICK = String.fromCodePoint(96);
 
 // Paths come from the template, but the report is the user-facing artifact:
-// backticks, pipes and newlines would break the code span or the table.
+// backticks and newlines would break the code span.
 const codeSpan = (value) => {
-  const text = String(value)
-    .replaceAll(/\s+/gu, " ")
-    .replaceAll("|", String.raw`\|`);
+  const text = String(value).replaceAll(/\s+/gu, " ");
 
   return text.includes(TICK) ? `${TICK}${TICK} ${text} ${TICK}${TICK}` : `${TICK}${text}${TICK}`;
 };
@@ -1089,8 +1112,18 @@ const run = (options) => {
       `${summary.keptDeleted.length} left deleted, ${summary.symlinks.length} symlinks skipped`,
   );
 
-  if (report.baseApproximate)
-    log("[sync] the base commit is unconfirmed — the sync state was left untouched");
+  if (report.baseApproximate) {
+    const warning =
+      "the base commit is unconfirmed, so older template changes may have been skipped. " +
+      'The sync state was left untouched; re-run the workflow with "base_commit" set to the ' +
+      "last upstream commit you synced.";
+
+    log(`[sync] ${warning}`);
+
+    // A run that produces no pull request would otherwise hide this in $RUNNER_TEMP.
+    log(`::warning title=Upstream sync base not confirmed::${warning}`);
+    if (stepSummary) fs.appendFileSync(stepSummary, `\n> [!WARNING]\n> ${warning}\n`);
+  }
 
   if (!changed) log("[sync] nothing to sync");
 
