@@ -107,11 +107,28 @@ opens a pull request that replays **only the changes this template made since yo
   them by hand if you want them.
 - The last synced template commit is stored in `.github/sync-state.json`. Merge that file together
   with the PR so the next run only replays what is new.
+- The workflow never applies anything directly: every run opens a pull request, so you can see and
+  reject a change before it reaches your site.
+
+> [!IMPORTANT]
+> This is the incremental sync model. Repositories created earlier still have the previous workflow,
+> which replaced the whole tree with the template's and could overwrite files like `AGENTS.md` or
+> `LICENSE`; GitHub Actions cannot push workflow changes, so it cannot update itself. Copy
+> `.github/workflows/sync-upstream.yml` and `.github/scripts/sync-upstream.mjs` from this template once
+> (they are listed in the PR under "Files that are never overwritten" whenever the template changes
+> them), and that destructive behaviour is gone.
 
 You can run the same sync locally at any time:
 
 ```bash
 node .github/scripts/sync-upstream.mjs --dry-run
+```
+
+If the sync ever reports "Base commit not confirmed", it could not find the last synced template
+commit among the recent ones. Replay the missing range by passing it explicitly:
+
+```bash
+node .github/scripts/sync-upstream.mjs --base <last-synced-upstream-commit>
 ```
 
 ## 🛠️ Tech Stack (For Developers)

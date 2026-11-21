@@ -82,14 +82,15 @@ const globToRegExp = (glob) => {
   for (let index = 0; index < glob.length; index++) {
     const char = glob[index];
 
-    if (char === "*") {
-      if (glob[index + 1] === "*") {
-        source += ".*";
+    if (char === "*" && glob[index + 1] === "*") {
+      index += 1;
+      // `a/**/b` matches `a/b` and `a/x/b`; `public/**` matches everything below it.
+      if (glob[index + 1] === "/") {
         index += 1;
-        // `a/**/b` should also match `a/b`.
-        if (glob[index + 1] === "/") index += 1;
-      } else source += "[^/]*";
-    } else if (char === "?") source += "[^/]";
+        source += "(?:.*/)?";
+      } else source += ".*";
+    } else if (char === "*") source += "[^/]*";
+    else if (char === "?") source += "[^/]";
     else source += char.replaceAll(/[$()*+.?[\\\]^{|}]/gu, String.raw`\$&`);
   }
 
@@ -308,8 +309,23 @@ const mergePackageJson = (ours, base, theirs) => {
 
 const resolveInRepo = (repo, relativePath) => {
   const fullPath = path.resolve(repo, relativePath);
+  const realRepo = fs.realpathSync(repo);
 
-  if (fullPath !== repo && !fullPath.startsWith(`${repo}${path.sep}`)) {
+  if (fullPath === repo) return fullPath;
+
+  if (!fullPath.startsWith(`${repo}${path.sep}`)) {
+    throw new Error(`Refusing to touch a path outside the repository: ${relativePath}`);
+  }
+
+  // A symlinked directory inside the repository can point anywhere, so the
+  // closest existing ancestor has to resolve back inside the repository too.
+  let ancestor = path.dirname(fullPath);
+
+  while (ancestor !== repo && !fs.existsSync(ancestor)) ancestor = path.dirname(ancestor);
+
+  const realAncestor = fs.realpathSync(ancestor);
+
+  if (realAncestor !== realRepo && !realAncestor.startsWith(`${realRepo}${path.sep}`)) {
     throw new Error(`Refusing to touch a path outside the repository: ${relativePath}`);
   }
 
@@ -337,7 +353,24 @@ const writeWorktreeFile = (repo, relativePath, data, mode) => {
 
   fs.mkdirSync(path.dirname(fullPath), { recursive: true });
   fs.writeFileSync(fullPath, data);
+
   if (mode === "100755") fs.chmodSync(fullPath, 0o755);
+  else if (mode === "100644") fs.chmodSync(fullPath, 0o644);
+};
+
+// A chmod-only upstream commit changes nothing but the mode, and `git merge-file`
+// never sees it, so the worktree has to be updated on its own.
+const applyModeChange = (repo, relativePath, entry, dryRun) => {
+  if (entry.oldMode === entry.newMode) return false;
+  if (entry.newMode !== "100644" && entry.newMode !== "100755") return false;
+
+  if (!dryRun) {
+    const fullPath = resolveInRepo(repo, relativePath);
+
+    fs.chmodSync(fullPath, entry.newMode === "100755" ? 0o755 : 0o644);
+  }
+
+  return true;
 };
 
 const removeWorktreeFile = (repo, relativePath) => {
@@ -396,7 +429,7 @@ const findBaseCommit = ({ repo, upstreamRef, target, depth, state, log }) => {
     if (isAncestor(repo, recorded, target)) {
       log(`[base] using the commit recorded in the sync state (${recorded.slice(0, 7)})`);
 
-      return { sha: recorded, source: "state" };
+      return { sha: recorded, source: "state", approximate: false };
     }
 
     log(
@@ -409,7 +442,7 @@ const findBaseCommit = ({ repo, upstreamRef, target, depth, state, log }) => {
   if (mergeBase) {
     log(`[base] using the common ancestor with upstream (${mergeBase.slice(0, 7)})`);
 
-    return { sha: mergeBase, source: "merge-base" };
+    return { sha: mergeBase, source: "merge-base", approximate: false };
   }
 
   // Template-created repositories have an orphan history, so there is no merge
@@ -443,16 +476,21 @@ const findBaseCommit = ({ repo, upstreamRef, target, depth, state, log }) => {
 
   if (!best) throw new Error(`Could not find any commit in ${upstreamRef}`);
 
-  if (best.index === 0 && candidates.length >= depth && best.changed > 0) {
+  // An exhausted window means the closest candidate is simply the oldest commit
+  // scanned: the real base may be older, and the diff would silently skip every
+  // commit before it. Report it, and never record such a base as fully synced.
+  const approximate = candidates.length >= depth && best.changed > 0;
+
+  if (approximate) {
     log(
-      `[base] warning: the closest match is the oldest commit in the scanned window; ` +
-        `the real base may be older. Re-run with --base <sha> or a larger --depth if the diff looks wrong.`,
+      `[base] warning: no confident match within the last ${depth} upstream commits, ` +
+        "so older template changes may be skipped. Re-run with --base <sha> or a larger --depth.",
     );
   }
 
   log(`[base] best match ${best.sha.slice(0, 7)} (${best.changed} file(s) differ from HEAD)`);
 
-  return { sha: best.sha, source: "heuristic" };
+  return { sha: best.sha, source: "heuristic", approximate };
 };
 
 const createReport = (base, target, state) => ({
@@ -467,6 +505,7 @@ const createReport = (base, target, state) => ({
   base,
   target,
   baseSource: state.source,
+  baseApproximate: Boolean(state.approximate),
   packageJsonChanged: false,
 });
 
@@ -620,7 +659,13 @@ const syncEntry = (context, entry) => {
   }
 
   if (theirs == null) return;
-  if (ours.data.equals(theirs)) return;
+
+  if (ours.data.equals(theirs)) {
+    // Mode-only change (`chmod +x`): the content is already identical.
+    if (applyModeChange(repo, relativePath, entry, dryRun)) report.updated.push(relativePath);
+
+    return;
+  }
 
   if (base != null && ours.data.equals(base)) {
     if (!dryRun) writeWorktreeFile(repo, relativePath, theirs, entry.newMode);
@@ -660,7 +705,11 @@ const syncEntry = (context, entry) => {
     return;
   }
 
-  if (merge.merged.equals(ours.data)) return;
+  if (merge.merged.equals(ours.data)) {
+    if (applyModeChange(repo, relativePath, entry, dryRun)) report.updated.push(relativePath);
+
+    return;
+  }
 
   if (!dryRun) writeWorktreeFile(repo, relativePath, merge.merged, entry.newMode);
   report.merged.push({ path: relativePath, note: "changes from both sides combined" });
@@ -684,6 +733,18 @@ const writeState = (repo, statePath, report) => {
 
 const shortHash = (sha) => (typeof sha === "string" ? sha.slice(0, 7) : String(sha));
 
+const TICK = String.fromCodePoint(96);
+
+// Paths come from the template, but the report is the user-facing artifact:
+// backticks, pipes and newlines would break the code span or the table.
+const codeSpan = (value) => {
+  const text = String(value)
+    .replaceAll(/\s+/gu, " ")
+    .replaceAll("|", String.raw`\|`);
+
+  return text.includes(TICK) ? `${TICK}${TICK} ${text} ${TICK}${TICK}` : `${TICK}${text}${TICK}`;
+};
+
 const renderList = (lines, items, format) => {
   for (const item of items.slice(0, MAX_REPORTED_ITEMS)) lines.push(format(item));
   if (items.length > MAX_REPORTED_ITEMS)
@@ -700,7 +761,11 @@ const BASE_SOURCE_LABELS = {
 const renderReport = (report) => {
   const lines = [];
   const commitLink = (sha) => `[${shortHash(sha)}](${TEMPLATE_URL}/commit/${sha})`;
-  const fileLink = (relativePath) => `${TEMPLATE_URL}/blob/${report.target}/${relativePath}`;
+  const fileLink = (relativePath) =>
+    `${TEMPLATE_URL}/blob/${report.target}/${relativePath
+      .split("/")
+      .map((segment) => encodeURIComponent(segment))
+      .join("/")}`;
   const applied =
     report.added.length + report.updated.length + report.deleted.length + report.merged.length;
   const review = report.conflicts.length + report.protected.length;
@@ -719,21 +784,42 @@ const renderReport = (report) => {
   lines.push(`| **Applied** | ${applied} file(s) |`);
   lines.push(`| **Needs review** | ${review} file(s) |`, "");
 
-  if (applied === 0 && review === 0) {
+  if (report.baseApproximate) {
+    lines.push(
+      "#### ⚠️ Base commit not confirmed",
+      "",
+      "The closest match was the oldest upstream commit scanned, so this sync may have skipped " +
+        "template changes older than it. Nothing is lost yet: `.github/sync-state.json` keeps the " +
+        "previous base, so you can replay the missing range by running the sync with an explicit base:",
+      "",
+      "```bash",
+      "node .github/scripts/sync-upstream.mjs --base <last-synced-upstream-commit>",
+      "```",
+      "",
+    );
+  }
+
+  const quiet =
+    applied === 0 &&
+    review === 0 &&
+    report.keptDeleted.length === 0 &&
+    report.symlinks.length === 0;
+
+  if (quiet) {
     lines.push("Your repository already contains every upstream change. Nothing to do. 🎉");
   }
 
   if (report.added.length > 0 || report.updated.length > 0 || report.deleted.length > 0) {
     lines.push("#### ✅ Applied", "");
-    renderList(lines, report.added, (file) => `- added \`${file}\``);
-    renderList(lines, report.updated, (file) => `- updated \`${file}\``);
-    renderList(lines, report.deleted, (file) => `- removed \`${file}\``);
+    renderList(lines, report.added, (file) => `- added ${codeSpan(file)}`);
+    renderList(lines, report.updated, (file) => `- updated ${codeSpan(file)}`);
+    renderList(lines, report.deleted, (file) => `- removed ${codeSpan(file)}`);
     lines.push("");
   }
 
   if (report.merged.length > 0) {
     lines.push("#### 🔀 Merged with your changes", "");
-    renderList(lines, report.merged, ({ path: file, note }) => `- \`${file}\` — ${note}`);
+    renderList(lines, report.merged, ({ path: file, note }) => `- ${codeSpan(file)} — ${note}`);
     lines.push("");
   }
 
@@ -747,7 +833,8 @@ const renderReport = (report) => {
     renderList(
       lines,
       report.conflicts,
-      ({ path: file, reason }) => `- \`${file}\` — ${reason} ([upstream](${fileLink(file)}))`,
+      ({ path: file, reason }) =>
+        `- ${codeSpan(file)} — ${reason} ([upstream](<${fileLink(file)}>))`,
     );
     lines.push("");
   }
@@ -765,7 +852,7 @@ const renderReport = (report) => {
           ? "GitHub Actions cannot update workflow files — copy it manually if needed"
           : "instance file (config, README, license, asset, …) — kept as-is";
 
-      return `- \`${file}\` — ${note} ([upstream](${fileLink(file)}))`;
+      return `- ${codeSpan(file)} — ${note} ([upstream](<${fileLink(file)}>))`;
     });
     lines.push("");
   }
@@ -775,14 +862,14 @@ const renderReport = (report) => {
     renderList(
       lines,
       report.keptDeleted,
-      (file) => `- \`${file}\` — you deleted it, so it is not restored`,
+      (file) => `- ${codeSpan(file)} — you deleted it, so it is not restored`,
     );
     lines.push("");
   }
 
   if (report.symlinks.length > 0) {
     lines.push("#### 🔗 Symlinks skipped", "");
-    renderList(lines, report.symlinks, (file) => `- \`${file}\``);
+    renderList(lines, report.symlinks, (file) => `- ${codeSpan(file)}`);
     lines.push("");
   }
 
@@ -915,7 +1002,7 @@ const run = (options) => {
     if (!isAncestor(repo, options.base, target))
       throw new Error(`--base ${options.base} is not an ancestor of ${upstreamRef}`);
 
-    base = { sha: revParse(repo, options.base), source: "forced" };
+    base = { sha: revParse(repo, options.base), source: "forced", approximate: false };
     log(`[base] forced by --base (${base.sha.slice(0, 7)})`);
   } else {
     base = findBaseCommit({
@@ -948,14 +1035,20 @@ const run = (options) => {
       report.deleted.length +
       report.merged.length +
       report.conflicts.length +
-      report.protected.length >
+      report.protected.length +
+      report.keptDeleted.length +
+      report.symlinks.length >
     0;
 
-  if (changed && !options.dryRun) writeState(repo, options.state, report);
+  // An unconfirmed base is never recorded: it would make the skipped commits
+  // unreachable for every later run.
+  if (changed && !report.baseApproximate && !options.dryRun)
+    writeState(repo, options.state, report);
 
   const summary = {
     base: report.base,
     baseSource: report.baseSource,
+    baseApproximate: report.baseApproximate,
     target: report.target,
     changed,
     added: report.added,
@@ -996,6 +1089,9 @@ const run = (options) => {
       `${summary.keptDeleted.length} left deleted, ${summary.symlinks.length} symlinks skipped`,
   );
 
+  if (report.baseApproximate)
+    log("[sync] the base commit is unconfirmed — the sync state was left untouched");
+
   if (!changed) log("[sync] nothing to sync");
 
   return summary;
@@ -1028,8 +1124,19 @@ const main = () => {
   }
 };
 
+const realPath = (target) => {
+  try {
+    return fs.realpathSync(target);
+  } catch {
+    return null;
+  }
+};
+
+// Compare real paths: a symlinked checkout or `/tmp` entry point would otherwise
+// make the CLI exit silently without doing anything.
 const invokedDirectly =
-  typeof process.argv[1] === "string" && path.resolve(process.argv[1]) === import.meta.filename;
+  typeof process.argv[1] === "string" &&
+  realPath(process.argv[1]) === realPath(import.meta.filename);
 
 if (invokedDirectly) main();
 

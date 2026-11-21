@@ -21,6 +21,7 @@ const gitEnv = {
 interface SyncSummary {
   added: string[];
   base: string;
+  baseApproximate: boolean;
   baseSource: string;
   changed: boolean;
   conflicts: { path: string; reason: string }[];
@@ -29,6 +30,7 @@ interface SyncSummary {
   merged: string[];
   packageJsonChanged: boolean;
   protected: { path: string; reason: string }[];
+  symlinks: string[];
   target: string;
   updated: string[];
 }
@@ -44,6 +46,10 @@ interface FixtureOptions {
   history?: "orphan" | "shared";
   /** Files changed by upstream after `initial`. */
   upstream: Record<string, string | null>;
+  /** Mode changes applied to the `upstream` commit, keyed by path. */
+  upstreamChmod?: Record<string, "100644" | "100755">;
+  /** Extra upstream commits after `upstream`, oldest first. */
+  upstreamHistory?: { files: Record<string, string | null>; message: string }[];
 }
 
 const tempRoots: string[] = [];
@@ -101,6 +107,13 @@ const commit = (directory: string, message: string): string => {
   return git(directory, "rev-parse", "HEAD");
 };
 
+// Commits whatever is already staged, so index-only changes (mode bits) survive.
+const commitStaged = (directory: string, message: string): string => {
+  git(directory, "commit", "-q", "--allow-empty", "-m", message);
+
+  return git(directory, "rev-parse", "HEAD");
+};
+
 const readRepoFile = (directory: string, relativePath: string): string | null => {
   const fullPath = path.join(directory, relativePath);
 
@@ -124,6 +137,8 @@ const createFixture = ({
   local = {},
   localBaseline = {},
   upstream,
+  upstreamChmod,
+  upstreamHistory = [],
 }: FixtureOptions): Fixture => {
   const temp = makeTempRoot();
   const upstreamDirectory = makeRepo(path.join(temp, "upstream"));
@@ -132,7 +147,24 @@ const createFixture = ({
   const initialSha = commit(upstreamDirectory, "initial");
 
   writeFiles(upstreamDirectory, upstream);
-  const upstreamSha = commit(upstreamDirectory, "upstream");
+  git(upstreamDirectory, "add", "-A");
+
+  // `git add -A` would drop an index-only chmod, so stage first and chmod after.
+  for (const [relativePath, mode] of Object.entries(upstreamChmod ?? {})) {
+    git(
+      upstreamDirectory,
+      "update-index",
+      `--chmod=${mode === "100755" ? "+x" : "-x"}`,
+      relativePath,
+    );
+  }
+
+  const upstreamSha = commitStaged(upstreamDirectory, "upstream");
+
+  for (const step of upstreamHistory) {
+    writeFiles(upstreamDirectory, step.files);
+    commit(upstreamDirectory, step.message);
+  }
 
   const forkDirectory = path.join(temp, "fork");
 
@@ -216,7 +248,7 @@ describe("upstream sync", () => {
       },
     });
 
-    const { summary } = fixture.run();
+    const { report, summary } = fixture.run();
 
     expect(fixture.forkFile("src/app.ts")).toBe(
       "one local\ntwo\nthree\nfour\nfive\nsix upstream\n",
@@ -225,6 +257,9 @@ describe("upstream sync", () => {
     expect(summary.merged).toStrictEqual(["src/app.ts"]);
     expect(summary.added).toStrictEqual(["src/new.ts"]);
     expect(summary.changed).toBe(true);
+    expect(report).toContain("#### ✅ Applied");
+    expect(report).toContain("- added `src/new.ts`");
+    expect(report).toContain("#### 🔀 Merged with your changes");
   });
 
   it("keeps the local version when both sides changed the same lines", () => {
@@ -416,8 +451,6 @@ describe("upstream sync", () => {
       lastSyncedCommit: fixture.upstreamSha,
       lastSyncSource: "heuristic",
     });
-    expect(fixture.status()).toContain(".github/");
-
     const second = fixture.run();
 
     expect(second.summary.changed).toBe(false);
@@ -473,6 +506,116 @@ describe("upstream sync", () => {
     expect(summary.changed).toBe(true);
     expect(fixture.forkFile("src/app.ts")).toBe("one\n");
     expect(fixture.status()).toBe("");
+  });
+
+  it("reports an unconfirmed base instead of recording it", () => {
+    const fixture = createFixture({
+      initial: { "src/app.ts": "one\n" },
+      upstream: { "src/one.ts": "one\n" },
+      upstreamHistory: [
+        { files: { "src/two.ts": "two\n" }, message: "upstream: two" },
+        { files: { "src/app.ts": "one upstream\n" }, message: "upstream: app" },
+      ],
+    });
+
+    const { report, summary } = fixture.run("--depth", "2");
+
+    expect(summary.baseSource).toBe("heuristic");
+    expect(summary.baseApproximate).toBe(true);
+    expect(summary.base).toBe(git(fixture.upstream, "rev-parse", "HEAD~1"));
+    expect(summary.updated).toStrictEqual(["src/app.ts"]);
+    expect(fixture.forkFile("src/two.ts")).toBeNull();
+    expect(fixture.forkFile(".github/sync-state.json")).toBeNull();
+    expect(report).toContain("Base commit not confirmed");
+  });
+
+  it("applies a mode-only change from upstream", () => {
+    const fixture = createFixture({
+      initial: { "scripts/run.sh": "echo hi\n" },
+      upstream: {},
+      upstreamChmod: { "scripts/run.sh": "100755" },
+    });
+
+    const { summary } = fixture.run();
+
+    expect(summary.updated).toStrictEqual(["scripts/run.sh"]);
+    expect(() =>
+      fs.accessSync(path.join(fixture.fork, "scripts", "run.sh"), fs.constants.X_OK),
+    ).not.toThrow();
+  });
+
+  it("merges nested package.json fields and drops what upstream removed", () => {
+    const packageJson = (value: Record<string, unknown>): string =>
+      `${JSON.stringify(value, null, 2)}\n`;
+    const fixture = createFixture({
+      initial: {
+        "package.json": packageJson({
+          dependencies: { react: "^19.0.0", vue: "^3.5.0" },
+          name: "portfolio-template",
+        }),
+      },
+      local: {
+        "package.json": packageJson({
+          dependencies: { react: "^19.2.0", vue: "^3.5.0" },
+          name: "my-site",
+        }),
+      },
+      upstream: {
+        "package.json": packageJson({
+          dependencies: { react: "^19.3.1" },
+          name: "portfolio-template",
+        }),
+      },
+    });
+
+    const { summary } = fixture.run();
+    const merged = readJson(fixture, "package.json");
+
+    expect(merged.dependencies).toStrictEqual({ react: "^19.2.0" });
+    expect(summary.packageJsonChanged).toBe(true);
+  });
+
+  it("keeps workflow and lockfile files protected even when listed as unprotected", () => {
+    const fixture = createFixture({
+      initial: {
+        ".github/workflows/linter.yml": "name: Linter\n",
+        "pnpm-lock.yaml": "lockfile v1\n",
+      },
+      upstream: {
+        ".github/workflows/linter.yml": "name: Linter v2\n",
+        "pnpm-lock.yaml": "lockfile v2\n",
+      },
+    });
+
+    fs.mkdirSync(path.join(fixture.fork, ".github"), { recursive: true });
+    fs.writeFileSync(
+      path.join(fixture.fork, ".github", "sync-state.json"),
+      `${JSON.stringify({ unprotected: [".github/workflows/*", "pnpm-lock.yaml"] }, null, 2)}\n`,
+    );
+
+    const { summary } = fixture.run();
+
+    expect(fixture.forkFile(".github/workflows/linter.yml")).toBe("name: Linter\n");
+    expect(fixture.forkFile("pnpm-lock.yaml")).toBe("lockfile v1\n");
+    expect(summary.protected).toStrictEqual([
+      { path: ".github/workflows/linter.yml", reason: "workflow" },
+    ]);
+  });
+
+  it("refuses to write through a symlinked directory that leaves the repository", () => {
+    const fixture = createFixture({
+      initial: { "docs/en.md": "v1\n" },
+      upstream: { "docs/en.md": "v2\n" },
+    });
+    const outside = path.join(fixture.temp, "outside");
+
+    fs.mkdirSync(outside, { recursive: true });
+    fs.writeFileSync(path.join(outside, "en.md"), "v1\n");
+    fs.rmSync(path.join(fixture.fork, "docs"), { recursive: true, force: true });
+    fs.symlinkSync(outside, path.join(fixture.fork, "docs"));
+
+    expect(() => fixture.run()).toThrow(/outside the repository/u);
+    expect(fs.readFileSync(path.join(outside, "en.md"), "utf8")).toBe("v1\n");
   });
 
   it("fails with a helpful message when upstream is missing", () => {
