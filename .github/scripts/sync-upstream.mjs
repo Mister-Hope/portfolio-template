@@ -326,7 +326,10 @@ const resolveInRepo = (repo, relativePath) => {
   const realAncestor = fs.realpathSync(ancestor);
 
   if (realAncestor !== realRepo && !realAncestor.startsWith(`${realRepo}${path.sep}`)) {
-    throw new Error(`Refusing to touch a path outside the repository: ${relativePath}`);
+    throw new Error(
+      `Refusing to touch ${relativePath}: it resolves to ${realAncestor}, which is outside ` +
+        `the repository (a symlinked directory is in the way).`,
+    );
   }
 
   return fullPath;

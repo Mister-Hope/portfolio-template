@@ -614,7 +614,7 @@ describe("upstream sync", () => {
     fs.rmSync(path.join(fixture.fork, "docs"), { recursive: true, force: true });
     fs.symlinkSync(outside, path.join(fixture.fork, "docs"));
 
-    expect(() => fixture.run()).toThrow(/outside the repository/u);
+    expect(() => fixture.run()).toThrow(/which is outside the repository/u);
     expect(fs.readFileSync(path.join(outside, "en.md"), "utf8")).toBe("v1\n");
   });
 
