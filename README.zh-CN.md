@@ -88,6 +88,39 @@ pnpm test
 > 还需把 `siteUrl` 设为站点的公开 URL。构建会自动生成 base-aware 的 `404.html`，
 > 也可在配置中覆盖 `favicon`/`ogImage`。
 
+## 🔄 同步上游更新
+
+你的仓库由本模板创建，拥有独立的压缩历史，`git merge` 无法直接合入模板更新。因此
+`.github/workflows/sync-upstream.yml` 每周运行一次，开一个 PR，**只重放模板自你上次同步以来的改动**：
+
+- 属于你的文件（`config.*`、`custom.css`、`public/`、`README*.md`、`LICENSE`、`AGENTS.md` 等）
+  同步时绝不会被写入，只会出现在 PR 说明里供参考。
+- 其余文件做三方合并：只要你没有改动模板改到的同一批行，你的修改就会保留；真正冲突的文件保留
+  **你的版本**，并列在 "Kept your version" 中。
+- `.github/workflows/` 无法由 GitHub Actions 更新，相关改动只会被报告，需要时请手动复制。
+- 上次同步到的模板提交记录在 `.github/sync-state.json`，请连同 PR 一起合并，这样下次只重放新增改动。
+- 同步永远不会直接改你的站点：每次运行只开一个 PR，你可以先看、先拒绝，满意了再合并。
+
+> [!IMPORTANT]
+> 以上是新的增量同步模型。早先创建的仓库仍在使用旧版 workflow：它会把整棵树替换成模板的文件，
+> 可能覆盖 `AGENTS.md`、`LICENSE` 等属于你的文件；而 GitHub Actions 无法推送 workflow 改动，
+> 所以它无法自我更新。请手动从模板复制一次 `.github/workflows/sync-upstream.yml` 与
+> `.github/scripts/sync-upstream.mjs`（当模板改动这些文件时，PR 会把它们列在
+> "Files that are never overwritten" 里），之后就不会再被整树覆盖。
+
+也可以随时在本地执行同样的同步：
+
+```bash
+node .github/scripts/sync-upstream.mjs --dry-run
+```
+
+如果同步提示 "Base commit not confirmed"，说明它在最近的模板提交中没有找到上次同步的位置。
+可以显式指定基准提交，把缺失的区间补上：
+
+```bash
+node .github/scripts/sync-upstream.mjs --base <last-synced-upstream-commit>
+```
+
 ## 🛠️ 技术栈（面向开发者）
 
 - React 19 + Vite

@@ -46,4 +46,27 @@ export default defineHopeConfig(
       "no-console": "off",
     },
   },
+  {
+    // `.github/scripts/**` is the fork-sync CLI: dependency-free ESM executed by
+    // `node` straight from a workflow checkout, so app-oriented rules such as
+    // jsdoc tags, complexity budgets and single-call chaining do not apply.
+    files: [".github/scripts/**/*.mjs"],
+    rules: {
+      complexity: "off",
+      curly: "off",
+      "import/no-nodejs-modules": "off",
+      "jsdoc/require-param": "off",
+      "jsdoc/require-returns": "off",
+      "jsdoc/require-returns-description": "off",
+      "max-lines": "off",
+      "max-statements": "off",
+      "no-undefined": "off",
+      "one-var": "off",
+      "react/function-component-definition": "off",
+      "unicorn/catch-error-name": "off",
+      "unicorn/consistent-function-scoping": "off",
+      "unicorn/prefer-number-coercion": "off",
+      "unicorn/prefer-single-call": "off",
+    },
+  },
 );
