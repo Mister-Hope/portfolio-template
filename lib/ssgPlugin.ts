@@ -311,10 +311,9 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
   const ogImage = siteUrl ? getOgImage(config, siteUrl) : "";
   const faviconTag = getFaviconTag(viteConfig.base, config, outDir);
 
-  const serverEntryPath = path.resolve(serverOutDir, "entry-server.js");
   // A query string bypasses Node's ESM module cache, so `vite build --watch` prerenders with the
   // freshly built SSR bundle instead of the first one loaded in this process.
-  const serverEntryUrl = `${pathToFileURL(serverEntryPath).href}?t=${Date.now()}`;
+  const serverEntryUrl = `${pathToFileURL(path.resolve(serverOutDir, "entry-server.js")).href}?t=${Date.now()}`;
   const { render } = (await import(serverEntryUrl)) as {
     render: (url: string, config: Config) => string;
   };
