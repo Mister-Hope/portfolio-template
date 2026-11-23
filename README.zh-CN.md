@@ -88,6 +88,19 @@ pnpm test
 > 还需把 `siteUrl` 设为站点的公开 URL。构建会自动生成 base-aware 的 `404.html`，
 > 也可在配置中覆盖 `favicon`/`ogImage`。
 
+## 📦 依赖更新
+
+日常依赖升级由 Renovate（`.github/renovate.json`）发起。pnpm 通过 `pnpm-workspace.yaml` 中的
+`minimumReleaseAge` 执行同一套供应链冷却策略：新版本发布满一天后才允许安装。这两处是策略的唯一来源。
+
+如需手动升级依赖，运行：
+
+```bash
+pnpm up -r --latest
+```
+
+pnpm 会自动应用冷却策略，跳过发布不足一天的版本。提交前请先检查 `pnpm-lock.yaml` 的变更。
+
 ## 🔄 同步上游更新
 
 你的仓库由本模板创建，拥有独立的压缩历史，`git merge` 无法直接合入模板更新。因此

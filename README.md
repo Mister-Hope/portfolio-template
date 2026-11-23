@@ -93,6 +93,21 @@ pnpm test
 > set `siteUrl` to the public URL of the deployed site. The build writes a base-aware `404.html`
 > automatically, and `favicon`/`ogImage` can be overridden in the config.
 
+## 📦 Dependency Updates
+
+Renovate (`.github/renovate.json`) opens routine dependency PRs. pnpm enforces the same supply-chain
+cooldown through `minimumReleaseAge` in `pnpm-workspace.yaml`: a version must be at least one day old
+before it can be installed. These two files are the only places that define the policy.
+
+To upgrade dependencies manually, run:
+
+```bash
+pnpm up -r --latest
+```
+
+pnpm applies the cooldown, so versions published less than a day ago are skipped. Review the lockfile
+diff before committing.
+
 ## 🔄 Staying up to Date
 
 Your repository was created from this template, so it has its own squashed history and `git merge`
