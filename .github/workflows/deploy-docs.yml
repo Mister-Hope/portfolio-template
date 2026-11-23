@@ -6,11 +6,17 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -43,10 +49,33 @@ jobs:
       - name: Build Docs
         run: |-
           pnpm run build
-          > dist/.nojekyll
+          : > dist/.nojekyll
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+          include-hidden-files: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    environment: github-pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
 
       - name: Deploy Docs
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@fa24774553152dd7873cd16ebd8d959b010c5445 # v4
         with:
           branch: gh-pages
           folder: dist
