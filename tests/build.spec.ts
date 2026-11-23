@@ -116,6 +116,35 @@ describe("prerender safety", () => {
 
     expect(html).toContain('src="/repo/assets/');
     expect(html).toContain('src="/repo/avatar.avif"');
+    expect(html).toContain('base="/repo"');
+    expect(html).toContain("location.replace(base+target)");
+  }, 120_000);
+
+  it("injects an early locale redirect script only on the root page when multiple locales exist", () => {
+    const config = readJsonExample();
+
+    writeConfig("json", JSON.stringify(config));
+    runBuild();
+
+    const rootHtml = readDist("index.html");
+    const zhHtml = readDist(path.join("zh", "index.html"));
+
+    expect(rootHtml).toContain("navigator.languages");
+    expect(rootHtml).toContain("location.replace(base+target)");
+    expect(rootHtml.indexOf("location.replace(base+target)")).toBeLessThan(
+      rootHtml.indexOf("<body"),
+    );
+    expect(zhHtml).not.toContain("location.replace(base+target)");
+
+    // Single-locale config should not receive the redirect script.
+    const singleLocale = readJsonExample();
+    const locales = singleLocale.locales as Record<string, unknown>;
+
+    singleLocale.locales = { "/": locales["/"] };
+    writeConfig("json", JSON.stringify(singleLocale));
+    runBuild();
+
+    expect(readDist("index.html")).not.toContain("location.replace(base+target)");
   }, 120_000);
 
   it("emits SEO files when siteUrl is set", () => {

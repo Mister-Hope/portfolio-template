@@ -75,6 +75,50 @@ const getFaviconTag = (base: string, config: Config, outDir: string): string => 
 };
 
 /**
+ * Serialize a value as inline-`<script>`-safe JSON (`<`, `>`, `&` are escaped as unicode sequences
+ * so user-provided strings can never close the surrounding `<script>` tag).
+ *
+ * 将值序列化为可安全内联到 `<script>` 的 JSON（转义 `<`、`>`、`&`，防止配置内容闭合 `<script>` 标签）。
+ *
+ * @param value - JSON-serializable value
+ * @returns Safe JSON literal
+ */
+const serializeForInlineScript = (value: unknown): string =>
+  JSON.stringify(value)
+    .replaceAll("<", String.raw`\u003c`)
+    .replaceAll(">", String.raw`\u003e`)
+    .replaceAll("&", String.raw`\u0026`);
+
+/**
+ * Build a blocking inline `<script>` for the root locale page that redirects to the user's saved or
+ * browser-preferred locale before the body is painted, avoiding a flash of the default language.
+ *
+ * 为根语言页面生成阻塞式内联 `<script>`，在页面绘制前根据已保存的语言或浏览器首选语言跳转到目标语言， 避免默认语言内容闪烁。
+ *
+ * @param config - Resolved user config
+ * @param base - Normalized Vite base path (always starts and ends with `"/"`)
+ * @returns Inline `<script>` tag, or `""` when fewer than two locales are configured
+ */
+export const getLocaleRedirectScript = (config: Config, base: string): string => {
+  const entries = Object.entries(config.locales);
+
+  if (entries.length <= 1) return "";
+
+  const locales = entries
+    .map(([localePath, localeConfig]) => ({
+      path: localePath,
+      lang: localeConfig.lang.toLowerCase(),
+    }))
+    .sort((a, b) => b.path.length - a.path.length);
+
+  const normalizedBase = base.endsWith("/") ? base.slice(0, -1) : base;
+  const serializedLocales = serializeForInlineScript(locales);
+  const serializedBase = serializeForInlineScript(normalizedBase);
+
+  return `<script>(()=>{const locales=${serializedLocales},base=${serializedBase};let target=null;try{const saved=localStorage.getItem("locale");if(saved&&locales.some(l=>l.path===saved))target=saved;}catch{}if(!target){const langs=navigator.languages||[navigator.language];outer:for(const raw of langs){if(!raw)continue;const lower=raw.toLowerCase();for(const l of locales)if(l.lang&&lower===l.lang){target=l.path;break outer;}}if(!target)outer2:for(const raw of langs){if(!raw)continue;const primary=raw.split("-")[0].toLowerCase();for(const l of locales)if(l.lang&&primary===l.lang.split("-")[0]){target=l.path;break outer2;}}}if(target&&target!=="/")location.replace(base+target);})();</script>`;
+};
+
+/**
  * Resolve the configured avatar/background image to an absolute URL for Open Graph.
  *
  * 将配置中的头像/背景图解析为 Open Graph 使用的绝对 URL。
@@ -331,15 +375,16 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
 
     const locale = config.locales[localePath];
     const appHtml = render(localePath, config);
-
-    // Use a function replacer: `appHtml` may contain `$&`/`$'`/`$\`` sequences (ordinary
-    // Markdown code can), which would otherwise be interpreted as replacement patterns.
-    let html = template.replace("<!--app-html-->", () => appHtml);
     const metaDescription = `<meta name="description" content="${escapeHtml(
       locale.description ?? "Portfolio Template",
     )}" />`;
+    const redirectScript =
+      localePath === "/" ? getLocaleRedirectScript(config, viteConfig.base) : "";
 
-    html = html
+    // Use a function replacer: `appHtml` may contain `$&`/`$'`/`$\`` sequences (ordinary
+    // Markdown code can), which would otherwise be interpreted as replacement patterns.
+    let html = template
+      .replace("<!--app-html-->", () => appHtml)
       // Drop the default-locale description injected by the Vite plugin: every page must
       // contain exactly one `<meta name="description">`, localized for its own route.
       .replace(/<meta name="description"[^>]*\/>\s*/u, "")
@@ -348,6 +393,8 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
         () => `<title>${escapeHtml(locale.title ?? "Portfolio")}</title>\n    ${metaDescription}`,
       )
       .replace(/<html lang="(?:.*?)">/u, () => `<html lang="${escapeHtml(locale.lang)}">`);
+
+    if (redirectScript) html = html.replace("<head>", () => `<head>\n    ${redirectScript}`);
 
     const headTags = [faviconTag, getSeoTags(localePath, config, siteUrl, ogImage)]
       .filter((tag) => tag.length > 0)
