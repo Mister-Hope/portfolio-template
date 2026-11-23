@@ -44,6 +44,16 @@ const runBuildExpectingError = (): string => {
   throw new Error("Expected the build to fail, but it succeeded");
 };
 
+const removeIconSetFixture = (directory: string): void => {
+  fs.rmSync(directory, { force: true, recursive: true });
+
+  try {
+    fs.rmdirSync(path.dirname(directory));
+  } catch {
+    // The parent still contains other installed icon sets.
+  }
+};
+
 const readDist = (relativePath: string): string => fs.readFileSync(distPath(relativePath), "utf-8");
 
 const countOccurrences = (haystack: string, needle: string): number =>
@@ -66,6 +76,45 @@ describe("example configs", () => {
       expect(fs.existsSync(distPath("zh", "index.html"))).toBe(true);
     }
   }, 240_000);
+});
+
+describe("icon inlining", () => {
+  it("inlines icons from an installed icon set", () => {
+    const iconSetName = "test-set";
+    const iconSetDirectory = path.join(root, "node_modules", "@iconify-json", iconSetName);
+
+    fs.mkdirSync(iconSetDirectory, { recursive: true });
+    fs.writeFileSync(
+      path.join(iconSetDirectory, "package.json"),
+      JSON.stringify({ name: `@iconify-json/${iconSetName}`, version: "0.0.0" }),
+    );
+    fs.writeFileSync(
+      path.join(iconSetDirectory, "icons.json"),
+      JSON.stringify({
+        prefix: iconSetName,
+        width: 24,
+        height: 24,
+        icons: { star: { body: '<path d="M0 0h24v24H0z" />' } },
+      }),
+    );
+
+    try {
+      const config = readJsonExample();
+      const locales = config.locales as Record<string, { sections: { icon?: string }[] }>;
+
+      locales["/"].sections[0].icon = `${iconSetName}:star`;
+      writeConfig("json", JSON.stringify(config));
+      runBuild();
+
+      const html = readDist("index.html");
+
+      expect(html).toContain("<svg");
+      expect(html).toContain("M0 0h24v24H0z");
+    } finally {
+      removeIconSetFixture(iconSetDirectory);
+      clearConfigs();
+    }
+  }, 120_000);
 });
 
 describe("prerender safety", () => {
