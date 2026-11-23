@@ -428,10 +428,10 @@ The optional `config` object contains the following fields:
         - Details: Long-form story (markdown supported).
       - `width`:
         - Type: Number (optional)
-        - Details: Intrinsic image width in pixels. Set it together with `height` to reserve space and avoid layout shift.
+        - Details: Intrinsic image width in pixels. Local images under `public/` are detected automatically; for remote URLs, set both `width` and `height` to reserve space and avoid layout shift.
       - `height`:
         - Type: Number (optional)
-        - Details: Intrinsic image height in pixels.
+        - Details: Intrinsic image height in pixels. Local images under `public/` are detected automatically.
 
 - `markdown` (type: `markdown`):
   - Type: Component
