@@ -9,6 +9,16 @@ export default {
   // Optional: favicon (defaults to /favicon.svg) and social preview image (defaults to the hero avatar).
   // favicon: "/favicon.svg",
   // ogImage: "https://example.com/social-preview.png",
+  config: {
+    experienceTypes: {
+      volunteer: {
+        bgClass: "bg-rose-600",
+        icon: "hand-holding-heart",
+        iconClass: "bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400",
+      },
+    },
+    mdIt: ["markdown-it-footnote"],
+  },
   locales: {
     "/": {
       lang: "en-US",

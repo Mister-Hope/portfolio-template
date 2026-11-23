@@ -215,6 +215,9 @@ importers:
       markdown-it:
         specifier: ^15.0.3
         version: 15.0.3
+      markdown-it-footnote:
+        specifier: 4.0.0
+        version: 4.0.0
       oxc-config-hope:
         specifier: 0.3.15
         version: 0.3.15(oxfmt@0.79.0)(oxlint-tsgolint@7.0.2008)(oxlint@1.94.0(oxlint-tsgolint@7.0.2008))
@@ -1226,6 +1229,9 @@ packages:
   magic-string@1.4.5:
     resolution: {integrity: sha512-oLLC2+YvQUfAa+vxoufE/yc1icb87M9iXIRqAoR/2EhE/8cb3SF/+Gi0c2By1B+5Vz2e2vQtUvHiu1+63Znh+w==}
 
+  markdown-it-footnote@4.0.0:
+    resolution: {integrity: sha512-WYJ7urf+khJYl3DqofQpYfEYkZKbmXmwxQV8c8mO/hGIhgZ1wOe7R4HLFNwqx7TjILbnC98fuyeSsin19JdFcQ==}
+
   markdown-it@15.0.3:
     resolution: {integrity: sha512-+Az7Ojz3iRGu8KYMvJ6xVhvrxP3eE+vEtJX75Ow88XBpcQNV/0lGX5ZynIIBftREo4DC2jsveAMDaeltmm8QvQ==}
     hasBin: true
@@ -2090,6 +2096,8 @@ snapshots:
   magic-string@1.4.5:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
+
+  markdown-it-footnote@4.0.0: {}
 
   markdown-it@15.0.3:
     dependencies:
