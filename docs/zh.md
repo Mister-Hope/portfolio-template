@@ -458,7 +458,11 @@
 
 您可以始终为图标和图片使用完整 URL (例如 `https://example.com/icon.png`)，或相对于 `public/` 目录的路径 (例如 `/images/icon.png` 对应 `public/images/icon.png`)。
 
-我们支持来自 [iconify](https://iconify.design/) 的所有图标名称，您可以直接使用 FontAwesome 7 实心图标名称 (例如 `book` 对应 `fa7-solid:book`)，或使用完整的图标名称 (例如 `mdi:github`)。
+我们支持来自 [Iconify](https://iconify.design/) 的所有图标名称，您可以直接使用 FontAwesome 7 实心图标名称 (例如 `book` 对应 `fa7-solid:book`)，或使用完整的 `prefix:name` 图标名称 (例如 `fa7-brands:github` 或 `mdi:github`)。
+
+所有使用到的 Iconify 图标都会在**构建时内联为 SVG**，预渲染的 HTML 中直接包含 `<svg>` 元素，浏览器在运行时不会向 Iconify API 发起请求。
+
+仓库已预装 `@iconify-json/fa7-solid`、`@iconify-json/fa7-brands` 与 `@iconify-json/logos`。如需使用其他图标集，请先安装对应的 `@iconify-json/<prefix>` 包（例如 `pnpm add -D @iconify-json/mdi`）；若缺少对应的图标集或图标不存在，构建将直接报错提示。
 
 ## 自定义样式
 

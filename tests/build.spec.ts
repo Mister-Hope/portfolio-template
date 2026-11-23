@@ -63,6 +63,8 @@ describe("example configs", () => {
       expect(html).not.toContain("<!--app-html-->");
       // Icon placeholders are sized during SSR so icons do not cause layout shift.
       expect(html).toContain("width:1em");
+      expect(html).toContain("<svg");
+      expect(html).not.toContain("api.iconify.design");
       expect(fs.existsSync(distPath("zh", "index.html"))).toBe(true);
     }
   }, 240_000);
@@ -156,6 +158,16 @@ describe("config validation", () => {
   it("reports a missing config file", () => {
     clearConfigs();
     expect(runBuildExpectingError()).toContain("No configuration file found");
+  }, 120_000);
+
+  it("reports an uninstalled icon set", () => {
+    const config = readJsonExample();
+    const locales = config.locales as Record<string, { sections: { icon?: string }[] }>;
+
+    locales["/"].sections[0].icon = "uninstalled-set:ghost";
+    writeConfig("json", JSON.stringify(config));
+
+    expect(runBuildExpectingError()).toContain("@iconify-json/uninstalled-set");
   }, 120_000);
 });
 

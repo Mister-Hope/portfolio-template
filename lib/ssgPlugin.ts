@@ -376,12 +376,15 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
  * @param config - Resolved user config
  * @param serializedConfig - Config serialized for the client/SSR bundles
  * @param buildYear - Build year injected as `__BUILD_YEAR__`
+ * @param serializedIconData - Icon data map serialized for `__ICON_DATA__`
  */
+// oxlint-disable-next-line max-params
 const handleCloseBundle = async (
   viteConfig: ResolvedConfig,
   config: Config,
   serializedConfig: string,
   buildYear: string,
+  serializedIconData: string,
 ): Promise<void> => {
   if (viteConfig.build.ssr !== false) return;
 
@@ -404,6 +407,7 @@ const handleCloseBundle = async (
     define: {
       __CONFIG__: serializedConfig,
       __BUILD_YEAR__: buildYear,
+      __ICON_DATA__: serializedIconData,
     },
     build: {
       ssr: "entry-server.tsx",
@@ -424,7 +428,12 @@ const handleCloseBundle = async (
   console.log("SSG complete.");
 };
 
-export const ssgPlugin = (config: Config, serializedConfig: string, buildYear: string): Plugin => {
+export const ssgPlugin = (
+  config: Config,
+  serializedConfig: string,
+  buildYear: string,
+  serializedIconData: string,
+): Plugin => {
   let viteConfig: ResolvedConfig;
   let clientBuildSucceeded = false;
 
@@ -442,7 +451,7 @@ export const ssgPlugin = (config: Config, serializedConfig: string, buildYear: s
       // original build error with an unrelated ENOENT on dist/index.html.
       if (!clientBuildSucceeded || viteConfig.build.ssr !== false) return;
 
-      await handleCloseBundle(viteConfig, config, serializedConfig, buildYear);
+      await handleCloseBundle(viteConfig, config, serializedConfig, buildYear, serializedIconData);
     },
   };
 };

@@ -59,10 +59,11 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
     );
   }
 
-  // @iconify/react renders an empty <span> until the icon data is loaded from the Iconify API.
-  // That placeholder has no size, which causes layout shift when icons appear. Reserve the em-box
-  // on a wrapper so the prerendered HTML and the first client paint already occupy the final size;
-  // `1em` scales with the font-size applied through `className`.
+  const resolvedName = resolveIcon(icon);
+  const iconData = __ICON_DATA__[resolvedName] ?? resolvedName;
+
+  // Reserve the em-box on a wrapper so the prerendered HTML and the first client paint occupy a
+  // stable size; `1em` scales with the font-size applied through `className`.
   return (
     <span
       className={className}
@@ -70,7 +71,7 @@ export const Icon: FC<IconProps> = ({ icon, className, style, ...props }) => {
       // oxlint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
-      <Iconify icon={resolveIcon(icon)} width="1em" height="1em" />
+      <Iconify icon={iconData} width="1em" height="1em" ssr />
     </span>
   );
 };

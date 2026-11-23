@@ -9,6 +9,7 @@ import { defineConfig } from "vite";
 
 import { CONFIG_FILES, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { escapeHtml } from "./lib/escapeHtml.js";
+import { collectIconData } from "./lib/icons.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
 // oxlint-disable-next-line unicorn/prefer-import-meta-properties -- `import.meta.dirname` resolves to Vite's temp bundle dir (`node_modules/.vite-temp`), not the project root. `import.meta.url` is rewritten by Vite to the original config file URL, so this is the only reliable way to get the root.
@@ -102,6 +103,7 @@ export default defineConfig(async () => {
   }
 
   const buildYear = String(new Date().getFullYear());
+  const serializedIconData = JSON.stringify(collectIconData(config));
 
   return {
     root: path.resolve(rootDir, "src"),
@@ -118,6 +120,7 @@ export default defineConfig(async () => {
     define: {
       __CONFIG__: serializedConfig,
       __BUILD_YEAR__: buildYear,
+      __ICON_DATA__: serializedIconData,
     },
     server: {
       port: 3000,
@@ -127,7 +130,7 @@ export default defineConfig(async () => {
       react(),
       injectCustomCssImportPlugin(),
       tailwindcss(),
-      ssgPlugin(config, serializedConfig, buildYear),
+      ssgPlugin(config, serializedConfig, buildYear, serializedIconData),
       {
         name: "inject-title-and-meta",
         transformIndexHtml(html: string): string {
