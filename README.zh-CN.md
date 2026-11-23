@@ -49,6 +49,9 @@ pnpm ci
 - [**English Configuration Guide**](./docs/en.md)
 - [**中文配置指南**](./docs/zh.md)
 
+> [!WARNING]
+> 解析后的配置会在构建时嵌入到公开的客户端产物中。请勿在 `config.*` 中存放密钥、Token、私人联系方式或内部链接。
+
 ### 3. 本地运行
 
 ```bash
