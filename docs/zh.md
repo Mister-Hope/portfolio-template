@@ -462,7 +462,9 @@
 
 您可以始终为图标和图片使用完整 URL (例如 `https://example.com/icon.png`)，或相对于 `public/` 目录的路径 (例如 `/images/icon.png` 对应 `public/images/icon.png`)。
 
-我们支持来自 [iconify](https://iconify.design/) 的所有图标名称，您可以直接使用 FontAwesome 7 实心图标名称 (例如 `book` 对应 `fa7-solid:book`)，或使用完整的图标名称 (例如 `mdi:github`)。
+我们支持来自 [Iconify](https://iconify.design/) 的所有图标名称，您可以直接使用 FontAwesome 7 实心图标名称 (例如 `book` 对应 `fa7-solid:book`)，或使用完整的 `prefix:name` 图标名称 (例如 `mdi:github`)。
+
+图标默认由 `@iconify/react` 在运行时加载。如果额外安装了可选的 `@iconify-json/<prefix>` 包（例如 `pnpm add -D @iconify-json/fa7-solid`），构建时会把该图标集中的图标内联进生成的 HTML，浏览器不再向 Iconify API 请求这些图标。未安装图标集的图标仍可正常使用，并继续在运行时加载——不强制安装任何图标集。
 
 ## 自定义样式
 
