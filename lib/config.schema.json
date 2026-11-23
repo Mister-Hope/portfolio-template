@@ -189,11 +189,11 @@
             },
             "siteTitle": {
               "type": "string",
-              "description": "Fallback website title when title is not set\n未设置 title 时的默认网站标题"
+              "description": "Website title override (falls back to title when omitted)\n网站标题覆盖（未设置时回退到 title）"
             },
             "siteDescription": {
               "type": "string",
-              "description": "Fallback website description when description is not set\n未设置 description 时的默认网站描述"
+              "description": "Website meta description override (falls back to description when omitted)\n网站元描述覆盖（未设置时回退到 description）"
             }
           },
           "additionalProperties": false,

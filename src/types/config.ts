@@ -138,15 +138,15 @@ export interface LocaleConfig {
      */
     nextImage?: string;
     /**
-     * Fallback website title when `title` is not set
+     * Website title override (falls back to `title` when omitted)
      *
-     * 未设置 `title` 时的默认网站标题
+     * 网站标题覆盖（未设置时回退到 `title`）
      */
     siteTitle?: string;
     /**
-     * Fallback website description when `description` is not set
+     * Website meta description override (falls back to `description` when omitted)
      *
-     * 未设置 `description` 时的默认网站描述
+     * 网站元描述覆盖（未设置时回退到 `description`）
      */
     siteDescription?: string;
   };
