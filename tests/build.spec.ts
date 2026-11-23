@@ -231,3 +231,62 @@ describe("static extras", () => {
     clearConfigs();
   }, 240_000);
 });
+
+describe("config evaluation", () => {
+  it("evaluates the user config only once per production build", () => {
+    const markerFile = path.join(root, ".config-eval-marker.tmp");
+    const exampleContent = fs.readFileSync(examplePath("ts"), "utf-8");
+
+    fs.rmSync(markerFile, { force: true });
+
+    try {
+      writeConfig(
+        "ts",
+        `import fs from "node:fs";\nfs.appendFileSync(${JSON.stringify(markerFile)}, "evaluated\\n");\n${exampleContent}`,
+      );
+      runBuild();
+
+      const lines = fs
+        .readFileSync(markerFile, "utf-8")
+        .trim()
+        .split("\n")
+        .filter((line) => line.length > 0);
+
+      expect(lines).toStrictEqual(["evaluated"]);
+    } finally {
+      clearConfigs();
+      fs.rmSync(markerFile, { force: true });
+    }
+  }, 120_000);
+
+  it("re-evaluates when the config file changes and deduplicates concurrent loads", async () => {
+    const { getConfigDependencies, loadConfig } = await import("../lib/configLoader.js");
+    const tempRoot = fs.mkdtempSync(path.join(root, ".config-cache-test-"));
+
+    try {
+      const config = readJsonExample();
+      const locales = config.locales as Record<string, Record<string, unknown>>;
+      const tempConfigPath = path.join(tempRoot, "config.json");
+
+      locales["/"].title = "First Title";
+      fs.writeFileSync(tempConfigPath, JSON.stringify(config));
+
+      const [first, concurrent] = await Promise.all([loadConfig(tempRoot), loadConfig(tempRoot)]);
+
+      expect(first).toBe(concurrent);
+      expect(first.locales["/"].title).toBe("First Title");
+      expect(getConfigDependencies(tempRoot)).toContain(tempConfigPath);
+
+      // Update the config file with different size/mtime and verify cache invalidation.
+      locales["/"].title = "Updated Second Title";
+      fs.writeFileSync(tempConfigPath, JSON.stringify(config, null, 2));
+
+      const reloaded = await loadConfig(tempRoot);
+
+      expect(reloaded).not.toBe(first);
+      expect(reloaded.locales["/"].title).toBe("Updated Second Title");
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+});
