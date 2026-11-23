@@ -113,6 +113,42 @@ export interface LocaleConfig {
      * 详情链接标签
      */
     details?: string;
+    /**
+     * Accessibility label for the hero scroll-to-content button
+     *
+     * 首屏滚动到内容按钮的无障碍标签
+     */
+    scrollToContent?: string;
+    /**
+     * Accessibility label for the lightbox close button
+     *
+     * 灯箱关闭按钮的无障碍标签
+     */
+    closeLightbox?: string;
+    /**
+     * Accessibility label for the lightbox previous image button
+     *
+     * 灯箱上一张图片按钮的无障碍标签
+     */
+    previousImage?: string;
+    /**
+     * Accessibility label for the lightbox next image button
+     *
+     * 灯箱下一张图片按钮的无障碍标签
+     */
+    nextImage?: string;
+    /**
+     * Fallback website title when `title` is not set
+     *
+     * 未设置 `title` 时的默认网站标题
+     */
+    siteTitle?: string;
+    /**
+     * Fallback website description when `description` is not set
+     *
+     * 未设置 `description` 时的默认网站描述
+     */
+    siteDescription?: string;
   };
 }
 

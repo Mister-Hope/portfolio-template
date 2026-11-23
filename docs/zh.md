@@ -140,6 +140,24 @@
     - `details`:
       - 类型: 字符串 (String) (可选)
       - 详情: 详情链接的标签。
+    - `scrollToContent`:
+      - 类型: 字符串 (String) (可选)
+      - 详情: 首屏滚动到内容按钮的无障碍标签。
+    - `closeLightbox`:
+      - 类型: 字符串 (String) (可选)
+      - 详情: 灯箱关闭按钮的无障碍标签。
+    - `previousImage`:
+      - 类型: 字符串 (String) (可选)
+      - 详情: 灯箱上一张图片按钮的无障碍标签。
+    - `nextImage`:
+      - 类型: 字符串 (String) (可选)
+      - 详情: 灯箱下一张图片按钮的无障碍标签。
+    - `siteTitle`:
+      - 类型: 字符串 (String) (可选)
+      - 详情: 网站标题覆盖（未设置时回退到 `title`，再回退到 `"Portfolio"`）。
+    - `siteDescription`:
+      - 类型: 字符串 (String) (可选)
+      - 详情: 网站元描述覆盖（未设置时回退到 `description`，再回退到 `"Portfolio Template"`）。
 
 ## 首屏区域 (`hero`)
 

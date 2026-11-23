@@ -19,7 +19,12 @@ export const LightBox: FC<{
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
-}> = ({ item, onClose, onPrev, onNext }) => {
+  ui?: {
+    closeLightbox?: string;
+    previousImage?: string;
+    nextImage?: string;
+  };
+}> = ({ item, onClose, onPrev, onNext, ui }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const restoreFocusRef = useRef<HTMLElement | null>(null);
@@ -111,7 +116,7 @@ export const LightBox: FC<{
           className="lightbox-close"
           type="button"
           onClick={onClose}
-          aria-label="Close lightbox"
+          aria-label={ui?.closeLightbox ?? "Close lightbox"}
         >
           <Icon icon="xmark" className="text-3xl" />
         </button>
@@ -120,7 +125,7 @@ export const LightBox: FC<{
           className="lightbox-nav lightbox-nav-left"
           type="button"
           onClick={handlePrev}
-          aria-label="Previous image"
+          aria-label={ui?.previousImage ?? "Previous image"}
         >
           <Icon icon="chevron-left" className="text-4xl" />
         </button>
@@ -129,7 +134,7 @@ export const LightBox: FC<{
           className="lightbox-nav lightbox-nav-right"
           type="button"
           onClick={handleNext}
-          aria-label="Next image"
+          aria-label={ui?.nextImage ?? "Next image"}
         >
           <Icon icon="chevron-right" className="text-4xl" />
         </button>

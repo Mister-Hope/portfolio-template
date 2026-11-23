@@ -170,8 +170,33 @@
             "details": {
               "type": "string",
               "description": "Label for detail link\n详情链接标签"
+            },
+            "scrollToContent": {
+              "type": "string",
+              "description": "Accessibility label for the hero scroll-to-content button\n首屏滚动到内容按钮的无障碍标签"
+            },
+            "closeLightbox": {
+              "type": "string",
+              "description": "Accessibility label for the lightbox close button\n灯箱关闭按钮的无障碍标签"
+            },
+            "previousImage": {
+              "type": "string",
+              "description": "Accessibility label for the lightbox previous image button\n灯箱上一张图片按钮的无障碍标签"
+            },
+            "nextImage": {
+              "type": "string",
+              "description": "Accessibility label for the lightbox next image button\n灯箱下一张图片按钮的无障碍标签"
+            },
+            "siteTitle": {
+              "type": "string",
+              "description": "Fallback website title when title is not set\n未设置 title 时的默认网站标题"
+            },
+            "siteDescription": {
+              "type": "string",
+              "description": "Fallback website description when description is not set\n未设置 description 时的默认网站描述"
             }
           },
+          "additionalProperties": false,
           "description": "UI translation strings\n界面翻译字符串"
         }
       },

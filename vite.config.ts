@@ -136,8 +136,10 @@ export default defineConfig(async () => {
           const locales = Object.keys(localeConfig);
           const [defaultLocale] = locales;
 
-          const title = localeConfig[defaultLocale].title ?? "Portfolio";
-          const description = localeConfig[defaultLocale].description ?? "Portfolio Template";
+          const locale = localeConfig[defaultLocale];
+          const title = locale.ui?.siteTitle ?? locale.title ?? "Portfolio";
+          const description =
+            locale.ui?.siteDescription ?? locale.description ?? "Portfolio Template";
 
           return html.replace(
             /<title>(?:.*?)<\/title>/u,

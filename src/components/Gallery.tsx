@@ -12,6 +12,16 @@ export interface GalleryProps {
    * 画廊项 (照片) 列表
    */
   items: GalleryItem[];
+  /**
+   * UI labels for the gallery lightbox
+   *
+   * 画廊灯箱的 UI 标签
+   */
+  ui?: {
+    closeLightbox?: string;
+    previousImage?: string;
+    nextImage?: string;
+  };
 }
 
 /**
@@ -23,7 +33,7 @@ export interface GalleryProps {
  *
  * 显示瀑布流风格的图片网格，并带有用于查看详情的灯箱。
  */
-export const Gallery: FC<GalleryProps> = ({ items }) => {
+export const Gallery: FC<GalleryProps> = ({ items, ui }) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const handleClose = useCallback(() => {
@@ -53,6 +63,7 @@ export const Gallery: FC<GalleryProps> = ({ items }) => {
           onClose={handleClose}
           onPrev={handlePrev}
           onNext={handleNext}
+          ui={ui}
         />
       )}
     </>

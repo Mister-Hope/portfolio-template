@@ -140,6 +140,24 @@ The optional `config` object contains the following fields:
     - `details`:
       - Type: String (optional)
       - Details: Label for the detail link.
+    - `scrollToContent`:
+      - Type: String (optional)
+      - Details: Accessibility label for the hero scroll-to-content button.
+    - `closeLightbox`:
+      - Type: String (optional)
+      - Details: Accessibility label for the lightbox close button.
+    - `previousImage`:
+      - Type: String (optional)
+      - Details: Accessibility label for the lightbox previous image button.
+    - `nextImage`:
+      - Type: String (optional)
+      - Details: Accessibility label for the lightbox next image button.
+    - `siteTitle`:
+      - Type: String (optional)
+      - Details: Website title override (falls back to `title`, then `"Portfolio"`).
+    - `siteDescription`:
+      - Type: String (optional)
+      - Details: Website meta description override (falls back to `description`, then `"Portfolio Template"`).
 
 ## Hero Section (`hero`)
 

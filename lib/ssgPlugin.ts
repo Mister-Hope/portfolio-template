@@ -173,8 +173,8 @@ const getSeoTags = (
   if (!siteUrl) return "";
 
   const locale = config.locales[localePath];
-  const title = locale.title ?? "Portfolio";
-  const description = locale.description ?? "Portfolio Template";
+  const title = locale.ui?.siteTitle ?? locale.title ?? "Portfolio";
+  const description = locale.ui?.siteDescription ?? locale.description ?? "Portfolio Template";
   const pageUrl = getPageUrl(siteUrl, localePath);
   const [defaultPath = "/"] = Object.keys(config.locales);
   const alternates = Object.entries(config.locales).map(
@@ -314,7 +314,7 @@ const writeNotFoundPage = (
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>404 | ${escapeHtml(locale.title ?? "Portfolio")}</title>
+    <title>404 | ${escapeHtml(locale.ui?.siteTitle ?? locale.title ?? "Portfolio")}</title>
     ${faviconTag}
     <style>
       :root { color-scheme: light dark; }
@@ -379,7 +379,7 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
     const locale = config.locales[localePath];
     const appHtml = render(localePath, config);
     const metaDescription = `<meta name="description" content="${escapeHtml(
-      locale.description ?? "Portfolio Template",
+      locale.ui?.siteDescription ?? locale.description ?? "Portfolio Template",
     )}" />`;
     const redirectScript =
       localePath === "/" ? getLocaleRedirectScript(config, viteConfig.base) : "";
@@ -393,7 +393,8 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
       .replace(/<meta name="description"[^>]*\/>\s*/u, "")
       .replace(
         /<title>(?:.*?)<\/title>/u,
-        () => `<title>${escapeHtml(locale.title ?? "Portfolio")}</title>\n    ${metaDescription}`,
+        () =>
+          `<title>${escapeHtml(locale.ui?.siteTitle ?? locale.title ?? "Portfolio")}</title>\n    ${metaDescription}`,
       )
       .replace(/<html lang="(?:.*?)">/u, () => `<html lang="${escapeHtml(locale.lang)}">`);
 

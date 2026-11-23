@@ -45,7 +45,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
 
   // update title and meta description based on locale config
   useEffect(() => {
-    document.title = localeConfig.title ?? "Portfolio";
+    document.title = localeConfig.ui?.siteTitle ?? localeConfig.title ?? "Portfolio";
     document.documentElement.lang = localeConfig.lang;
 
     let metaDescription = document.querySelector('meta[name="description"]');
@@ -56,7 +56,10 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
       document.head.append(metaDescription);
     }
 
-    metaDescription.setAttribute("content", localeConfig.description ?? "Portfolio Template");
+    metaDescription.setAttribute(
+      "content",
+      localeConfig.ui?.siteDescription ?? localeConfig.description ?? "Portfolio Template",
+    );
   }, [localeConfig]);
 
   useEffect(() => {
@@ -182,7 +185,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
       }
 
       case "gallery": {
-        return <Gallery items={section.data} />;
+        return <Gallery items={section.data} ui={localeConfig.ui} />;
       }
 
       case "markdown": {
@@ -209,7 +212,7 @@ export const App: FC<{ initialLocale?: string }> = ({ initialLocale }) => {
         />
       )}
 
-      <Hero hero={localeConfig.hero} locale={localePath} />
+      <Hero hero={localeConfig.hero} locale={localePath} ui={localeConfig.ui} />
 
       <main className="container mx-auto mt-12 max-w-7xl px-6 md:mt-16">
         {localeConfig.sections.map((block) => (

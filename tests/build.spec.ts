@@ -160,6 +160,31 @@ describe("prerender safety", () => {
     expect(fs.existsSync(distPath("sitemap.xml"))).toBe(true);
     expect(readDist("robots.txt")).toContain("Sitemap: https://example.com/sitemap.xml");
   }, 120_000);
+
+  it("renders configured ui strings in prerendered HTML", () => {
+    const config = readJsonExample();
+    const locales = config.locales as Record<string, Record<string, unknown>>;
+
+    delete locales["/"].title;
+    delete locales["/"].description;
+    locales["/"].ui = {
+      ...(locales["/"].ui as Record<string, unknown> | undefined),
+      scrollToContent: "滚动到内容",
+      closeLightbox: "关闭灯箱",
+      previousImage: "上一张",
+      nextImage: "下一张",
+      siteTitle: "自定义站点标题",
+      siteDescription: "自定义站点描述",
+    };
+    writeConfig("json", JSON.stringify(config));
+    runBuild();
+
+    const html = readDist("index.html");
+
+    expect(html).toContain("<title>自定义站点标题</title>");
+    expect(html).toContain('<meta name="description" content="自定义站点描述" />');
+    expect(html).toContain('aria-label="滚动到内容"');
+  }, 120_000);
 });
 
 describe("config validation", () => {

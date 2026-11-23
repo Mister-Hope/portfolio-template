@@ -24,6 +24,14 @@ interface Props {
    * 当前语言
    */
   locale?: string;
+  /**
+   * UI labels for the hero section
+   *
+   * 首屏区域的 UI 标签
+   */
+  ui?: {
+    scrollToContent?: string;
+  };
 }
 
 /**
@@ -49,7 +57,7 @@ const handleScroll = (): void => {
  *
  * 作品集的主要 Hero 区域，显示头像、姓名、头衔和社交链接。
  */
-export const Hero: FC<Props> = ({ hero, locale }) => {
+export const Hero: FC<Props> = ({ hero, locale, ui }) => {
   const isCJK = isCJKLocale(locale);
 
   return (
@@ -114,7 +122,7 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
         type="button"
         className="hero-scroll-indicator"
         onClick={handleScroll}
-        aria-label="Scroll to content"
+        aria-label={ui?.scrollToContent ?? "Scroll to content"}
       >
         <Icon icon="chevron-down" className="text-3xl text-white" />
       </button>
