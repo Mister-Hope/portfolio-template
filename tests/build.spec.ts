@@ -134,6 +134,9 @@ describe("prerender safety", () => {
     expect(rootHtml.indexOf("location.replace(base+target)")).toBeLessThan(
       rootHtml.indexOf("<body"),
     );
+    expect(rootHtml.indexOf('<meta charset="UTF-8"')).toBeLessThan(
+      rootHtml.indexOf("location.replace(base+target)"),
+    );
     expect(zhHtml).not.toContain("location.replace(base+target)");
 
     // Single-locale config should not receive the redirect script.
