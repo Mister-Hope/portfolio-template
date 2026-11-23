@@ -14,9 +14,6 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Only run linter on the main repository
-    # We can not force users to satisfy our linter rules on forks with their configurations
-    if: github.repository == 'Mister-Hope/portfolio-template'
     steps:
       - name: Checkout
         uses: actions/checkout@v7
