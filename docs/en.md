@@ -138,8 +138,8 @@ The optional `config` object contains the following fields:
       - Type: String (optional)
       - Details: Label for the contact section.
     - `details`:
-      - Type: String
-      - Details: Label for the detail link (optional).
+      - Type: String (optional)
+      - Details: Label for the detail link.
     - `scrollToContent`:
       - Type: String (optional)
       - Details: Accessibility label for the hero scroll-to-content button.
