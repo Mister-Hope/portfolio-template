@@ -97,7 +97,7 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
           <div className="card-decoration" />
           <div className="relative z-10 block">
             {category && (
-              <h4 className={`mb-3 label-sm ${isCJK ? "" : "tracking-widest"}`}>{category}</h4>
+              <p className={`mb-3 label-sm ${isCJK ? "" : "tracking-widest"}`}>{category}</p>
             )}
             {logo && (
               <AdaptiveImage
