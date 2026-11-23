@@ -120,6 +120,26 @@ export const getLocaleRedirectScript = (config: Config, base: string): string =>
 };
 
 /**
+ * Inject the locale redirect script after `<meta charset>` so the encoding declaration stays inside
+ * the first 1024 bytes, with a fallback for templates without a charset tag.
+ *
+ * 将语言重定向脚本插入到 `<meta charset>` 之后，确保编码声明仍位于前 1024 字节内；没有 charset 标签时回退到 `<head>` 后。
+ *
+ * @param html - Page HTML
+ * @param redirectScript - Inline redirect script (may be empty)
+ * @returns HTML with the script injected when present
+ */
+const injectLocaleRedirect = (html: string, redirectScript: string): string => {
+  if (!redirectScript) return html;
+
+  const charsetTag = /<meta charset="[^"]*"\s*\/?>/iu;
+
+  return charsetTag.test(html)
+    ? html.replace(charsetTag, (tag) => `${tag}\n    ${redirectScript}`)
+    : html.replace("<head>", () => `<head>\n    ${redirectScript}`);
+};
+
+/**
  * Resolve the configured avatar/background image to an absolute URL for Open Graph.
  *
  * 将配置中的头像/背景图解析为 Open Graph 使用的绝对 URL。
@@ -398,7 +418,7 @@ const prerender = async (viteConfig: ResolvedConfig, config: Config): Promise<vo
       )
       .replace(/<html lang="(?:.*?)">/u, () => `<html lang="${escapeHtml(locale.lang)}">`);
 
-    if (redirectScript) html = html.replace("<head>", () => `<head>\n    ${redirectScript}`);
+    html = injectLocaleRedirect(html, redirectScript);
 
     const headTags = [faviconTag, getSeoTags(localePath, config, siteUrl, ogImage)]
       .filter((tag) => tag.length > 0)
