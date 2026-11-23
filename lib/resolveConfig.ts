@@ -1,9 +1,16 @@
 import type { Config, LocaleConfig, Section } from "../src/types/index.js";
+import type { ImageDimensions } from "./imageDimensions.js";
+import { createImageDimensionsResolver } from "./imageDimensions.js";
 import { createMarkdownRenderer } from "./markdown.js";
 
 type RenderMarkdown = (content: string, inline?: boolean) => string;
+type ResolveImageDimensions = (url: string) => ImageDimensions | null;
 
-const processSection = (section: Section, renderMarkdown: RenderMarkdown): Section => {
+const processSection = (
+  section: Section,
+  renderMarkdown: RenderMarkdown,
+  resolveImageDimensions: ResolveImageDimensions,
+): Section => {
   const result = { ...section };
 
   switch (result.type) {
@@ -84,9 +91,23 @@ const processSection = (section: Section, renderMarkdown: RenderMarkdown): Secti
     }
 
     case "gallery": {
-      result.data = result.data.map((item) =>
-        item.description ? { ...item, description: renderMarkdown(item.description) } : item,
-      );
+      result.data = result.data.map((item) => {
+        const processed = item.description
+          ? { ...item, description: renderMarkdown(item.description) }
+          : item;
+
+        if (processed.width != null && processed.height != null) return processed;
+
+        const dimensions = resolveImageDimensions(processed.url);
+
+        return dimensions
+          ? {
+              ...processed,
+              width: processed.width ?? dimensions.width,
+              height: processed.height ?? dimensions.height,
+            }
+          : processed;
+      });
       break;
     }
 
@@ -101,9 +122,12 @@ const processSection = (section: Section, renderMarkdown: RenderMarkdown): Secti
 const resolveLocaleConfig = (
   config: LocaleConfig,
   renderMarkdown: RenderMarkdown,
+  resolveImageDimensions: ResolveImageDimensions,
 ): LocaleConfig => ({
   ...config,
-  sections: config.sections.map((section) => processSection(section, renderMarkdown)),
+  sections: config.sections.map((section) =>
+    processSection(section, renderMarkdown, resolveImageDimensions),
+  ),
   ...(config.footer
     ? {
         footer: {
@@ -119,15 +143,16 @@ const resolveLocaleConfig = (
     : {}),
 });
 
-export const resolveConfig = async (config: Config): Promise<Config> => {
+export const resolveConfig = async (config: Config, root: string): Promise<Config> => {
   const renderMarkdown = await createMarkdownRenderer(config.config?.mdIt);
+  const resolveImageDimensions = createImageDimensionsResolver(root);
 
   const resolved: Config = {
     ...config,
     locales: Object.fromEntries(
       Object.entries(config.locales).map(([localePath, localeConfig]) => [
         localePath,
-        resolveLocaleConfig(localeConfig, renderMarkdown),
+        resolveLocaleConfig(localeConfig, renderMarkdown, resolveImageDimensions),
       ]),
     ),
   };

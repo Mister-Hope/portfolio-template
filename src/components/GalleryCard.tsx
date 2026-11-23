@@ -44,15 +44,16 @@ export interface GalleryItem {
   /**
    * Intrinsic image width in pixels
    *
-   * Set it together with `height` to reserve space and avoid layout shift.
+   * Local images under `public/` are detected at build time. Set it together with `height` for
+   * remote images to reserve space and avoid layout shift.
    *
-   * 图片原始宽度（像素）。与 `height` 一起设置可预留空间、避免布局抖动。
+   * 图片原始宽度（像素）。`public/` 下的本地图片会在构建时自动读取；远程图片请与 `height` 一起设置，以预留空间、避免布局抖动。
    */
   width?: number;
   /**
    * Intrinsic image height in pixels
    *
-   * 图片原始高度（像素）。
+   * 图片原始高度（像素）。`public/` 下的本地图片会在构建时自动读取。
    */
   height?: number;
 }

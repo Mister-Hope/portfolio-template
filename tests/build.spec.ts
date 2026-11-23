@@ -147,6 +147,24 @@ describe("prerender safety", () => {
     expect(readDist("index.html")).not.toContain("location.replace(base+target)");
   }, 120_000);
 
+  it("detects dimensions for local gallery images", () => {
+    const config = readJsonExample();
+    const locales = config.locales as Record<
+      string,
+      { sections: { data?: unknown; type: string }[] }
+    >;
+    const gallery = locales["/"].sections.find((section) => section.type === "gallery") as {
+      data?: unknown;
+      type: string;
+    };
+
+    gallery.data = [{ url: "/favicon.svg", title: "Local fixture" }];
+    writeConfig("json", JSON.stringify(config));
+    runBuild();
+
+    expect(readDist("index.html")).toMatch(/alt="Local fixture"[^>]*width="64"[^>]*height="64"/u);
+  }, 120_000);
+
   it("emits SEO files when siteUrl is set", () => {
     const config = readJsonExample();
 

@@ -193,7 +193,7 @@ export const loadConfig = async (root: string): Promise<Config> => {
   }
 
   try {
-    return await resolveConfig(validated);
+    return await resolveConfig(validated, root);
   } catch (err) {
     throw new Error(
       `Failed to resolve configuration from ${path.basename(filePath)}: ${String(err)}`,
