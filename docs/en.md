@@ -423,11 +423,11 @@ The optional `config` object contains the following fields:
         - Type: String (optional)
         - Details: Long-form story (markdown supported).
       - `width`:
-        - Type: Number (optional)
+        - Type: Number (recommended)
         - Details: Intrinsic image width in pixels. Set it together with `height` to reserve space and avoid layout shift.
       - `height`:
-        - Type: Number (optional)
-        - Details: Intrinsic image height in pixels.
+        - Type: Number (recommended)
+        - Details: Intrinsic image height in pixels. Providing both dimensions is strongly recommended for gallery images.
 
 - `markdown` (type: `markdown`):
   - Type: Component

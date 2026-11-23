@@ -44,15 +44,16 @@ export interface GalleryItem {
   /**
    * Intrinsic image width in pixels
    *
-   * Set it together with `height` to reserve space and avoid layout shift.
+   * Providing it together with `height` is strongly recommended: it reserves space and avoids
+   * layout shift while the image loads.
    *
-   * 图片原始宽度（像素）。与 `height` 一起设置可预留空间、避免布局抖动。
+   * 图片原始宽度（像素）。强烈建议与 `height` 一起设置，可预留空间并避免图片加载时的布局抖动。
    */
   width?: number;
   /**
    * Intrinsic image height in pixels
    *
-   * 图片原始高度（像素）。
+   * 图片原始高度（像素）。强烈建议与 `width` 一起设置。
    */
   height?: number;
 }

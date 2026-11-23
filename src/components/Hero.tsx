@@ -69,7 +69,13 @@ export const Hero: FC<Props> = ({ hero, locale }) => {
         {/* Avatar Section */}
         <div className="group hero-avatar-wrapper">
           <div className="hero-avatar-glow" />
-          <AdaptiveImage src={hero.avatar} alt={hero.name} className="hero-avatar-img" />
+          <AdaptiveImage
+            src={hero.avatar}
+            alt={hero.name}
+            className="hero-avatar-img"
+            width={384}
+            height={384}
+          />
         </div>
 
         {/* Info Section */}

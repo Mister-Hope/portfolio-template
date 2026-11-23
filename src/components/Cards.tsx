@@ -105,6 +105,8 @@ export const Cards: FC<CardsProps> = ({ items, locale }) => {
                 alt={title}
                 className="card-logo float-right ms-4 mb-2"
                 loading="lazy"
+                width={64}
+                height={64}
               />
             )}
             <h3 className="card-title">
