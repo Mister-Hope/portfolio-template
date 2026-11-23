@@ -9,6 +9,7 @@ import { defineConfig } from "vite";
 
 import { CONFIG_FILES, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { escapeHtml } from "./lib/escapeHtml.js";
+import { serializeConfig } from "./lib/serializeConfig.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
 // oxlint-disable-next-line unicorn/prefer-import-meta-properties -- `import.meta.dirname` resolves to Vite's temp bundle dir (`node_modules/.vite-temp`), not the project root. `import.meta.url` is rewritten by Vite to the original config file URL, so this is the only reliable way to get the root.
@@ -91,7 +92,7 @@ export default defineConfig(async () => {
   let serializedConfig: string;
 
   try {
-    serializedConfig = JSON.stringify(config);
+    serializedConfig = serializeConfig(config);
   } catch (err) {
     throw new Error(
       `Failed to serialize the configuration for the client bundle. The config must only contain JSON-serializable values: ${String(

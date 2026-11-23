@@ -11,6 +11,9 @@ Supported configuration formats: `config.ts`, `config.js`, `config.json`, `confi
 
 ## Configuration
 
+> [!WARNING]
+> The resolved configuration is embedded directly into the public client bundle at build time. **Do not** put secrets, API keys, tokens, private contact details, or internal links in `config.*` — anything in the config file can be read by visitors.
+
 The configuration file exports a `Config` object by default, containing the following fields:
 
 - `base`:

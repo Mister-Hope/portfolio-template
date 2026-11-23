@@ -53,6 +53,9 @@ Detailed guides on how to configure every section:
 - [**English Configuration Guide**](./docs/en.md)
 - [**中文配置指南**](./docs/zh.md)
 
+> [!WARNING]
+> The resolved configuration is embedded into the public client bundle at build time. Do not put secrets, tokens, private contact details, or internal links in `config.*`.
+
 ### 3. Run Locally
 
 ```bash
