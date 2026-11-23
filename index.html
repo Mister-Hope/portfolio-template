@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en-US">
   <head>
+    <script>(()=>{const locales=[{"path":"/zh/","lang":"zh-cn"},{"path":"/","lang":"en-us"}],base="/portfolio-template";let target=null;try{const saved=localStorage.getItem("locale");if(saved&&locales.some(l=>l.path===saved))target=saved;}catch{}if(!target){const langs=navigator.languages||[navigator.language];outer:for(const raw of langs){if(!raw)continue;const lower=raw.toLowerCase();for(const l of locales)if(l.lang&&lower===l.lang){target=l.path;break outer;}}if(!target)outer2:for(const raw of langs){if(!raw)continue;const primary=raw.split("-")[0].toLowerCase();for(const l of locales)if(l.lang&&primary===l.lang.split("-")[0]){target=l.path;break outer2;}}}if(target&&target!=="/")location.replace(base+target);})();</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mister-Hope | Portfolio</title>
