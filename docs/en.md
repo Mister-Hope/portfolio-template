@@ -480,7 +480,9 @@ The optional `config` object contains the following fields:
 
 You can always use a full URL for icons and images (e.g., `https://example.com/icon.png`), or a relative path to the `public/` directory starting with `/` (e.g., `/images/icon.png` for `public/images/icon.png`).
 
-We support all icon name from [iconify](https://iconify.design/), and you can either use FontAwesome 7 solid icons directly with its name (e.g.: `book` for `fa7-solid:book`), or use the full icon name (e.g., `mdi:github`).
+We support all icon names from [Iconify](https://iconify.design/). You can either use FontAwesome 7 solid icons directly by their short name (e.g., `book` for `fa7-solid:book`), or use a full `prefix:name` identifier (e.g., `mdi:github`).
+
+Icons are loaded by `@iconify/react` at runtime. If you install an optional `@iconify-json/<prefix>` package (for example `pnpm add -D @iconify-json/fa7-solid`), the build inlines the icons from that set into the generated HTML, so the browser no longer requests them from the Iconify API. Icons from sets that are not installed keep working and continue to load at runtime — no icon set is required.
 
 ## Customizing Styles
 

@@ -9,6 +9,7 @@ import { defineConfig } from "vite";
 
 import { CONFIG_FILES, getConfigDependencies, loadConfig } from "./lib/configLoader.js";
 import { escapeHtml } from "./lib/escapeHtml.js";
+import { collectIconData } from "./lib/icons.js";
 import { serializeConfig } from "./lib/serializeConfig.js";
 import { ssgPlugin } from "./lib/ssgPlugin.js";
 
@@ -103,6 +104,7 @@ export default defineConfig(async () => {
   }
 
   const buildYear = String(new Date().getFullYear());
+  const serializedIconData = JSON.stringify(collectIconData(config));
 
   return {
     root: path.resolve(rootDir, "src"),
@@ -119,6 +121,7 @@ export default defineConfig(async () => {
     define: {
       __CONFIG__: serializedConfig,
       __BUILD_YEAR__: buildYear,
+      __ICON_DATA__: serializedIconData,
     },
     server: {
       port: 3000,
@@ -128,7 +131,7 @@ export default defineConfig(async () => {
       react(),
       injectCustomCssImportPlugin(),
       tailwindcss(),
-      ssgPlugin(config, serializedConfig, buildYear),
+      ssgPlugin(config, serializedConfig, buildYear, serializedIconData),
       {
         name: "inject-title-and-meta",
         transformIndexHtml(html: string): string {
