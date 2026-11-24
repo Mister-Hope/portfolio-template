@@ -19,6 +19,9 @@
  * - Upstream deletions are applied unless the file was modified locally;
  * - Instance-owned files (config, README, LICENSE, AGENTS.md, public assets, workflow files,
  *   lockfile) are never written automatically, only reported;
+ * - Template-only test files (`tests/`, `vitest.config.ts`) are not synced: they cover the template
+ *   source, while a site built from it is expected to diverge, and a fork that deleted its fixtures
+ *   would otherwise get a failing test suite on every update;
  * - `package.json` is merged per field so template dependency bumps land while the personal metadata,
  *   extra scripts and extra dependencies survive.
  *
@@ -75,6 +78,14 @@ const DEFAULT_PROTECTED = [
 const WORKFLOW_PATTERN = /^\.github\/workflows\//iu;
 const LOCKFILE_PATTERN = /^pnpm-lock\.yaml$/iu;
 const STATE_PATTERN = /^\.github\/sync-state\.json$/iu;
+
+/**
+ * Tests are part of the template's own development setup. They assert the behaviour of the template
+ * source, so a site that customizes that source cannot keep them in sync, and a fork that removed
+ * the example configs they build would break on every update that touches them. They are therefore
+ * skipped silently — add them to `unprotected` in `.github/sync-state.json` to sync them anyway.
+ */
+const TEST_PATTERN = /^(?:tests\/|vitest\.config\.ts$)/iu;
 
 const globToRegExp = (glob) => {
   let source = "^";
@@ -251,6 +262,31 @@ const isPlainObject = (value) =>
   typeof value === "object" && value != null && !Array.isArray(value);
 
 /**
+ * Test tooling mirrors `TEST_PATTERN`: a fork whose specs are not synced should not receive a
+ * `test` script that can only fail on the template's fixtures. The fields are kept when the user
+ * already has them, so an existing test setup is never torn down.
+ */
+const TEMPLATE_ONLY_PACKAGE_FIELDS = [
+  ["scripts", "test"],
+  ["devDependencies", "vitest"],
+];
+
+const dropTemplateOnlyPackageFields = (value, ours) => {
+  for (const [section, name] of TEMPLATE_ONLY_PACKAGE_FIELDS) {
+    const ownSection = isPlainObject(ours[section]) ? ours[section] : {};
+    const mergedSection = value[section];
+
+    if (name in ownSection || !isPlainObject(mergedSection)) continue;
+
+    // Rebuild the section instead of `delete value[section][name]`: oxlint forbids deleting
+    // computed keys.
+    value[section] = Object.fromEntries(
+      Object.entries(mergedSection).filter(([key]) => key !== name),
+    );
+  }
+};
+
+/**
  * Field-by-field three-way merge of `package.json`, so upstream dependency bumps and scripts land
  * while personal metadata and extra dependencies survive.
  *
@@ -304,7 +340,11 @@ const mergePackageJson = (ours, base, theirs) => {
     return ourValue;
   };
 
-  return { value: merge(ours, base, theirs, ""), conflicts };
+  const value = merge(ours, base, theirs, "");
+
+  dropTemplateOnlyPackageFields(value, ours);
+
+  return { value, conflicts };
 };
 
 const resolveInRepo = (repo, relativePath) => {
@@ -441,6 +481,11 @@ const protectMatcher = (state) => {
     if (WORKFLOW_PATTERN.test(relativePath)) return "workflow";
     if (LOCKFILE_PATTERN.test(relativePath)) return "lockfile";
     if (STATE_PATTERN.test(relativePath)) return "state";
+    if (
+      TEST_PATTERN.test(relativePath) &&
+      !exceptions.some((pattern) => pattern.test(relativePath))
+    )
+      return "test";
     if (!patterns.some((pattern) => pattern.test(relativePath))) return null;
     if (exceptions.some((pattern) => pattern.test(relativePath))) return null;
 
@@ -536,7 +581,9 @@ const createReport = (base, target, state) => ({
 });
 
 const noteProtected = (context, entry, reason) => {
-  if (reason === "lockfile" || reason === "state") return;
+  // Lockfile, sync state and tests are template bookkeeping: their absence is expected, so they
+  // are skipped instead of being reported on every run.
+  if (reason === "lockfile" || reason === "state" || reason === "test") return;
 
   const theirs = entry.status === "D" ? null : readBlob(context.repo, entry.newSha);
   const ours = readWorktreeFile(context.repo, entry.path);

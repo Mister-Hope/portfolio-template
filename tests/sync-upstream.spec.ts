@@ -344,6 +344,81 @@ describe("upstream sync", () => {
     ]);
   });
 
+  it("never syncs the template's test files", () => {
+    const fixture = createFixture({
+      initial: { "src/app.ts": "one\n" },
+      upstream: {
+        "src/app.ts": "one upstream\n",
+        "tests/build.spec.ts": "import { it } from 'vitest';\n",
+        "tests/sync-upstream.spec.ts": "import { it } from 'vitest';\n",
+        "vitest.config.ts": "export default {};\n",
+      },
+    });
+
+    const { report, summary } = fixture.run();
+
+    expect({
+      config: fixture.forkFile("vitest.config.ts"),
+      "tests/build.spec.ts": fixture.forkFile("tests/build.spec.ts"),
+      "tests/sync-upstream.spec.ts": fixture.forkFile("tests/sync-upstream.spec.ts"),
+    }).toStrictEqual({
+      config: null,
+      "tests/build.spec.ts": null,
+      "tests/sync-upstream.spec.ts": null,
+    });
+    expect(summary.protected).toStrictEqual([]);
+    expect(summary.keptDeleted).toStrictEqual([]);
+    expect(report).not.toContain("build.spec.ts");
+    expect(fixture.forkFile("src/app.ts")).toBe("one upstream\n");
+  });
+
+  it("syncs test files only when they are listed as unprotected", () => {
+    const fixture = createFixture({
+      initial: { "src/app.ts": "one\n" },
+      upstream: {
+        "tests/build.spec.ts": "import { it } from 'vitest';\n",
+        "vitest.config.ts": "export default {};\n",
+      },
+    });
+
+    fs.mkdirSync(path.join(fixture.fork, ".github"), { recursive: true });
+    fs.writeFileSync(
+      path.join(fixture.fork, ".github", "sync-state.json"),
+      `${JSON.stringify({ unprotected: ["tests/**", "vitest.config.ts"] }, null, 2)}\n`,
+    );
+
+    const { summary } = fixture.run();
+
+    expect(fixture.forkFile("tests/build.spec.ts")).toBe("import { it } from 'vitest';\n");
+    expect(fixture.forkFile("vitest.config.ts")).toBe("export default {};\n");
+    expect(summary.added.toSorted()).toStrictEqual(["tests/build.spec.ts", "vitest.config.ts"]);
+  });
+
+  it("does not add the test script or vitest to a fork without specs", () => {
+    const initial = { name: "me", private: true };
+    const fixture = createFixture({
+      initial: { "package.json": `${JSON.stringify(initial, null, 2)}\n` },
+      upstream: {
+        "package.json": `${JSON.stringify(
+          {
+            ...initial,
+            scripts: { build: "vite build", test: "vitest run" },
+            devDependencies: { vite: "8.3.8", vitest: "^5.0.5" },
+          },
+          null,
+          2,
+        )}\n`,
+      },
+    });
+
+    const { summary } = fixture.run();
+    const packageJson = readJson(fixture, "package.json");
+
+    expect(packageJson.scripts).toStrictEqual({ build: "vite build" });
+    expect(packageJson.devDependencies).toStrictEqual({ vite: "8.3.8" });
+    expect(summary.updated).toStrictEqual(["package.json"]);
+  });
+
   it("does not resurrect a file the user deleted", () => {
     const fixture = createFixture({
       initial: { "docs/en.md": "v1\n", "src/app.ts": "one\n" },

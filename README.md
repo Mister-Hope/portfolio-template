@@ -79,7 +79,8 @@ pnpm run build
 
 The output will be in the `dist/` folder, ready to deploy to Vercel, Netlify or any static host.
 
-Run the build integration tests (builds every example config and asserts the prerendered output):
+For template development, run the build integration tests (they build every example config and
+assert the prerendered output). They cover the template source, not a site built from it:
 
 ```bash
 pnpm test
@@ -108,6 +109,8 @@ opens a pull request that replays **only the changes this template made since yo
   template changed — those files keep **your** version and are listed under "Kept your version".
 - `.github/workflows/` cannot be updated by GitHub Actions, so changes there are reported only; copy
   them by hand if you want them.
+- `tests/` and `vitest.config.ts` belong to the template's own development setup, so they are not
+  synced: they assert the template source, which a customized site is expected to diverge from.
 - The last synced template commit is stored in `.github/sync-state.json`. Merge that file together
   with the PR so the next run only replays what is new.
 - The workflow never applies anything directly: every run opens a pull request, so you can see and

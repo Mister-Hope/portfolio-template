@@ -29,3 +29,8 @@ jobs:
 
       - name: Run linter
         run: pnpm run lint:check
+
+      # The test suite covers the template source and builds the example configs, so it only runs
+      # here: forks customize the source, and synced test files would not match it.
+      - name: Run tests
+        run: pnpm test
